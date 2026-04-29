@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<!-- Sporttag-Sekretär | Schule Pfäffikon | Bucher 2026 -->
+<!-- Herzlichen Dank und Props gehen an Andi Räz -->
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<style>
+:root{
+  --bg:#f5f4f1;--surface:#fff;--border:#dedad2;--border-strong:#b8b4ac;
+  --text:#1a1a18;--muted:#6b6a66;--accent:#2563eb;--accent-bg:#eff6ff;--accent-hover:#1d4ed8;
+  --danger:#dc2626;--danger-bg:#fef2f2;--danger-border:#fca5a5;
+  --success:#16a34a;--success-bg:#f0fdf4;
+  --warn-bg:#fffbeb;--warn:#d97706;
+  --bm-bg:#dbeafe;--bm-fg:#1e40af;--bm-border:#93c5fd;
+  --bw-bg:#fce7f3;--bw-fg:#831843;--bw-border:#f9a8d4;
+  --bx-bg:#f3e8ff;--bx-fg:#581c87;--bx-border:#d8b4fe;
+  --r:8px;--rl:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.topbar h1{font-size:16px;font-weight:600}
+.aname{font-size:13px;color:var(--muted);font-style:italic}
+.ver{font-size:10px;color:var(--muted);}
+.tabs{display:flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:4px;margin-bottom:20px;flex-wrap:wrap}
+.tab{padding:7px 14px;border-radius:var(--r);border:none;background:none;cursor:pointer;font-size:13px;color:var(--muted);font-weight:500;white-space:nowrap}
+.tab.active{background:var(--accent);color:#fff}
+.tab:not(.active):hover{background:var(--bg);color:var(--text)}
+.page{display:none}.page.active{display:block}
+.content{padding:20px;max-width:1400px;margin:0 auto}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 22px;margin-bottom:18px}
+.ctitle{font-size:14px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.form2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.fg{margin-bottom:14px}
+label{font-size:12px;font-weight:500;color:var(--muted);display:block;margin-bottom:3px}
+input[type=text],input[type=number],textarea,select{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:var(--r);font-size:13px;background:var(--surface);color:var(--text);outline:none;font-family:inherit}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+textarea{resize:vertical;min-height:70px}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.btn{display:inline-block;padding:7px 14px;border-radius:var(--r);border:1px solid var(--border-strong);background:var(--surface);color:var(--text);cursor:pointer;font-size:12px;font-weight:500;white-space:nowrap;font-family:inherit}
+.btn:hover{background:var(--bg)}
+.btn-p{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-p:hover{background:var(--accent-hover)}
+.btn-d{background:var(--danger-bg);color:var(--danger);border-color:var(--danger-border)}
+.btn-d:hover{background:#fee2e2}
+.btn-sm{padding:4px 9px;font-size:12px}
+.drow{display:grid;grid-template-columns:1fr 60px 80px 60px 130px 32px;gap:8px;align-items:center;margin-bottom:8px}
+.twrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:7px 8px;font-size:11px;font-weight:600;color:var(--muted);border-bottom:2px solid var(--border);background:var(--bg);white-space:nowrap;cursor:pointer;user-select:none}
+th:hover{color:var(--text)}
+th.nosort{cursor:default}
+th.nosort:hover{color:var(--muted)}
+th.sa::after{content:" ↑"}th.sd::after{content:" ↓"}
+.empty-state{text-align:center;color:var(--muted);padding:16px}
+.empty-state .btn{margin-left:8px}
+details[open] .adv-arrow{transform:rotate(90deg)}
+.adv-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:120px}
+.adv-col h4{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.adv-col .fg{margin-bottom:14px}
+.adv-slider{display:flex;align-items:center;gap:8px}
+.adv-slider input[type=range]{flex:1;min-width:0}
+.adv-slider input.val{width:64px;font-size:12px;font-variant-numeric:tabular-nums;font-weight:600;text-align:right;padding:4px 6px}
+@media(max-width:700px){.adv-cols{grid-template-columns:1fr;gap:14px}}
+.cb-aussl{width:15px;height:15px;cursor:pointer;accent-color:var(--danger)}
+.muted{color:var(--muted)}
+.muted-sm{color:var(--muted);font-size:11px}
+td{padding:6px 8px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr.excl td{opacity:.4}tr.excl td.nc{text-decoration:line-through}
+.ei{width:54px;padding:4px 6px;font-size:12px;border:1px solid var(--border);border-radius:6px;text-align:center;-moz-appearance:textfield}
+.ei::-webkit-outer-spin-button,.ei::-webkit-inner-spin-button{-webkit-appearance:none}
+.ei:focus{border-color:var(--accent);outline:none}
+.pc{font-weight:700;color:var(--accent)}
+.fbar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;background:var(--bg);padding:10px 14px;border-radius:var(--r);border:1px solid var(--border)}
+.fbar label{margin:0;font-size:12px}
+.fbar select{width:auto;min-width:110px;font-size:12px;padding:5px 8px}
+.rb{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-weight:700;font-size:12px}
+.r1{background:#fef08a;color:#713f12}.r2{background:#e5e7eb;color:#374151}.r3{background:#fed7aa;color:#7c2d12}.rx{background:#f0f0f0;color:#555}
+.rlt tr:nth-child(1) td{background:#fefce8}.rlt tr:nth-child(2) td{background:#f9fafb}.rlt tr:nth-child(3) td{background:#fff7ed}
+.al{padding:10px 14px;border-radius:var(--r);font-size:12px;margin-bottom:14px}
+.ai{background:var(--accent-bg);color:#1e40af;border:1px solid #bfdbfe}
+.aw{background:var(--warn-bg);color:#92400e;border:1px solid #fde68a}
+.as{background:var(--success-bg);color:#14532d;border:1px solid #86efac}
+.chip{display:inline-flex;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:100px;padding:2px 9px;font-size:12px}
+.bm{background:var(--bm-bg);color:var(--bm-fg);border:1px solid var(--bm-border);border-radius:100px;padding:2px 8px;font-size:11px;font-weight:600}
+.bw{background:var(--bw-bg);color:var(--bw-fg);border:1px solid var(--bw-border);border-radius:100px;padding:2px 8px;font-size:11px;font-weight:600}
+.bx{background:var(--bx-bg);color:var(--bx-fg);border:1px solid var(--bx-border);border-radius:100px;padding:2px 8px;font-size:11px;font-weight:600}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:var(--rl);padding:28px 32px;max-width:560px;width:90%;max-height:80vh;overflow-y:auto;position:relative;box-shadow:0 8px 32px rgba(0,0,0,.18)}
+.modal h2{font-size:16px;font-weight:700;margin-bottom:16px}
+.mclose{position:absolute;top:14px;right:18px;font-size:20px;cursor:pointer;color:var(--muted);background:none;border:none;line-height:1}
+.modal ol{padding-left:20px;font-size:13px;line-height:1.8}
+.modal ol li{margin-bottom:6px}
+.modal code{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:12px}
+.ocr-icon{font-size:20px}
+.ocr-text{font-size:12px}
+.ocr-icon.ok,.ocr-text.ok{color:var(--success)}
+.ocr-icon.exist,.ocr-text.exist{color:var(--accent)}
+.ocr-icon.warn,.ocr-text.warn{color:var(--warn)}
+.lbprev{font-family:'Century Gothic',CenturyGothic,AppleGothic,Futura,'Trebuchet MS',Arial,sans-serif;font-size:11px;color:#111;background:#fff;padding:18px 20px;border:1px solid var(--border);border-radius:var(--rl);margin-bottom:14px}
+.lbh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.lbtitle{font-size:18px;font-weight:700;letter-spacing:.5px}
+.lbge{font-size:14px;font-weight:700;margin-top:3px;color:#333}
+.lbdate{font-size:11px;color:#555;margin-top:4px}
+.lbkz{display:flex;justify-content:space-between;align-items:baseline;margin:8px 0 6px;font-size:14px;font-weight:700;border-bottom:2px solid #555;padding-bottom:5px}
+.lbt{width:100%;border-collapse:collapse;margin-top:8px;font-size:10px}
+.lbt th,.lbt td{border:1px solid #555;padding:5px 5px;text-align:center}
+.lbt th{background:#d0d0d0;font-weight:700;font-size:10px}
+.lbt thead tr:first-child th{background:#b8b8b8}
+.lbt td.ncol{text-align:left;min-width:175px;font-size:11px;font-weight:500}
+.ncol-inner{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:175px}
+.lbt td.rcol{min-width:24px;background:#fff}
+.lbt td.res{min-width:28px}
+.lbt td.ptc{min-width:26px;background:#fff}
+.lbt td.tot{min-width:82px;background:#fff;font-weight:700;border:2px solid #555}
+.lbt tbody tr:nth-child(even) td{background:#f5f5f5}
+.lbt tbody tr:nth-child(even) td.ptc{background:#f5f5f5}
+.lbt tbody tr:nth-child(even) td.tot{background:#f0f0f0}
+.lbt tbody tr:nth-child(even) td.rcol{background:#f5f5f5}
+.lbt tfoot td {border-left-color: transparent !important;border-right-color: transparent !important;border-bottom-color: transparent !important}
+.lbprev .lbt tbody tr td,.lbprev .lbt tbody tr:nth-child(even) td{background:#fff!important}
+.lbfn{font-size:9px;color:#555;margin-bottom:5px}
+.lbwarn{font-size:13px;font-weight:700;color:#c00;border:1px solid #c00;padding:3px 8px;display:inline-block;border-radius:3px}
+.qr1-cell{width:82px;min-width:82px;padding:2px;text-align:center;vertical-align:middle;background:#fff!important;border:1px solid #555}
+.qr2-cell{width:64px;min-width:64px;padding:2px;text-align:center;vertical-align:middle;background:#fff!important;border:1px solid #555}
+.qr-spacer{border:none!important;background:#fff!important;padding:0!important;height:4px!important}
+footer{text-align:center;font-size:10px;color:var(--muted);padding:16px;margin-top:8px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span style="font-size:18px">&#127939;</span>
+  <h1 id="app-name"></h1>
+  <span class="ver"></span>
+  <span class="aname" id="anlass-label"></span>
+  <div style="flex:1"></div>
+  <span id="save-status" style="font-size:11px;color:var(--muted);margin-right:4px"></span>
+  <button class="btn btn-sm" onclick="doSave()">&#128190; Speichern</button>
+  <label class="btn btn-sm" style="cursor:pointer;margin:0">&#128194; Laden
+    <input type="file" accept=".json" onchange="doLoad(this)" style="display:none">
+  </label>
+  <button class="btn btn-sm btn-d" onclick="doReset()">&#128465; Reset</button>
+</div>
+
+<!-- MODALS (Anleitungen) -->
+<!-- SuS Import -->
+<div class="modal-bg" id="modal-sus" onclick="if(event.target===this)closeModal('modal-sus')">
+    <div class="modal">
+        <button class="mclose" onclick="closeModal('modal-sus')">&#10005;</button>
+        <h2>&#128203; SuS erfassen &mdash; Anleitung</h2>
+        <p style="font-size:13px;margin-bottom:14px">Der einfachste Weg ist der JSON-Export aus <strong>escola</strong>:</p>
+        <ol>
+            <li>In escola <strong>SuS-Gruppe wählen</strong> (z.B. <code>POB MST SuS</code>)</li>
+            <li><strong>Export &rarr; Adresslisten-Export</strong> aufrufen</li>
+            <li>Vorlage <strong>Mittelstufensporttag</strong> wählen</li>
+            <li>Unter <em>Weitere Formate</em> &rarr; <strong>JSON</strong> wählen und herunterladen</li>
+            <li>Die heruntergeladene <strong>JSON-Datei hier hochladen</strong></li>
+        </ol>
+        <br><div style="border-top:1px solid #444;margin:10px 0;"></div>
+        <p style="font-size:12px;color:var(--muted);margin-top:14px">
+            Alternativ: XLS/XLSX, CSV oder TXT mit Feldern in Reihenfolge:<br>
+            <strong>Name &middot; Vorname &middot; Klasse &middot; Geschlecht &middot; Jahrgangsstufe &middot; Klassenlehrperson</strong>
+        </p>
+    </div>
+</div>
+<!-- Scan Import -->
+<div class="modal-bg" id="modal-scan" onclick="if(event.target===this)closeModal('modal-scan')">
+  <div class="modal">
+    <button class="mclose" onclick="closeModal('modal-scan')">&#10005;</button>
+    <h2>&#128203; Laufblätter scannen &mdash; Anleitung</h2>
+    <ol>
+      <li>Laufblätter in den Automatischen Dokumente-Einzug legen (Vorderseite nach oben)</li>
+      <li>Scannen wählen <code>Scan-OneDrive empfohlen</code></li>
+      <li>In den Einstellungen <strong>JPEG</strong> und <strong>Einseitig</strong> wählen</li>
+      <li>Scan starten</li>
+      <li>Die gescannten Dokumente hier hochladen</li>
+    </ol>
+    <br><div style="border-top:1px solid #444;margin:10px 0;"></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:14px">
+        <strong>Wichtig:</strong> Verschmutzte und zerknitterte Laufblätter liefern schlechtere Resultate.
+    </p>
+  </div>
+</div>
+
+<!-- REITER -->
+<div class="content">
+<div class="tabs">
+  <button class="tab active" onclick="showTab('setup')">&#9881;&#65039; Setup</button>
+  <button class="tab" onclick="showTab('sus')">&#128101; SuS</button>
+  <button class="tab" onclick="showTab('laufblatt')">&#128196; Laufblatt</button>
+  <button class="tab" onclick="showTab('ergebnisse')">&#128221; Ergebnisse</button>
+  <button class="tab" onclick="showTab('rangliste')">&#127942; Rangliste</button>
+</div>
+
+<!-- SETUP -->
+<div class="page active" id="page-setup">
+  <div class="card">
+    <div class="ctitle">&#127914; Anlass</div>
+    <div class="form2">
+      <div class="fg"><label>Anlassname</label>
+        <input type="text" id="anlassName" placeholder="z.B. Mittelstufensporttag 2026" oninput="updateLabel();autoSave()"></div>
+      <div class="fg"><label>Datum</label>
+        <input type="text" id="anlasDatum" placeholder="z.B. 03. Juni 2026" oninput="autoSave()"></div>
+    </div>
+    <div class="fg"><label>Schulhaus</label>
+      <input type="text" id="anlassSchulhaus" placeholder="z.B. Primarschule Steinacker / Obermatt" oninput="autoSave()"></div>
+    <div class="fg"><label>Logo (PNG/SVG/JPG)</label>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <label class="btn btn-sm" style="cursor:pointer;margin:0">&#128247; Logo laden
+          <input type="file" accept="image/*" onchange="loadLogo(this)" style="display:none"></label>
+        <img id="logo-prev" style="height:36px;display:none;border:1px solid var(--border);border-radius:6px;padding:3px">
+        <button class="btn btn-sm btn-d" id="logo-del" style="display:none" onclick="delLogo()">&#10005; Entfernen</button>
+      </div>
+    </div>
+  </div>
+  <div class="card" id="disziplinen-card">
+    <div class="ctitle">&#127885; Disziplinen</div>
+    <div class="al ai">Name &middot; Versuche &middot; Einheit &middot; Max. Punkte &middot; Höher/Tiefer = besser</div>
+    <div style="display:grid;grid-template-columns:1fr 60px 80px 60px 130px 32px;gap:8px;margin-bottom:6px;padding:0 2px">
+      <span style="font-size:11px;color:var(--muted)">Name</span>
+      <span style="font-size:11px;color:var(--muted)">Versuche</span>
+      <span style="font-size:11px;color:var(--muted)">Einheit</span>
+      <span style="font-size:11px;color:var(--muted)">Max</span>
+      <span style="font-size:11px;color:var(--muted)">Bewertung</span>
+      <span></span>
+    </div>
+    <div id="dis-liste"></div>
+    <button class="btn btn-p" onclick="addDis()" style="margin-top:8px">+ Disziplin</button>
+  </div>
+  <div class="card">
+    <div class="ctitle">&#128202; Punkteskala</div>
+    <div class="fg"><label>Typ</label>
+      <select id="skalaTyp" onchange="renderSkala()">
+        <option value="punkte">Punkteskala (Messwert &rarr; Punkte)</option>
+        <option value="keine">Keine Bewertung</option>
+      </select></div>
+    <div id="skala-container"></div>
+  </div>
+  <div class="card">
+    <details id="adv-card">
+      <summary style="cursor:pointer;font-weight:600;font-size:14px;list-style:none;display:flex;align-items:center;gap:6px">
+        <span class="adv-arrow" style="display:inline-block;transition:transform .2s">&#9656;</span>
+        &#9881;&#65039; Erweiterte Einstellungen
+        <span style="font-size:11px;color:var(--muted);font-weight:400;margin-left:4px">(OCR-Tuning)</span>
+      </summary>
+      <div style="margin-top:14px">
+        <div class="al ai" style="margin-bottom:12px">Diese Werte beeinflussen die OCR-Texterkennung. Defaults sind für Standard-Scans optimiert.</div>
+        <div class="adv-cols">
+            <div class="adv-col">
+                <h4>OCR-Engine: Tesseract</h4>
+                <div class="fg">
+                    <label title="Mindestkonfidenz [%], ab der OCR-Werte als sicher erkannt behandelt werden.">Konfidenz-Schwelle [%]   &#9432;</label>
+                    <div class="adv-slider">
+                        <input type="range" id="set-confMin" min="0" max="100" step="1" oninput="updSetting('confMin',this.value)">
+                        <input type="number" id="setv-confMin" min="0" max="100" step="1" class="val" oninput="updSetting('confMin',this.value)">
+                    </div>
+                </div>
+                <div class="fg">
+                    <label title="Tesseract Page Segmentation Mode (PSM)">Seitensegmentierung   &#9432;</label>
+                    <select id="set-psm" onchange="updSetting('psm',this.value)">
+                        <option value="7">7 — Einzelne Textzeile</option>
+                        <option value="8">8 — Einzelnes Wort (App-Default)</option>
+                        <option value="10">10 — Einzelnes Zeichen</option>
+                        <option value="11">11 — Verstreuter Text</option>
+                    </select>
+                </div>
+                <div class="fg">
+                    <label title="Tesseract OCR Engine Mode (OEM)">OCR Modus   &#9432;</label>
+                    <select id="set-oem" onchange="updSetting('oem',this.value)">
+                        <option value="0">0 — Legacy</option>
+                        <option value="1">1 — LSTM (App-Default)</option>
+                        <option value="2">2 — Legacy + LSTM</option>
+                    </select>
+                </div>
+            </div>
+            <div class="adv-col">
+                <h4>Zahlenanalyse</h4>
+                <div class="fg">
+                    <label title="Mindest-Anteil dunkler Pixel in Boolean-Zellen.">Grauanteil in Auswahlzellen   &#9432</label>
+                    <div class="adv-slider">
+                        <input type="range" id="set-markMinFrac" min="0" max="1" step="0.01" oninput="updSetting('markMinFrac',this.value)">
+                        <input type="number" id="setv-markMinFrac" min="0" max="1" step="0.01" class="val" oninput="updSetting('markMinFrac',this.value)">
+                    </div>
+                </div>
+                <div class="fg">
+                    <label title="Helligkeit, ab der Pixel als Hintergrund gelten.">Grauwertschwelle (0–255)   &#9432</label>
+                    <div class="adv-slider">
+                        <input type="range" id="set-greyThreshold" min="0" max="255" step="1" oninput="updSetting('greyThreshold',this.value)">
+                        <input type="number" id="setv-greyThreshold" min="0" max="255" step="1" class="val" oninput="updSetting('greyThreshold',this.value)">
+                    </div>
+                </div>
+                <div class="fg">
+                    <label title="Pixel-Inset beim Beschneiden der POI-Zellen.">Zellenbeschnitt [px]   &#9432</label>
+                    <div class="adv-slider">
+                        <input type="range" id="set-poiInset" min="0" max="20" step="1" oninput="updSetting('poiInset',this.value)">
+                        <input type="number" id="setv-poiInset" min="0" max="20" step="1" class="val" oninput="updSetting('poiInset',this.value)">
+                    </div>
+                </div>
+            </div>
+            <div class="adv-col">
+                <h4>Passermarken</h4>
+                <div class="fg">
+                    <label title="Helligkeit, ab der ein Pixel als Passermarke gewertet wird.">Grauwertschwelle (0–255)   &#9432</label>
+                    <div class="adv-slider">
+                        <input type="range" id="set-markDarkThres" min="0" max="255" step="1" oninput="updSetting('markDarkThres',this.value)">
+                        <input type="number" id="setv-markDarkThres" min="0" max="255" step="1" class="val" oninput="updSetting('markDarkThres',this.value)">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top:12px"><button class="btn btn-sm" onclick="resetSettings()">&#8634; Auf Defaults zurücksetzen</button></div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- SUS -->
+<div class="page" id="page-sus">
+  <div class="card">
+    <div class="ctitle">&#128229; SuS importieren
+      <button class="btn btn-sm" onclick="openModal('modal-sus')" style="margin-left:4px">&#10067; Anleitung</button>
+    </div>
+    <div class="al ai">
+      Felder: <strong>Name &middot; Vorname &middot; Klasse &middot; Geschlecht &middot; Jahrgangsstufe &middot; Klassenlehrperson</strong><br>
+      <strong>JSON / XLS / XLSX</strong>: Felder als Spaltenköpfe oder JSON-Keys &nbsp;&middot;&nbsp;
+      <strong>CSV / TXT / Copy&amp;Paste</strong>: Tab- oder Semikolon-getrennt in obiger Reihenfolge
+    </div>
+    <div class="form2">
+      <div>
+        <label>JSON / XLS / XLSX / CSV / TXT</label>
+        <label class="btn btn-p" style="cursor:pointer">
+          &#128101; SuS importieren
+          <input type="file" id="importFile" accept=".json,.csv,.txt,.xls,.xlsx" onchange="importFile(this)" style="display:none">
+        </label>
+      </div>
+      <div>
+        <label>Copy/Paste: Name;Vorname;Klasse;Geschlecht;Jahrgangsstufe;Klassenlehrperson</label>
+        <div style="display:flex;gap:8px">
+          <textarea id="csvText" placeholder="Muster;Anna;PST P 5a;w;5. Klasse;A. Muster" style="flex:1;min-height:60px;font-size:12px"></textarea>
+          <button class="btn btn-p" style="align-self:flex-start" onclick="importText()">Import</button>
+        </div>
+      </div>
+    </div>
+    <div id="import-hint" style="display:none"></div>
+  </div>
+  <div class="card">
+    <div class="ctitle">&#128101; SuS-Liste
+      <span id="s-count" style="font-size:11px;font-weight:400;color:var(--muted)"></span>
+      <div style="flex:1"></div>
+      <button class="btn btn-sm" onclick="addManual()">+ Manuell</button>
+      <button class="btn btn-sm btn-d" onclick="clearSus()">Alle löschen</button>
+    </div>
+    <div class="fbar">
+      <label>Klasse:</label>
+      <select id="fKS" onchange="renderS()"><option value="">Alle</option></select>
+      <label>Stufe:</label>
+      <select id="fSS" onchange="renderS()"><option value="">Alle</option></select>
+      <label>Geschlecht:</label>
+      <select id="fGS" onchange="renderS()"><option value="" selected>Alle</option><option value="w">Mädchen</option><option value="m">Knaben</option></select>
+    </div>
+    <div class="twrap">
+      <table><thead><tr>
+        <th onclick="sortS('nr')">#</th>
+        <th onclick="sortS('name')">Name</th>
+        <th onclick="sortS('vorname')">Vorname</th>
+        <th onclick="sortS('jahrgangsstufe')">Stufe</th>
+        <th onclick="sortS('klasse')">Klasse</th>
+        <th onclick="sortS('geschlecht')">Geschlecht</th>
+        <th onclick="sortS('klassenlehrperson')">Klassenlehrperson</th>
+        <th class="nosort" style="text-align:center">Ausschluss</th>
+        <th class="nosort"></th>
+      </tr></thead><tbody id="s-tbody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ERGEBNISSE -->
+<div class="page" id="page-ergebnisse">
+  <div class="card">
+    <div class="ctitle">&#128269; Laufblätter scannen (OCR)
+        <button class="btn btn-sm" onclick="openModal('modal-scan')" style="margin-left:4px">&#10067; Anleitung</button>
+      </div>
+    <div class="al ai" style="margin-bottom:10px">
+        Gescannte Laufblätter hochladen <strong>JPG / PNG</strong> &nbsp;&middot;&nbsp; Es können gleichzeitig mehrere Dokumente hochgeladen werden.<br>
+        <strong id="ocr-conf-hint"></strong>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <label class="btn btn-p" style="cursor:pointer">
+        &#128196; Scans hochladen
+        <input type="file" id="ocrFile" accept="image/jpeg,image/png" multiple onchange="startOCR(this)" style="display:none">
+      </label>
+      <span id="ocr-status" style="font-size:12px;color:var(--muted)"></span>
+    </div>
+    <div id="ocr-prog" style="display:none;margin-top:10px">
+      <div style="background:var(--border);border-radius:4px;height:6px;width:100%">
+        <div id="ocr-bar" style="background:var(--accent);height:6px;border-radius:4px;width:0%;transition:width .3s"></div>
+      </div>
+    </div>
+    <div id="ocr-import-list" style="margin-top:10px"></div>
+  </div>
+  <div class="card" id="ocr-konflikte-card" style="display:none;background-color:var(--accent-bg)">
+    <div class="ctitle">&#9888; Konflikte aus Scans <span id="ocr-konflikte-count" style="font-size:11px;font-weight:400;color:var(--muted)"></span></div>
+    <div id="ocr-result"></div>
+  </div>
+  <div class="card">
+    <div class="ctitle">&#128221; Ergebnisse <span id="e-fill-status" style="font-size:11px;font-weight:400;color:var(--muted)"></span></div>
+    <div class="fbar">
+      <label>Klasse:</label>
+      <select id="fKE" onchange="renderE()"><option value="">Alle</option></select>
+      <label>Stufe:</label>
+      <select id="fSE" onchange="renderE()"><option value="">Alle</option></select>
+      <label>Geschlecht:</label>
+      <select id="fGE" onchange="renderE()">
+          <option value="" selected>Alle</option><option value="w">Mädchen</option><option value="m">Knaben</option>
+      </select>
+    </div>
+    <div class="twrap">
+      <table><thead id="e-thead"></thead><tbody id="e-tbody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- LAUFBLATT -->
+<div class="page" id="page-laufblatt">
+  <div class="card">
+    <div class="ctitle">&#128196; Laufblatt</div>
+    <div class="fbar" style="margin-bottom:0">
+      <label>Klasse:</label>
+      <select id="lbKlasse" onchange="renderLB()"><option value="">&#8212; wählen &#8212;</option></select>
+      <label>Geschlecht:</label>
+      <select id="lbGe" onchange="renderLB()">
+        <option value="w" selected>Mädchen</option><option value="m">Knaben</option>
+      </select>
+      <button class="btn btn-p" onclick="printLB()">&#128424;&#65039; Drucken</button>
+      <button class="btn" onclick="printAll()">&#128424;&#65039; Alle Klassen</button>
+    </div>
+  </div>
+  <div id="lb-cont"></div>
+</div>
+
+<!-- RANGLISTE -->
+<div class="page" id="page-rangliste">
+  <div class="card">
+    <div class="ctitle">&#127942; Rangliste</div>
+    <div class="fbar" style="margin-bottom:12px">
+      <label>Stufe:</label>
+      <select id="fSR" onchange="renderR()"><option value="">Alle Stufen</option></select>
+      <label>Geschlecht:</label>
+      <select id="fGR" onchange="renderR()">
+        <option value="w" selected>Mädchen</option><option value="m">Knaben</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-p" onclick="printRangliste()">&#128424;&#65039; Rangliste drucken</button>
+      <button class="btn" onclick="printAlleRanglisten()">&#128424;&#65039; Alle Ranglisten drucken</button>
+    </div>
+  </div>
+  <div id="r-cont"></div>
+</div>
+</div>
+
+<footer>&copy; 2026 Schule Pfäffikon &nbsp;&middot;&nbsp; C.Bucher &nbsp;&middot;&nbsp; <span class="ver"></span></footer>
+
+<script>
+var LOGO='data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNS4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkViZW5lXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KICAgICB3aWR0aD0iMTg2Ljc1cHgiIGhlaWdodD0iMzcuNDhweCIgdmlld0JveD0iMCAwIDE4Ni43NSAzNy40OCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTg2Ljc1IDM3LjQ4IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxwYXRoIGZpbGw9IiMyMzFGMjAiIGQ9Ik00My40NDgsMjMuMTY4bDAuOTE2LTAuNTVjMC42NDUsMS4xODcsMS4zODksMS43NzksMi4yMzQsMS43NzljMC4zNjEsMCwwLjcwMS0wLjA4NCwxLjAxOC0wLjI1Mg0KCWMwLjMxNy0wLjE2OCwwLjU1OS0wLjM5NCwwLjcyNS0wLjY3OGMwLjE2Ni0wLjI4MywwLjI1LTAuNTgzLDAuMjUtMC45MDFjMC0wLjM2MS0wLjEyMy0wLjcxNS0wLjM2OC0xLjA2Mg0KCWMtMC4zMzYtMC40NzktMC45NTEtMS4wNTUtMS44NDUtMS43MjljLTAuODk5LTAuNjc5LTEuNDU3LTEuMTctMS42NzctMS40NzJjLTAuMzgxLTAuNTA4LTAuNTcxLTEuMDU3LTAuNTcxLTEuNjQ4DQoJYzAtMC40NjksMC4xMTItMC44OTYsMC4zMzctMS4yODJjMC4yMjQtMC4zODYsMC41NDEtMC42ODksMC45NDgtMC45MTJjMC40MDgtMC4yMjIsMC44NS0wLjMzMywxLjMzLTAuMzMzDQoJYzAuNTA3LDAsMC45ODIsMC4xMjYsMS40MjQsMC4zNzdjMC40NDIsMC4yNTIsMC45MDksMC43MTQsMS40MDIsMS4zODhsLTAuODc5LDAuNjY3Yy0wLjQwNS0wLjUzOC0wLjc1LTAuODkyLTEuMDM2LTEuMDYyDQoJYy0wLjI4NS0wLjE3MS0wLjU5Ny0wLjI1Ny0wLjkzNC0wLjI1N2MtMC40MzQsMC0wLjc5LDAuMTMyLTEuMDY1LDAuMzk2Yy0wLjI3NiwwLjI2My0wLjQxNCwwLjU4OC0wLjQxNCwwLjk3NA0KCWMwLDAuMjM0LDAuMDQ5LDAuNDYxLDAuMTQ2LDAuNjgxYzAuMDk4LDAuMjIsMC4yNzYsMC40NTksMC41MzYsMC43MThjMC4xNCwwLjEzNiwwLjYwNCwwLjQ5NSwxLjM5LDEuMDc2DQoJYzAuOTMzLDAuNjg5LDEuNTcyLDEuMzAyLDEuOTIsMS44MzljMC4zNDYsMC41MzcsMC41MiwxLjA3NiwwLjUyLDEuNjE4YzAsMC43ODEtMC4yOTcsMS40Ni0wLjg5LDIuMDM2DQoJYy0wLjU5NCwwLjU3Ni0xLjMxNSwwLjg2NC0yLjE2NSwwLjg2NGMtMC42NTQsMC0xLjI0Ny0wLjE3NS0xLjc3OS0wLjUyM0M0NC4zODgsMjQuNTczLDQzLjg5NywyMy45ODgsNDMuNDQ4LDIzLjE2OCIvPg0KICAgIDxwYXRoIGZpbGw9IiMyMzFGMjAiIGQ9Ik01OS43NzgsMTguODYxbC0wLjgxMywwLjUwNWMtMC43MDMtMC45MzItMS42NjEtMS4zOTgtMi44NzUtMS4zOThjLTAuOTcsMC0xLjc3NywwLjMxMi0yLjQxNywwLjkzNg0KCWMtMC42NDIsMC42MjQtMC45NjMsMS4zODMtMC45NjMsMi4yNzVjMCwwLjU4MSwwLjE0OCwxLjEyNywwLjQ0MywxLjYzOWMwLjI5NSwwLjUxMiwwLjY5OSwwLjkxLDEuMjE0LDEuMTkyDQoJYzAuNTE0LDAuMjgzLDEuMDkyLDAuNDI1LDEuNzMsMC40MjVjMS4xNywwLDIuMTI2LTAuNDY3LDIuODY4LTEuMzk5bDAuODEzLDAuNTM1Yy0wLjM4MSwwLjU3My0wLjg5MywxLjAxOS0xLjUzNCwxLjMzNQ0KCWMtMC42NDMsMC4zMTUtMS4zNzQsMC40NzUtMi4xOTUsMC40NzVjLTEuMjU5LDAtMi4zMDQtMC40MDEtMy4xMzQtMS4yMDJjLTAuODMtMC44LTEuMjQ0LTEuNzc0LTEuMjQ0LTIuOTIyDQoJYzAtMC43NzEsMC4xOTMtMS40ODgsMC41ODItMi4xNWMwLjM4Ny0wLjY2MSwwLjkyLTEuMTc4LDEuNTk5LTEuNTQ5YzAuNjc5LTAuMzcxLDEuNDM5LTAuNTU2LDIuMjc5LTAuNTU2DQoJYzAuNTI3LDAsMS4wMzYsMC4wOCwxLjUyNywwLjI0MWMwLjQ5LDAuMTYxLDAuOTA2LDAuMzcyLDEuMjQ5LDAuNjNDNTkuMjQ4LDE4LjEzMSw1OS41MzksMTguNDYxLDU5Ljc3OCwxOC44NjEiLz4NCiAgICA8cGF0aCBmaWxsPSIjMjMxRjIwIiBkPSJNNjEuOTAxLDE0LjEzaDEuMDI1djQuNTA0YzAuNDE1LTAuNTQ2LDAuODcyLTAuOTU1LDEuMzctMS4yMjdjMC40OTgtMC4yNywxLjAzOC0wLjQwNiwxLjYxOS0wLjQwNg0KCWMwLjU5NSwwLDEuMTI0LDAuMTUxLDEuNTg2LDAuNDU0YzAuNDYxLDAuMzAzLDAuODAxLDAuNzEsMS4wMjEsMS4yMmMwLjIyLDAuNTEsMC4zMywxLjMwOSwwLjMzLDIuMzk4djQuMTAzaC0xLjAyNXYtMy44MDINCgljMC0wLjkxOC0wLjAzNy0xLjUzLTAuMTExLTEuODM5Yy0wLjEyNy0wLjUyNy0wLjM1Ny0wLjkyNC0wLjY5Mi0xLjE4OWMtMC4zMzQtMC4yNjYtMC43NzItMC4zOTktMS4zMTQtMC4zOTkNCgljLTAuNjIxLDAtMS4xNzYsMC4yMDUtMS42NjYsMC42MTVjLTAuNDkyLDAuNDEtMC44MTUsMC45MTgtMC45NzEsMS41MjRjLTAuMDk4LDAuMzktMC4xNDcsMS4xMTItMC4xNDcsMi4xNjh2Mi45MjJoLTEuMDI1VjE0LjEzIi8+DQogICAgPHBhdGggZmlsbD0iIzIzMUYyMCIgZD0iTTcxLjI4NCwxNy4yMDZoMS4wMjV2My43MjFjMCwwLjkwOCwwLjA0OSwxLjUzMywwLjE0NywxLjg3NWMwLjE0NiwwLjQ4NywwLjQyNywwLjg3NCwwLjg0LDEuMTU2DQoJYzAuNDEzLDAuMjgzLDAuOTA2LDAuNDI2LDEuNDc4LDAuNDI2YzAuNTczLDAsMS4wNTgtMC4xMzksMS40NTYtMC40MTRjMC4zOTktMC4yNzYsMC42NzMtMC42MzksMC44MjUtMS4wODgNCgljMC4xMDMtMC4zMDgsMC4xNTQtMC45NTksMC4xNTQtMS45NTV2LTMuNzIxaDEuMDQ4djMuOTExYzAsMS4xLTAuMTI4LDEuOTI4LTAuMzg1LDIuNDgzYy0wLjI1NiwwLjU1Ny0wLjY0MiwwLjk5My0xLjE1NywxLjMwNw0KCWMtMC41MTUsMC4zMTYtMS4xNiwwLjQ3NC0xLjkzOCwwLjQ3NGMtMC43NzUsMC0xLjQyNC0wLjE1Ny0xLjk0NC0wLjQ3NGMtMC41Mi0wLjMxMy0wLjkwOC0wLjc1NC0xLjE2NC0xLjMxNw0KCWMtMC4yNTctMC41NjQtMC4zODUtMS40MTItMC4zODUtMi41NDVWMTcuMjA2Ii8+DQogICAgPHJlY3QgeD0iODAuODA1IiB5PSIxNC4xMyIgZmlsbD0iIzIzMUYyMCIgd2lkdGg9IjEuMDI1IiBoZWlnaHQ9IjExLjA0NSIvPg0KICAgIDxwYXRoIGZpbGw9IiMyMzFGMjAiIGQ9Ik05MS4wODMsMjIuNTMxbDAuODY0LDAuNDU0Yy0wLjI4MywwLjU1Ny0wLjYxMSwxLjAwNi0wLjk4MiwxLjM0OGMtMC4zNzEsMC4zNDMtMC43ODksMC42MDMtMS4yNTQsMC43OA0KCWMtMC40NjQsMC4xNzgtMC45ODksMC4yNjgtMS41NzYsMC4yNjhjLTEuMywwLTIuMzE3LTAuNDI3LTMuMDQ5LTEuMjc4Yy0wLjczMy0wLjg1My0xLjEwMS0xLjgxNS0xLjEwMS0yLjg4OQ0KCWMwLTEuMDEyLDAuMzExLTEuOTEzLDAuOTMyLTIuNzA0YzAuNzg2LTEuMDA2LDEuODQtMS41MDksMy4xNTktMS41MDljMS4zNTksMCwyLjQ0NCwwLjUxNSwzLjI1NSwxLjU0Ng0KCWMwLjU3NywwLjcyNywwLjg3LDEuNjM1LDAuODgsMi43MjRIODUuMDRjMC4wMiwwLjkyNiwwLjMxNSwxLjY4NSwwLjg4OCwyLjI3N2MwLjU3MiwwLjU5MSwxLjI3OCwwLjg4NywyLjExOSwwLjg4Nw0KCWMwLjQwNiwwLDAuODAxLTAuMDcsMS4xODQtMC4yMTFjMC4zODQtMC4xNDIsMC43MS0wLjMyOSwwLjk3OS0wLjU2M1M5MC43NywyMy4wNTIsOTEuMDgzLDIyLjUzMSBNOTEuMDgzLDIwLjM4NQ0KCWMtMC4xMzctMC41NDctMC4zMzYtMC45ODQtMC41OTgtMS4zMTFjLTAuMjYxLTAuMzI3LTAuNjA3LTAuNTkxLTEuMDM4LTAuNzkxYy0wLjQyOS0wLjItMC44ODItMC4zLTEuMzU2LTAuMw0KCWMtMC43ODIsMC0xLjQ1NCwwLjI1MS0yLjAxNywwLjc1NGMtMC40MSwwLjM2Ni0wLjcyMSwwLjkxNi0wLjkzLDEuNjQ4SDkxLjA4M3oiLz4NCiAgICA8cGF0aCBmaWxsPSIjMjMxRjIwIiBkPSJNOTguOTU2LDE0LjQwMWgyLjE3NmMxLjE3NywwLDIuMDI1LDAuMTA4LDIuNTQ1LDAuMzI1YzAuNTIxLDAuMjE4LDAuOTMxLDAuNTcsMS4yMywxLjA1NQ0KCWMwLjMwMSwwLjQ4NiwwLjQ1MSwxLjA2OCwwLjQ1MSwxLjc0N2MwLDAuNzUyLTAuMTk3LDEuMzc3LTAuNTksMS44NzVjLTAuMzk0LDAuNDk4LTAuOTI3LDAuODQ1LTEuNjAxLDEuMDQNCgljLTAuMzk2LDAuMTEyLTEuMTE2LDAuMTY4LTIuMTYxLDAuMTY4djQuNTYzaC0yLjA1MVYxNC40MDEgTTEwMS4wMDcsMTguNjEyaDAuNjUyYzAuNTEzLDAsMC44NjktMC4wMzcsMS4wNjktMC4xMQ0KCWMwLjItMC4wNzQsMC4zNTctMC4xOTUsMC40NzMtMC4zNjRjMC4xMTQtMC4xNjksMC4xNzItMC4zNzQsMC4xNzItMC42MTNjMC0wLjQxNy0wLjE2MS0wLjcyMS0wLjQ4My0wLjkxMg0KCWMtMC4yMzQtMC4xNDItMC42NjktMC4yMTMtMS4zMDQtMC4yMTNoLTAuNTc5VjE4LjYxMnoiLz4NCiAgICA8cGF0aCBmaWxsPSIjMjMxRjIwIiBkPSJNMTA2LjcyOSwxNy4yMDZoMC43MTJjMC4wMDQtMS4wNDUsMC4wMjEtMS42NjIsMC4wNTEtMS44NTNjMC4wNTQtMC40MzksMC4yMzctMC43ODgsMC41NTMtMS4wNDMNCgljMC4zMTUtMC4yNTcsMC43NjEtMC4zODUsMS4zMzctMC4zODVjMC40MTUsMCwwLjg4NCwwLjA5NSwxLjQwNiwwLjI4NXYxLjUyNGMtMC4yODgtMC4wODMtMC41MjUtMC4xMjUtMC43MS0wLjEyNQ0KCWMtMC4yMzQsMC0wLjQwNiwwLjA0OS0wLjUxNCwwLjE0N2MtMC4wNzgsMC4wNzMtMC4xMTcsMC4yMjUtMC4xMTcsMC40NTRsLTAuMDA3LDAuOTk2aDEuMjY3djEuNjkyaC0xLjI2N3Y2LjI3N2gtMS45OTl2LTYuMjc3DQoJaC0wLjcxMlYxNy4yMDYiLz4NCiAgICA8cGF0aCBmaWxsPSIjMjMxRjIwIiBkPSJNMTE4LjA2MSwxNy4yMDZoMS45OTl2Ny45NjloLTEuOTk5di0wLjg0M2MtMC4zOTEsMC4zNzEtMC43ODIsMC42MzktMS4xNzUsMC44MDMNCgljLTAuMzkzLDAuMTYzLTAuODE4LDAuMjQ1LTEuMjc2LDAuMjQ1Yy0xLjAyOSwwLTEuOTE5LTAuMzk5LTIuNjctMS4xOTdjLTAuNzUxLTAuNzk5LTEuMTI2LTEuNzkxLTEuMTI2LTIuOTc5DQoJYzAtMS4yMjksMC4zNjItMi4yMzksMS4wODktMy4wMjRjMC43MjctMC43ODYsMS42MDktMS4xNzksMi42NDgtMS4xNzljMC40NzgsMCwwLjkyNywwLjA5LDEuMzQ2LDAuMjcxDQoJYzAuNDIsMC4xODEsMC44MDgsMC40NTIsMS4xNjQsMC44MTNWMTcuMjA2IE0xMTQuNDcxLDEzLjY1NGMwLjI5MywwLDAuNTQzLDAuMTAyLDAuNzQ4LDAuMzA4YzAuMjA1LDAuMjA1LDAuMzA3LDAuNDUxLDAuMzA3LDAuNzM5DQoJYzAsMC4yOTMtMC4xMDIsMC41NDItMC4zMDcsMC43NDdjLTAuMjA1LDAuMjA2LTAuNDU1LDAuMzA4LTAuNzQ4LDAuMzA4Yy0wLjI4OCwwLTAuNTM0LTAuMTAyLTAuNzM5LTAuMzA4DQoJYy0wLjIwNS0wLjIwNS0wLjMwOC0wLjQ1NC0wLjMwOC0wLjc0N2MwLTAuMjg4LDAuMTAzLTAuNTM0LDAuMzA4LTAuNzM5QzExMy45MzcsMTMuNzU2LDExNC4xODMsMTMuNjU0LDExNC40NzEsMTMuNjU0eg0KCSBNMTE1Ljk1OCwxOC44NDdjLTAuNjE4LDAtMS4xMzIsMC4yMTktMS41NCwwLjY1NWMtMC40MDksMC40MzgtMC42MTMsMC45OTctMC42MTMsMS42ODFjMCwwLjY4OCwwLjIwOCwxLjI1NSwwLjYyNCwxLjY5OQ0KCXMwLjkyOSwwLjY2NywxLjUzNiwwLjY2N2MwLjYyOCwwLDEuMTQ5LTAuMjE5LDEuNTYzLTAuNjU1YzAuNDE0LTAuNDM4LDAuNjIxLTEuMDEsMC42MjEtMS43MThjMC0wLjY5My0wLjIwNy0xLjI1NS0wLjYyMS0xLjY4Ng0KCUMxMTcuMTE0LDE5LjA2MiwxMTYuNTkxLDE4Ljg0NywxMTUuOTU4LDE4Ljg0N3ogTTExNy43MTYsMTMuNjU0YzAuMjkzLDAsMC41NDIsMC4xMDIsMC43NDcsMC4zMDgNCgljMC4yMDUsMC4yMDUsMC4zMDksMC40NTEsMC4zMDksMC43MzljMCwwLjI5My0wLjEwNCwwLjU0Mi0wLjMwOSwwLjc0N2MtMC4yMDUsMC4yMDYtMC40NTQsMC4zMDgtMC43NDcsMC4zMDgNCgljLTAuMjg4LDAtMC41MzQtMC4xMDItMC43MzktMC4zMDhjLTAuMjA1LTAuMjA1LTAuMzA5LTAuNDU0LTAuMzA5LTAuNzQ3YzAtMC4yODgsMC4xMDQtMC41MzQsMC4zMDktMC43MzkNCglDMTE3LjE4MiwxMy43NTYsMTE3LjQyOCwxMy42NTQsMTE3LjcxNiwxMy42NTR6Ii8+DQogICAgPHBhdGggZmlsbD0iIzIzMUYyMCIgZD0iTTEyMS43NTksMTcuMjA2aDAuNzExYzAuMDA0LTEuMDQ1LDAuMDIxLTEuNjYyLDAuMDUyLTEuODUzYzAuMDUzLTAuNDM5LDAuMjM3LTAuNzg4LDAuNTUyLTEuMDQzDQoJYzAuMzE1LTAuMjU3LDAuNzYxLTAuMzg1LDEuMzM3LTAuMzg1YzAuNDE1LDAsMC44ODQsMC4wOTUsMS40MDYsMC4yODV2MS41MjRjLTAuMjg4LTAuMDgzLTAuNTI1LTAuMTI1LTAuNzEtMC4xMjUNCgljLTAuMjM0LDAtMC40MDYsMC4wNDktMC41MTQsMC4xNDdjLTAuMDc4LDAuMDczLTAuMTE3LDAuMjI1LTAuMTE3LDAuNDU0bC0wLjAwNywwLjk5NmgxLjI2N3YxLjY5MmgtMS4yNjd2Ni4yNzdoLTEuOTk5di02LjI3Nw0KCWgtMC43MTFWMTcuMjA2Ii8+DQogICAgPHBhdGggZmlsbD0iIzIzMUYyMCIgZD0iTTEyNy4wNjUsMTcuMjA2aDAuNzExYzAuMDA0LTEuMDQ1LDAuMDIxLTEuNjYyLDAuMDUxLTEuODUzYzAuMDU0LTAuNDM5LDAuMjM4LTAuNzg4LDAuNTUzLTEuMDQzDQoJYzAuMzE1LTAuMjU3LDAuNzYxLTAuMzg1LDEuMzM3LTAuMzg1YzAuNDE1LDAsMC44ODQsMC4wOTUsMS40MDYsMC4yODV2MS41MjRjLTAuMjg4LTAuMDgzLTAuNTI1LTAuMTI1LTAuNzEtMC4xMjUNCgljLTAuMjM0LDAtMC40MDYsMC4wNDktMC41MTQsMC4xNDdjLTAuMDc4LDAuMDczLTAuMTE3LDAuMjI1LTAuMTE3LDAuNDU0bC0wLjAwNywwLjk5NmgxLjI2N3YxLjY5MmgtMS4yNjd2Ni4yNzdoLTEuOTk5di02LjI3Nw0KCWgtMC43MTFWMTcuMjA2Ii8+DQogICAgPHBhdGggZmlsbD0iIzIzMUYyMCIgZD0iTTEzMy45MSwxMy45MjVjMC4zNTEsMCwwLjY1MSwwLjEyNywwLjkwMSwwLjM4MWMwLjI1MiwwLjI1NCwwLjM3NywwLjU2MSwwLjM3NywwLjkyMw0KCWMwLDAuMzU2LTAuMTI1LDAuNjYtMC4zNzMsMC45MTJjLTAuMjQ4LDAuMjUxLTAuNTQ0LDAuMzc3LTAuODkxLDAuMzc3Yy0wLjM1NSwwLTAuNjU5LTAuMTI4LTAuOTA5LTAuMzg1DQoJYy0wLjI1MS0wLjI1Ni0wLjM3Ny0wLjU2OC0wLjM3Ny0wLjkzNGMwLTAuMzUxLDAuMTI1LTAuNjUyLDAuMzczLTAuOTAxUzEzMy41NiwxMy45MjUsMTMzLjkxLDEzLjkyNSBNMTMyLjkxLDE3LjIwNmgydjcuOTY4aC0yDQoJVjE3LjIwNnoiLz4NCiAgICA8cG9seWxpbmUgZmlsbD0iIzIzMUYyMCIgcG9pbnRzPSIxMzcuMjE0LDE0LjEzIDEzOS4yMTQsMTQuMTMgMTM5LjIxNCwyMC40OTEgMTQyLjE1NywxNy4yMDYgMTQ0LjY2OSwxNy4yMDYgMTQxLjIzNiwyMS4wMjYNCgkxNDUuMDc5LDI1LjE3NSAxNDIuNTk3LDI1LjE3NSAxMzkuMjE0LDIxLjUwMiAxMzkuMjE0LDI1LjE3NSAxMzcuMjE0LDI1LjE3NSAxMzcuMjE0LDE0LjEzICIvPg0KICAgIDxwYXRoIGZpbGw9IiMyMzFGMjAiIGQ9Ik0xNDkuNDY0LDE3LjAwMWMwLjc1MSwwLDEuNDU4LDAuMTg4LDIuMTIsMC41NjRjMC42NjEsMC4zNzYsMS4xNzgsMC44ODYsMS41NDksMS41Mw0KCWMwLjM3MSwwLjY0NSwwLjU1NywxLjM0MSwwLjU1NywyLjA4OGMwLDAuNzUyLTAuMTg3LDEuNDU1LTAuNTYxLDIuMTA4Yy0wLjM3MywwLjY1NC0wLjg4MiwxLjE2Ni0xLjUyNiwxLjUzNQ0KCWMtMC42NDUsMC4zNjgtMS4zNTUsMC41NTQtMi4xMzIsMC41NTRjLTEuMTQzLDAtMi4xMTgtMC40MDctMi45MjYtMS4yMjFjLTAuODA5LTAuODEzLTEuMjEyLTEuOC0xLjIxMi0yLjk2Mw0KCWMwLTEuMjQ1LDAuNDU2LTIuMjgyLDEuMzY5LTMuMTEyQzE0Ny41MDMsMTcuMzYyLDE0OC40MjMsMTcuMDAxLDE0OS40NjQsMTcuMDAxIE0xNDkuNDk2LDE4Ljg4M2MtMC42MjEsMC0xLjEzOSwwLjIxNi0xLjU1MiwwLjY0OA0KCWMtMC40MTMsMC40MzQtMC42MTksMC45ODUtMC42MTksMS42NTljMCwwLjY5MywwLjIwNCwxLjI1NSwwLjYxMiwxLjY4NXMwLjkyNiwwLjY0NSwxLjU1MiwwLjY0NXMxLjE0Ni0wLjIxNywxLjU2My0wLjY1Mg0KCWMwLjQxNi0wLjQzNCwwLjYyMy0wLjk5MywwLjYyMy0xLjY3N3MtMC4yMDQtMS4yMzktMC42MTItMS42NjZTMTUwLjEzMiwxOC44ODMsMTQ5LjQ5NiwxOC44ODN6Ii8+DQogICAgPHBhdGggZmlsbD0iIzIzMUYyMCIgZD0iTTE1NS41NzgsMTcuMjA2aDEuOTk5djAuODE2YzAuNDU0LTAuMzgxLDAuODY0LTAuNjQ3LDEuMjMyLTAuNzk3YzAuMzY4LTAuMTQ5LDAuNzQ1LTAuMjI0LDEuMTMtMC4yMjQNCgljMC43ODksMCwxLjQ2MSwwLjI3NiwyLjAxMiwwLjgyOGMwLjQ2MywwLjQ2OCwwLjY5NSwxLjE2MiwwLjY5NSwyLjA4djUuMjY3aC0xLjk3OHYtMy40OWMwLTAuOTUxLTAuMDQzLTEuNTgyLTAuMTI5LTEuODk1DQoJYy0wLjA4NS0wLjMxMi0wLjIzMy0wLjU0OS0wLjQ0NS0wLjcxM2MtMC4yMTItMC4xNjMtMC40NzQtMC4yNDUtMC43ODUtMC4yNDVjLTAuNDA0LDAtMC43NTIsMC4xMzUtMS4wNDEsMC40MDYNCgljLTAuMjksMC4yNzEtMC40OTEsMC42NDYtMC42MDQsMS4xMjNjLTAuMDU5LDAuMjQ5LTAuMDg4LDAuNzg4LTAuMDg4LDEuNjE3djMuMTk3aC0xLjk5OVYxNy4yMDYiLz4NCiAgICA8cG9seWxpbmUgZmlsbD0iIzIzMUYyMCIgcG9pbnRzPSIxNjkuMDI0LDE0LjQwMSAxNzUuNTQzLDE0LjQwMSAxNzEuNzA3LDIzLjIwNSAxNzUuMjk0LDIzLjIwNSAxNzUuMjk0LDI1LjE3NSAxNjguNzA5LDI1LjE3NQ0KCTE3Mi41MjgsMTYuNDMgMTY5LjAyNCwxNi40MyAxNjkuMDI0LDE0LjQwMSAiLz4NCiAgICA8cG9seWxpbmUgZmlsbD0iIzIzMUYyMCIgcG9pbnRzPSIxNzcuNDY1LDE0LjQwMSAxNzkuNTQ1LDE0LjQwMSAxNzkuNTQ1LDE4LjQ2NiAxODMuMTQyLDE4LjQ2NiAxODMuMTQyLDE0LjQwMSAxODUuMjE1LDE0LjQwMQ0KCTE4NS4yMTUsMjUuMTc1IDE4My4xNDIsMjUuMTc1IDE4My4xNDIsMjAuNDUxIDE3OS41NDUsMjAuNDUxIDE3OS41NDUsMjUuMTc1IDE3Ny40NjUsMjUuMTc1IDE3Ny40NjUsMTQuNDAxICIvPg0KICAgIDxnPg0KCTxkZWZzPg0KCQk8cmVjdCBpZD0iU1ZHSURfMV8iIHg9IjAuMDYiIHdpZHRoPSIxODUuMTU1IiBoZWlnaHQ9IjM3LjQyIi8+DQoJPC9kZWZzPg0KICAgICAgICA8Y2xpcFBhdGggaWQ9IlNWR0lEXzJfIj4NCgkJPHVzZSB4bGluazpocmVmPSIjU1ZHSURfMV8iICBvdmVyZmxvdz0idmlzaWJsZSIvPg0KCTwvY2xpcFBhdGg+DQogICAgICAgIDxwYXRoIGNsaXAtcGF0aD0idXJsKCNTVkdJRF8yXykiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBmaWxsPSIjRTMwNjEzIiBkPSJNMTAuMTIzLDQuNDIxDQoJCWMwLDAuMDU4LDAsMC4wNTgsMCwwLjExNkMxMC4wMDYsNC43MTIsOS45NDksNC45NDUsOS44OSw1LjExOWMwLDAuOTMxLDAsMS41MTMsMC4wNTksMi4yMTFjMCwwLjY0LDAuNDY1LDEuMzk2LDEuMjc5LDEuNjg3DQoJCWMtMS41NywwLjQwNy0yLjQ0MywxLjIyMi0zLjAyNCwyLjczNGMtMC41MjQtMC4xNzQtMC41ODItMS4zOTYtMC41ODItMS44NjFjMC0xLjgwNCwwLjExNi0zLjMxNiwwLjExNi00LjU5Ng0KCQlDNi4zNDEsMy41NDksOC4wMjksMi45MDksOC40MzYsMS44MDNjMC4xMTYtMC40MDctMC4yOTEtMS4wNDctMC43NTctMC45ODljMC44NzMtMC40NjUsMS4xNjQtMC4wNTgsMS4zOTYsMC4xNzUNCgkJYzAuMjMyLTAuMTc1LDAuMjkxLTAuNjQsMC0wLjk4OUM5Ljc3NCwwLjM0OSw5Ljk0OSwwLjc1Niw5Ljg5LDEuMTA1YzAuMzQ5LDAuMDU4LDAuNjk4LTAuNDY1LDAuNDY2LTAuOTMNCgkJYzEuMTYzLDAuODcyLDAuMTc0LDEuNTEyLDAuMjMyLDEuNjg3YzAsMCwwLjA1OSwwLDAuMDU5LDAuMDU4YzAuMjksMCwwLjY5Ny0wLjM0OSwwLjc1Ni0wLjgxNWMwLjUyMywxLjE2NC0wLjQwNywxLjU3MS0wLjY0LDEuNzQ1DQoJCUMxMC43MDUsMy40MzIsMTAuNDcyLDQuMDE0LDEwLjEyMyw0LjQyMSBNMC45ODksMTAuOTM3Yy0wLjM0OSwwLTAuNzU2LDAuMDU4LTAuOTg5LDAuODcyYzAuMjkxLTAuMjkxLDEuMDQ3LTAuMTc0LDEuMzM4LDANCgkJYzAuOTMxLDAuOTMxLDAuODc0LDIuNzM1LDIuOTY3LDIuMzg2YzEuMDQ4LDAuNTgyLDEuODYxLDEuODYxLDIuNTYsMi41MDFsMi41NiwyLjczNWMxLjYzLDEuMzM3LDMuNjY1LDAuMTE2LDMuNzgzLTEuNjg3DQoJCWMwLjI5MS0yLjMyOC0yLjMyOC0zLjI1OC0zLjcyNC0zLjU0OWMtMS4zOTYtMC4yOTEtMS40NTQtMC4xMTctMy4yNTgtMS4yOGMtMC4yMzItMC4xMTYtMC41MjMtMC4yOTEtMC43NTYtMC40NjUNCgkJYy0wLjExNi0xLjM5Ny0xLjUxMy0xLjM5Ny0xLjkyLTIuMjExYy0wLjExNi0wLjIzMy0wLjExNi0xLjI4LTEuNTcxLTEuMDQ3YzAuNDY2LDAuMTE2LDAuNjQxLDAuNTIzLDAuNTgyLDAuODE0SDIuNTAxDQoJCWMtMC4yMzIsMC0wLjUyMy0xLjI4LTEuOTE5LTAuNDY1YzAuNTI0LTAuMDU4LDAuOTMxLDAuNDA3LDAuODczLDAuNjk4Yy0wLjI5Mi0wLjE3NS0wLjc1Ni0wLjIzMy0xLjM5NywwLjIzMw0KCQlDMC41MjQsMTAuMzU1LDAuOTMxLDEwLjY0NiwwLjk4OSwxMC45Mzd6IE0xNC41NDQsNS41ODVjLTAuMTE2LDEuMTA1LDAuODcyLDEuODAzLDEuOTIsMi41NTljMC4yMzMtMC45ODgsMC4yOS0xLjM5NiwxLjI4LTEuNTEyDQoJCWMwLjE3NCwwLjA1OCwwLjQwNy0wLjUyNCwwLjY5OC0wLjM0OWMwLjgxNCwwLjUyNCwxLjkyLDEuMjgsMi43OTIsMS44NjFjMC40NjYsMC4zNSwwLjkzMSwwLjU4MiwwLjc1NywxLjEwNg0KCQljMC40MDcsMC4zNDksMC41ODIsMC41MjMsMC44NzMsMC43NTZjMC4yOSwwLjI5MSwwLjI5LDAuMjMzLDAsMC42OThjLTAuNTI1LDAuOTMxLTEuODA0LDEuMzM4LTIuNDQ1LDAuNjQNCgkJYy0wLjE3My0wLjE3NC0wLjE3My0wLjE3NC0wLjM0OC0wLjI5MWMtMC40MDcsMC40NjUtMS42MjksMS4zMzgtMS45NzgsMC44NzNjLTAuMzQ5LTAuMjkxLTAuNzU3LTAuNjk4LTEuMjgtMS4yOA0KCQljLTEuMTYzLDAuMjkxLTEuNjg4LTEuMzM4LTAuNTgyLTEuODAzQzE0LjY2MSw4LjAyOCwxMy40OTgsNi44MDcsMTQuNTQ0LDUuNTg1eiBNMTcuNjg2LDEwLjAwNg0KCQljLTAuNzU3LDAuNDA3LTEuNjg4LTAuMzQ5LTEuMzk2LTEuMTYzQzE2LjkyOSw5LjE5MiwxNy40NTQsOS40ODMsMTcuNjg2LDEwLjAwNnogTTE2LjQ2NCwxMS40NjENCgkJYzAuNDA4LDAuNDY1LDAuNzU2LDAuODcyLDEuMTA1LDEuMTYzYzAuNjk5LDAuNzU2LDEuNjMsMC4xNzUsMi4zMjctMC41MjRjMC40MDcsMC4zNSwwLjU4MiwwLjQwOCwxLjEwNSwwLjQ2Ng0KCQljMC40NjYsMS4zOTYsMC4yMzMsMi4xNTItMC40MDcsMy4wMjVjLTEuODAzLDIuNTAyLTQuMjQ2LDMuMDgzLTYuODY0LDMuMjU3YzAuOTMxLTIuMTUyLTAuMjkxLTMuNjA2LTEuNDU1LTQuNDIxDQoJCWMtMC45ODgtMC41ODEtMi42MTctMC45MzEtMy42MDYtMS4xMDVjLTAuMDU5LTIuNzkyLDIuNzM0LTQuMjQ3LDUuMjM1LTMuMzc0YzAuMzQ5LDAuMTc0LDAuNjk4LDAuNDA3LDEuMTA1LDAuNzU2DQoJCUMxNS4zNTksMTEuMDUzLDE1LjY1LDExLjYzNSwxNi40NjQsMTEuNDYxeiBNMjQuMjU5LDI1LjY1NWMtMC40NjUtMC42OTgtMS41Ny0xLjkyLTMuNjY1LTEuODYNCgkJYzAuNDA3LTAuNjQxLDEuMzM5LTAuOTg5LDIuMDM2LTAuODE1QzIzLjQ0NSwyMy4xNTQsMjQuMzE4LDI0Ljc4MywyNC4yNTksMjUuNjU1eiBNMTcuODAyLDkuOTQ4DQoJCWMtMC4xNzUtMC43NTYtMC41MjMtMS4zMzgtMS4yOC0xLjc0NUMxNy41NjksNy43MzcsMTguODQ5LDkuMDE3LDE3LjgwMiw5Ljk0OHogTTE4LjczMyw3LjI3MmMwLjQwNywwLjI5MSwwLjg3MiwwLjUyNCwxLjI4LDAuODcyDQoJCWMtMC4yMzMsMC0wLjY0LDAuMTE3LTAuNzU3LDAuMzVDMTkuMTQsOC4xNDQsMTguOTA4LDcuNjc5LDE4LjczMyw3LjI3MnogTTEyLjEwMSwyMi4yMjNjLTAuMjkxLDAtMC42OTgsMC4xMTYtMC45MzEsMC44MTMNCgkJYzAuMjMzLTAuMjMxLDAuOTg5LTAuMTc0LDEuMjgsMGMxLjA0OCwwLjgxNSwwLjQ2NSwyLjczNSwyLjczNCwyLjU2MWMwLjIzMiwwLjM0OSwwLjQ2NiwxLjMzOCwxLjIyMiwyLjE1Mg0KCQljMS4wNDgsMS4xNjQsMi42MTgsMS41Nyw0LjY1NCwxLjUxM2MwLjc1NiwwLjA1OCwxLjMzOCwwLjExNiwxLjMzOC0wLjgxNHYtMS4xNjRjMC0wLjI5MSwwLjExNi0wLjQ2NSwwLjQ2Ni0wLjUyMmwxLjM5NSwwLjA1OA0KCQljLTAuMTc1LDQuMzA1LDEuMDQ4LDUuNTg1LDQuNjU1LDUuNTg1YzAuMDU4LDEuMjIxLDAuMDU4LDIuNDQzLTAuOTksMi42MTdjLTAuNjM5LTEuMjc5LTEuNDU0LTAuODcyLTEuNjg2LTEuNTEyDQoJCWMtMC4xMTYtMC4yOTEtMC4xNzUtMS4xNjMtMS41MTMtMC45ODljMC40MDcsMC4xMTYsMC41ODIsMC40NjUsMC41ODIsMC43NTZjLTAuMDU5LDAtMC4xMTcsMC0wLjExNywwDQoJCWMtMC4yMzMsMC0wLjUyNC0xLjI3OS0xLjkxOS0wLjQ2NWMwLjUyMy0wLjA1OCwwLjkzMSwwLjQwNywwLjg3MiwwLjY5OGMtMC4yOTEtMC4xNzYtMC42OTgtMC4xNzYtMS4yNzksMC4xNzQNCgkJYzAuNDY1LTAuMDU5LDAuODE0LDAuMjkyLDAuODE0LDAuNTgyYy0wLjI5MSwwLTAuNjk4LDAuMDU5LTAuOTMxLDAuODE0YzAuMjMzLTAuMjkxLDAuOTg5LTAuMTc1LDEuMjgsMC4wNTkNCgkJYzEuMzM4LDAuODEzLDEuMTYzLDMuMjU4LDMuODk3LDEuOTc4YzEuMTY0LTAuNDY2LDEuODYzLTEuMDQ3LDMuMDI2LTEuODYxYzEuMjc5LTAuOTg5LDAuOTg5LTIuMzg2LDAuOTg5LTQuNjU0DQoJCWMtMC4xMTYtMC4xNzUtMC4zNS0wLjI5MS0wLjQ2Ni0wLjI5MWMtMS42MjksMC4wNTktMi4yMS0wLjE3NS0yLjIxLTAuODE0di0yLjYxN2wxLjk3OCwyLjA5NGMxLjgwMywxLjk3OCw1LjM1Mi0xLjA0NywzLjA4My0zLjM3NA0KCQlsLTguMjAyLTguNTUyYzAuMTE2LTAuOTg5LTAuMTc1LTEuMzM4LTEuMjgxLTIuMDk0Yy0xLjE2My0wLjg3MywwLjIzMy0yLjUwMSwwLjUyNC0yLjc5MmMtMS4yODEsMC4yMzItMy40OTEsMS43NDUtMi45MDgsMy44MzkNCgkJYzAuMjksMC44NzMsMS4wNDYsMS44MDQsMi41NTksMi4xNTNsOC4zNzcsOC43MjdjMC41ODIsMC42NC0wLjUyMywxLjQ1NC0wLjk4OSwwLjkzMUwyMS4xMTksMTYuMTE1DQoJCWMtMi4yNywzLjU0OS01Ljg3NiwzLjE5OS03LjYyMSwzLjQ5YzAuNDA2LDAuMjkxLDAuODcyLDAuNTI0LDEuMzM3LDAuNzU2YzAuMDU4LDAsMC4wNTgsMCwwLjExNywwLjA2DQoJCWMyLjM4NCwwLjkzLDUuMjk0LDAuNDA2LDcuMjcxLDIuMTUxYy0xLjQ1NC0wLjQwNy0yLjY3NiwwLjY0MS0yLjczNCwxLjYyOWMwLDAuNTgyLTAuMDU4LDEuMTYzLTAuMDU4LDEuNjg4DQoJCWMtMC4yOTEsMC4yOTEtMS4xNjMsMC0xLjU3MS0wLjE3NWMtMC40NjUtMC4yMzItMS4wNDctMC44MTQtMS4zOTYtMS4zMzljMC4xNzQtMS45MTktMS42ODctMi4wMzUtMS44NjItMi45MDcNCgkJYy0wLjA1OC0wLjM1LTAuMjMyLTEuMTA2LTEuNDU0LTAuOTg5YzAuMzUsMC4xNzQsMC41MjMsMC40NjUsMC41MjMsMC42OThjMCwwLTAuMDU3LDAtMC4xMTYsMGMtMC4xNzUsMC0wLjQ2Ni0xLjIyMy0xLjg2MS0wLjQ2Ng0KCQljMC41MjMsMCwwLjkzLDAuNDY2LDAuODE0LDAuNzU3Yy0wLjIzMy0wLjE3Ni0wLjYzOS0wLjE3Ni0xLjIyMSwwLjExNWMwLjQ2NCwwLDAuNzU1LDAuMjkxLDAuODE0LDAuNTgyDQoJCUMxMi4xMDEsMjIuMjIzLDEyLjEwMSwyMi4yMjMsMTIuMTAxLDIyLjIyM3oiLz4NCjwvZz4NCiAgICA8cG9seWxpbmUgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGw9IiNFMzA2MTMiIHBvaW50cz0iMzUuNTg2LDE3LjY0NCAyMC43NywyLjgyNyAzNS41ODYsMi44MjcgMzUuNTg2LDE3LjY0NA0KCSIvPg0KICAgIDxwb2x5bGluZSBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iI0UzMDYxMyIgcG9pbnRzPSIzLjE5NCwyMC40MDIgMTguMDExLDM1LjIxOSAzLjE5NCwzNS4yMTkgMy4xOTQsMjAuNDAyDQoJIi8+DQo8L3N2Zz4=';
+var APP_VERSION = "1.19.006";
+var APP_NAME = "Sporttag-Sekretär";
+
+var DEFAULTS = {
+  anlass: {
+    name:      'Mittelstufensporttag 2026', datum: '',
+    schulhaus: 'Primarschule Steinacker / Obermatt',
+  },
+  disziplin: {
+    name:'', anzahl:2, einheit:'m', maxPunkte:15, hoeher:true, },
+  startDisziplinen: [
+    {name:'Weitsprung', anzahl:3, einheit:'m', hoeher:true,  maxPunkte:15},
+    {name:'Weitwurf',   anzahl:2, einheit:'m',  hoeher:true,  maxPunkte:15},
+    {name:'60m Lauf',   anzahl:1, einheit:'s',  hoeher:false, maxPunkte:15},
+    {name:'Hochsprung', anzahl:3, einheit:'m', hoeher:true,  maxPunkte:15},
+    {name:'Klettern',   anzahl:2, einheit:'m',  hoeher:true, maxPunkte:8},
+  ],
+  ocr: {
+    confMin: 70,           // Mindest-Konfidenz [%] für Auto-Übernahme
+    psm: 8,                // Tesseract Page Segmentation Mode (8 = single word)
+    oem: 1,                // Tesseract OCR Engine Mode (1 = LSTM)
+    markDarkThres: 180,    // Pixel-Helligkeit, ab der ein Pixel als „dunkel" gilt (0–255)
+    markMinFrac: 0.02,     // Mindest-Anteil dunkler Pixel in Marker-Zelle (0.0–1.0)
+    poiInset: 5,           // Inset [px] beim Beschnitt der OCR-Zellen
+    greyThreshold: 220,    // Helligkeit, ab der Pixel als Hintergrund gelten (0–255)
+  },
+};
+
+// Aktive Settings (initial = Defaults, werden durch importData/Reset überschrieben)
+var settings = Object.assign({}, DEFAULTS.ocr);
+
+var st={dis:[],skala:{bereiche:[]},sus:[],erg:{},logo:''};
+var sid=1,did=1;
+var sortCol='klasse',sortDir=1;
+var ocrPending=[];
+var _ocrHadContent=false;
+var scan_results=[];        // {kl, ge, autoCount} — erfolgreiche Importe akkumuliert (bis Reset)
+var scan_currentErrors=[];  // pro Upload-Vorgang, transient
+
+document.title = APP_NAME + " v" + APP_VERSION;
+document.querySelectorAll('#app-name').forEach(el => {el.textContent = APP_NAME; });
+document.querySelectorAll(".ver").forEach(el => { el.textContent = " v" + APP_VERSION; });
+
+function g(id){return document.getElementById(id);}
+function esc(s){var s2=String(s||'');s2=s2.split('&').join('&amp;');s2=s2.split('<').join('&lt;');s2=s2.split('>').join('&gt;');s2=s2.split('"').join('&quot;');s2=s2.split("'").join('&#39;');return s2;}
+function geBadge(v){if(v==='w')return '<span class="bw">\u2640 Mädchen</span>';if(v==='m')return '<span class="bm">\u2642 Knaben</span>';return '<span class="bx">\u2295</span>';}
+function geLabel(v){return v==='w'?'MÄDCHEN':v==='m'?'KNABEN':'';}
+// Filter-Helper für SuS- und Ergebnisse-Tab (prefix='S' oder 'E')
+function getFilters(prefix){return{kl:g('fK'+prefix).value,ge:g('fG'+prefix).value,st:g('fS'+prefix).value};}
+function filterSus(f){return st.sus.filter(function(s){return(!f.kl||s.klasse===f.kl)&&(!f.ge||s.geschlecht===f.ge)&&(!f.st||s.jahrgangsstufe===f.st);});}
+function openModal(id) { g(id).classList.add('open'); }
+function closeModal(id) { g(id).classList.remove('open'); }
+// Navigation helpers für Empty-State-Buttons
+function gotoSus(){showTab('sus');}
+function gotoDisziplinen(){showTab('setup');setTimeout(function(){var el=g('disziplinen-card');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},50);}
+// Empty-State-Markup mit optionalem Action-Button. Liefert einen Block, der überall gleich aussieht
+// (zentriert, gedämpft, grauer Button) — egal ob in <td> oder in <div class="card">.
+function emptyMsg(text, btnLabel, btnAction){
+  var btn = btnLabel ? '<button class="btn btn-sm" onclick="'+btnAction+'">'+btnLabel+'</button>' : '';
+  return '<div class="empty-state">'+text+(btn?' '+btn:'')+'</div>';
+}
+
+function showTab(t){
+    ['setup', 'sus', 'laufblatt', 'ergebnisse', 'rangliste'].forEach(function(p,i){
+    g('page-'+p).classList.toggle('active',p===t);
+    document.querySelectorAll('.tab')[i].classList.toggle('active',p===t);
+  });
+  syncFilters();
+  if(t==='ergebnisse') renderE();
+  if(t==='rangliste') renderR();
+  if(t==='laufblatt') renderLB();
+  if(t==='sus') renderS();
+}
+function updateLabel(){g('anlass-label').textContent=g('anlassName').value;}
+
+function loadLogo(inp){
+  if(!inp.files||!inp.files[0])return;
+  var r=new FileReader();
+  r.onload=function(e){st.logo=e.target.result;showLogoPreview();autoSave();};
+  r.readAsDataURL(inp.files[0]);inp.value='';
+}
+function delLogo(){st.logo='';showLogoPreview();autoSave();}
+function showLogoPreview(){
+  var prev=g('logo-prev'),del=g('logo-del');
+  prev.src=getLogo();prev.style.display='';
+  if(del) del.style.display=st.logo?'':'none';
+}
+function getLogo(){return st.logo||LOGO;}
+
+
+
+function addDis(){st.dis.push(Object.assign({},DEFAULTS.disziplin,{id:did++}));renderDis();}
+function remDis(id){st.dis=st.dis.filter(function(d){return d.id!==id;});renderDis();}
+function updDis(id,f,v){var d=st.dis.find(function(d){return d.id===id;});if(!d)return;if(f==='hoeher')d.hoeher=(v==='true');else if(f==='anzahl'||f==='maxPunkte')d[f]=parseInt(v)||0;else d[f]=v;}
+
+// === Erweiterte Einstellungen (OCR-Tuning) ===
+// settings ist global oben deklariert. Nur diese 7 Keys sind erlaubt.
+var SETTING_KEYS = ['confMin','psm','oem','markDarkThres','markMinFrac','poiInset','greyThreshold'];
+function updSetting(key,raw){
+  if(SETTING_KEYS.indexOf(key)<0) return;
+  var num = (key==='markMinFrac') ? parseFloat(raw) : parseInt(raw,10);
+  if(!isFinite(num)){ num = DEFAULTS.ocr[key]; }
+  settings[key] = num;
+  var v=g('setv-'+key); if(v) v.textContent=(key==='markMinFrac') ? num.toFixed(2) : num;
+  // Hint-Text aktualisieren, falls confMin geändert
+  if(key==='confMin'){var ch=g('ocr-conf-hint'); if(ch) ch.textContent='Es werden ausschliesslich Resultate übernommen mit einem Konfidenzwert >'+settings.confMin+'% und korrekter Summe.';}
+  autoSave();
+}
+function resetSettings(){settings=Object.assign({},DEFAULTS.ocr);renderSettings();autoSave();}
+function renderSettings(){
+  SETTING_KEYS.forEach(function(k){
+    var el=g('set-'+k); if(el) el.value=settings[k];
+    var v=g('setv-'+k); if(v) v.textContent=(k==='markMinFrac') ? Number(settings[k]).toFixed(2) : settings[k];
+  });
+  var ch=g('ocr-conf-hint'); if(ch) ch.textContent='Es werden ausschliesslich Resultate übernommen mit einem Konfidenzwert >'+settings.confMin+'% und korrekter Summe.';
+}
+
+function renderDis(){
+  var el=g('dis-liste');
+  if(!st.dis.length){el.innerHTML='<p style="font-size:12px;color:var(--muted);margin-bottom:8px">Noch keine Disziplinen.</p>';return;}
+  el.innerHTML=st.dis.map(function(d){
+    return '<div class="drow">'+
+      '<input type="text" placeholder="Name" value="'+esc(d.name)+'" oninput="updDis('+d.id+',\'name\',this.value)">'+
+      '<input type="number" value="'+(d.anzahl||2)+'" min="1" max="5" oninput="updDis('+d.id+',\'anzahl\',this.value)">'+
+      '<input type="text" value="'+esc(d.einheit)+'" placeholder="Einheit" oninput="updDis('+d.id+',\'einheit\',this.value)">'+
+      '<input type="number" value="'+(d.maxPunkte||0)+'" min="0" oninput="updDis('+d.id+',\'maxPunkte\',this.value)">'+
+      '<select onchange="updDis('+d.id+',\'hoeher\',this.value)">'+
+        '<option value="true" '+(d.hoeher?'selected':'')+'>Höher = besser</option>'+
+        '<option value="false" '+(!d.hoeher?'selected':'')+'>Tiefer = besser</option>'+
+      '</select>'+
+      '<button class="btn btn-sm btn-d" onclick="remDis('+d.id+')">\u2715</button>'+
+    '</div>';
+  }).join('');
+}
+
+function renderSkala(){
+  var typ=g('skalaTyp').value,cont=g('skala-container');
+  if(typ==='keine'){cont.innerHTML='';return;}
+  if(!st.skala.bereiche.length){st.skala.bereiche=[{von:0,bis:5,wert:1},{von:6,bis:9,wert:2},{von:10,bis:14,wert:3},{von:15,bis:99,wert:4}];}
+  cont.innerHTML='<div style="font-size:11px;color:var(--muted);margin-bottom:6px">Von \u2014 Bis \u2014 Punkte</div>'+
+    st.skala.bereiche.map(function(b,i){
+      return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">'+
+        '<input type="number" style="width:90px" value="'+b.von+'" step="0.01" oninput="st.skala.bereiche['+i+'].von=parseFloat(this.value)||0">'+
+        '<span style="color:var(--muted)">\u2013</span>'+
+        '<input type="number" style="width:90px" value="'+b.bis+'" step="0.01" oninput="st.skala.bereiche['+i+'].bis=parseFloat(this.value)||0">'+
+        '<span style="color:var(--muted)">\u2192</span>'+
+        '<input type="number" style="width:90px" value="'+b.wert+'" step="0.5" oninput="st.skala.bereiche['+i+'].wert=parseFloat(this.value)||0">'+
+        '<span style="font-size:11px;color:var(--muted)">Punkte</span>'+
+        '<button class="btn btn-sm btn-d" onclick="st.skala.bereiche.splice('+i+',1);renderSkala()">\u2715</button>'+
+      '</div>';
+    }).join('')+
+    '<button class="btn btn-sm" onclick="st.skala.bereiche.push({von:0,bis:0,wert:0});renderSkala()" style="margin-top:6px">+ Bereich</button>';
+}
+
+function parseGe(v){v=(v||'').trim().toLowerCase();if(v==='male'||v==='m')return 'm';if(v==='female'||v==='w')return 'w';return 'x';}
+function addSus(name,vorname,klasse,ge,klp,stufe){
+  if(!name||!vorname||!klasse)return false;
+  st.sus.push({id:sid++,name:name.trim(),vorname:vorname.trim(),klasse:klasse.trim(),
+    geschlecht:ge,klassenlehrperson:(klp||'').trim(),jahrgangsstufe:(stufe||'').trim(),ausschluss:false});
+  return true;
+}
+function importFile(inp){
+  if(!inp.files||!inp.files.length)return;
+  var f=inp.files[0];
+  var ext=f.name.split('.').pop().toLowerCase();
+  var r=new FileReader();
+  if(ext==='json'){r.onload=function(e){importJSON(e.target.result);};r.readAsText(f,'UTF-8');}
+  else if(ext==='xls'||ext==='xlsx'){r.onload=function(e){var wb=XLSX.read(e.target.result,{type:'binary'});var ws=wb.Sheets[wb.SheetNames[0]];importRows(XLSX.utils.sheet_to_json(ws,{header:1,defval:''}));};r.readAsBinaryString(f);}
+  else{r.onload=function(e){importCSVText(e.target.result);};r.readAsText(f,'UTF-8');}
+}
+function importText(){importCSVText(g('csvText').value);}
+function importJSON(text){
+  try{
+    var data=JSON.parse(text);if(!Array.isArray(data)){alert('Ungültiges JSON.');return;}
+    var added=0,skipped=0;
+    data.forEach(function(d){addSus(d.Name||d.name||'',d.Vorname||d.vorname||'',d.Klasse||d.klasse||'',parseGe(d.Geschlecht||d.geschlecht||''),d.Klassenlehrperson||d.klassenlehrperson||'',d.Jahrgangsstufe||d.jahrgangsstufe||'')?added++:skipped++;});
+    showHint(added,skipped);syncFilters();renderS();autoSave();
+  }catch(err){alert('Fehler: '+err.message);}
+}
+function importCSVText(text){importRows(text.split(/\r?\n/).filter(function(l){return l.trim();}).map(function(l){return l.split('\t');}));}
+function importRows(rows){
+  var added=0,skipped=0,hFound=false;
+  for(var i=0;i<rows.length;i++){
+    var p=rows[i].map(function(c){return String(c||'').trim();});
+    if(!hFound){if(p[0].toLowerCase()==='name'){hFound=true;continue;}}
+    var ok=p.length>=4?addSus(p[0],p[1],p[2],parseGe(p[3]),p[4]||'',p[5]||''):addSus((p[1]||''),(p[0]||''),(p[2]||''),parseGe(p[3]),'','');
+    ok?added++:skipped++;
+  }
+  if(!hFound){
+    st.sus=[];added=0;skipped=0;
+    rows.forEach(function(p){var q=p.map(function(c){return String(c||'').trim();});var r2=q.length>1?q:(q[0]||'').split(/[;,]/);addSus(r2[1]||'',r2[0]||'',r2[2]||'',parseGe(r2[3]),'','')?added++:skipped++;});
+  }
+  showHint(added,skipped);syncFilters();renderS();autoSave();
+}
+function showHint(added,skipped){var el=g('import-hint');el.className='al '+(skipped?'aw':'as');el.textContent='\u2713 '+added+' SuS importiert'+(skipped?', '+skipped+' übersprungen':'');el.style.display='block';clearTimeout(el._t);el._t=setTimeout(function(){el.style.display='none';},4000);}
+function addManual(){
+  var dlg=document.createElement('div');
+  dlg.className='modal-bg open';
+  dlg.setAttribute('data-dlg','1');
+  var fields=[{id:'m_vn',label:'Vorname *'},{id:'m_na',label:'Name *'},{id:'m_kl',label:'Klasse *',ph:'z.B. PST P 5a'},{id:'m_st',label:'Jahrgangsstufe',ph:'z.B. 5. Klasse'},{id:'m_lp',label:'Klassenlehrperson',ph:'z.B. A. Muster'}];
+  var fhtml=fields.map(function(f){return '<div class="fg"><label>'+f.label+'</label><input id="'+f.id+'" type="text" placeholder="'+(f.ph||'')+'"></div>';}).join('');
+  dlg.innerHTML='<div class="modal" style="max-width:380px"><h2>SuS manuell erfassen</h2>'+fhtml+
+    '<div class="fg"><label>Geschlecht</label><select id="m_ge"><option value="w">Mädchen</option><option value="m">Knaben</option><option value="x">Andere</option></select></div>'+
+    '<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">'+
+      '<button class="btn" onclick="this.closest(\'[data-dlg]\').remove()">Abbrechen</button>'+
+      '<button class="btn btn-p" id="m_ok">Hinzufügen</button>'+
+    '</div></div>';
+  // Klick auf Backdrop schliesst — analog zu modal-sus / modal-scan
+  dlg.onclick=function(e){if(e.target===dlg)dlg.remove();};
+  document.body.appendChild(dlg);
+  setTimeout(function(){var el=dlg.querySelector('#m_vn');if(el)el.focus();},50);
+  dlg.querySelector('#m_ok').onclick=function(){
+    var vn=dlg.querySelector('#m_vn').value.trim(),
+        na=dlg.querySelector('#m_na').value.trim(),
+        kl=dlg.querySelector('#m_kl').value.trim(),
+        st2=dlg.querySelector('#m_st').value.trim(),
+        lp=dlg.querySelector('#m_lp').value.trim(),
+        ge=dlg.querySelector('#m_ge').value;
+    if(!vn||!na||!kl){alert('Vorname, Name und Klasse sind Pflichtfelder.');return;}
+    addSus(na,vn,kl,ge,lp,st2);syncFilters();renderS();autoSave();dlg.remove();
+  };
+}
+function clearSus(){if(!confirm('Alle SuS löschen?'))return;st.sus=[];st.erg={};syncFilters();renderS();autoSave();}
+function toggleAussl(id){var s=st.sus.find(function(s){return s.id===id;});if(s)s.ausschluss=!s.ausschluss;renderS();autoSave();}
+function remSus(id){st.sus=st.sus.filter(function(s){return s.id!==id;});delete st.erg[id];renderS();autoSave();}
+function sortS(col){if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}renderS();}
+function renderS(){
+  var list=filterSus(getFilters('S')).slice().sort(function(a,b){var av=a[sortCol]||'',bv=b[sortCol]||'';return String(av).localeCompare(String(bv),'de')*sortDir;});
+  g('s-count').textContent='('+list.length+' / '+st.sus.length+')';
+  var cols=['nr','name','vorname','jahrgangsstufe','klasse','geschlecht','klassenlehrperson'];
+  document.querySelectorAll('#page-sus th').forEach(function(th,i){th.classList.remove('sa','sd');if(cols[i]===sortCol)th.classList.add(sortDir===1?'sa':'sd');});
+  var tb=g('s-tbody');
+  if(!list.length){tb.innerHTML='<tr><td colspan="9">'+emptyMsg('Keine SuS.')+'</td></tr>';return;}
+  tb.innerHTML=list.map(function(s,i){
+      return '<tr class="' + (s.ausschluss ? 'excl' : '') + '"><td class="muted">' + (i + 1) + '</td><td class="nc">' + esc(s.name) + '</td><td class="nc">' + esc(s.vorname) + '</td><td class="muted-sm">' + esc(s.jahrgangsstufe) + '</td><td><span class="chip">' + esc(s.klasse) + '</span></td><td>' + geBadge(s.geschlecht) + '</td><td class="muted-sm">' + esc(s.klassenlehrperson) + '</td><td style="text-align:center"><input type="checkbox" class="cb-aussl" ' + (s.ausschluss ?'checked':'')+' onchange="toggleAussl('+s.id+')"></td><td><button class="btn btn-sm btn-d" onclick="remSus('+s.id+')">\u2715</button></td></tr>';
+  }).join('');
+}
+
+function setErg(sid2,did2,v){
+  if(!st.erg[sid2])st.erg[sid2]={};
+  st.erg[sid2][did2]=(v===''?null:parseFloat(v));
+  var tot=st.dis.reduce(function(s2,d){var val=st.erg[sid2]?st.erg[sid2][d.id]:null;return s2+(val!=null?parseFloat(val)||0:0);},0);
+  st.erg[sid2]['total']=tot;
+  var el=document.querySelector('.tot-'+sid2);if(el)el.value=tot||'';
+  autoSave();
+}
+
+function getMaxTot() { return st.dis.reduce(function (a, d) { return a + (d.maxPunkte || 0); }, 0); }
+function getMaxDis(idx) { var d = st.dis[idx]; return d ? d.maxPunkte : 0; }
+
+// Generischer Wertcheck: parsed Integer und clippt explizit zwischen min und max.
+// min und max sind PFLICHT — Bounds gehören zum Aufrufkontext, nicht zum Helper.
+// Verwendung: clampInt(v, 0, getMaxTot())  oder  clampInt(v, 0, getMaxDis(idx))
+function clampInt(v, min, max) {
+  if (v === '' || v === null || v === undefined) return null;
+  var n = parseInt(v, 10);
+  if (isNaN(n)) return null;
+  return Math.max(min, Math.min(max, n));
+}
+
+function setTotal(sid2, v, inp) {
+  // explizite Bounds: 0 .. getMaxTot()
+  var max = getMaxTot();
+  var n = clampInt(v, 0, max > 0 ? max : Infinity);
+  if (!st.erg[sid2]) st.erg[sid2] = {};
+  st.erg[sid2].total = n;
+  if (n !== null) st.erg[sid2]._src = 'manual';
+  // Wert-Sync nur bei Blur (inp übergeben) — verhindert Cursor-Sprung beim Live-Tippen
+  if (inp && n !== null && String(n) !== inp.value) inp.value = n;
+  // Auto-Remove aus Konflikten, sobald in Ergebnissen ein Total gesetzt wird.
+  // Re-render der Konflikt-Tabelle gebatcht (siehe scheduleOCRRender) — schützt bei Massen-Eingabe.
+  if (n !== null) {
+    var pi = ocrPending.findIndex(function(p){ return p.sid === sid2; });
+    if (pi >= 0) { ocrPending.splice(pi, 1); scheduleOCRRender(); }
+  }
+  autoSave();
+  // Variante A: 0 ist gültiger Wert → Häkchen sobald total != null
+  var statusEl = document.querySelector('.estat-'+sid2);
+    if (statusEl) statusEl.innerHTML = (n != null) ? '<span class="ocr-icon ok">&#10003;</span>' : '';
+  updateFillStatus();
+}
+function getTotal(sid2){
+  if(st.erg[sid2]&&st.erg[sid2]['total']!=null)return st.erg[sid2]['total'];
+  return st.dis.reduce(function(s2,d){var v=st.erg[sid2]?st.erg[sid2][d.id]:null;return s2+(v!=null?parseFloat(v)||0:0);},0);
+}
+function updateFillStatus(){
+  var list=filterSus(getFilters('E'));
+  var filled=list.filter(function(s){return st.erg[s.id]&&st.erg[s.id]['total']!=null;}).length;
+  var fstat=g('e-fill-status');if(fstat)fstat.textContent='('+filled+' / '+list.length+' ausgefüllt)';
+}
+function renderE(){
+  var thead=g('e-thead'),tbody=g('e-tbody');
+  if(!st.dis.length){thead.innerHTML='';tbody.innerHTML='<tr><td>'+emptyMsg('Keine Disziplinen.','Disziplin hinzufügen','gotoDisziplinen()')+'</td></tr>';return;}
+  var th='<tr><th class="nosort">#</th><th class="nosort">Name</th><th class="nosort">Vorname</th><th class="nosort" style="white-space:nowrap">Klasse</th><th class="nosort" style="white-space:nowrap">Geschlecht</th><th class="nosort" style="text-align:center">Ausschluss</th><th class="nosort">Total Punkte</th><th class="nosort">Status</th></tr>';thead.innerHTML=th;
+  var list=filterSus(getFilters('E'));
+  if(!list.length){tbody.innerHTML='<tr><td colspan="'+(5+st.dis.length+1)+'">'+emptyMsg('Keine SuS.','SuS hinzufügen','gotoSus()')+'</td></tr>';return;}
+  updateFillStatus();
+  var maxTot = getMaxTot();
+  tbody.innerHTML=list.map(function(s,i){
+    if(!st.erg[s.id])st.erg[s.id]={};
+    // Variante A: explizit gespeicherter Total entscheidet über Häkchen + Anzeige
+    var explTot   = (st.erg[s.id].total != null) ? st.erg[s.id].total : null;
+    var displayVal= (explTot != null) ? explTot : (getTotal(s.id) || '');
+      var statusHtml = (explTot != null) ? '<span class="ocr-icon ok">&#10003;</span>' : '';
+    var src=st.erg[s.id]&&st.erg[s.id]['_src'];
+    var row='<tr><td class="muted">'+(i+1)+'</td><td>'+esc(s.name)+'</td><td>'+esc(s.vorname)+'</td><td><span class="chip">'+esc(s.klasse)+'</span></td><td>'+geBadge(s.geschlecht)+'</td>';
+    row+='<td style="text-align:center"><input type="checkbox" tabIndex="-1" class="cb-aussl" '+(s.ausschluss?'checked':'')+' onchange="toggleAussl('+s.id+')"></td>';
+    // oninput → live State/Häkchen/Counter (kein value-Touch, Fokus bleibt)
+    // onchange (Blur) → finales Clipping inkl. Wert-Sync via 3. Parameter "this"
+    row+='<td><input class="ei tot-'+s.id+'" type="number" step="1" min="0" max="'+maxTot+'" style="width:160px" value="'+displayVal+'" oninput="setTotal('+s.id+',this.value)" onchange="setTotal('+s.id+',this.value,this)"></td>';
+    row+='<td class="estat-'+s.id+'">'+statusHtml+'</td>';
+    return row+'</tr>';
+  }).join('');
+}
+
+function genQRImg(data,size){
+  try{
+    var tmp=document.createElement('div');tmp.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(tmp);
+    new QRCode(tmp,{text:data,width:size,height:size,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.L});
+    var canvas=tmp.querySelector('canvas');
+    var img=canvas?'<img src="'+canvas.toDataURL()+'" width="'+size+'" height="'+size+'" style="display:block">':'';
+    tmp.remove();return img;
+  }catch(e){return '';}
+}
+function buildLB(kl,ge){
+  var sus=st.sus.filter(function(s){return s.klasse===kl&&(!ge||s.geschlecht===ge);}).sort(function(a,b){return a.name.localeCompare(b.name,'de')||a.vorname.localeCompare(b.vorname,'de');});
+  var name=g('anlassName').value,dat=g('anlasDatum').value;
+  var klpAuto=(sus.find(function(s){return s.klassenlehrperson;})||{klassenlehrperson:''}).klassenlehrperson;
+  var gel=geLabel(ge);
+  // Calculate total column count for colspan
+  var totalCols=2+st.dis.reduce(function(s,d){return s+(d.anzahl||1)+1;},0)+1;
+  // Row 0 (new): QR1 top-right, spanning above Total column
+  var n=sus.length;
+  var qr1img=genQRImg(JSON.stringify({kl:kl,ge:ge,n:n}),80);
+  var hdrQR1='<th colspan="'+(totalCols-1)+'" class="qr-spacer"></th>'+
+    '<th class="qr1-cell"><div class="qr1-div">'+qr1img+'</div></th>';
+  // Row 1: group headers (no QR column now)
+  var hdr='<th rowspan="2" class="ncol">Name / Vorname</th><th rowspan="2" class="rcol aussl-hdr">Aussl.*</th>';
+  var hdr2='';
+  st.dis.forEach(function(d){var nv=d.anzahl||1;hdr+='<th colspan="'+(nv+1)+'">'+esc(d.name)+'</th>';for(var v=1;v<=nv;v++)hdr2+='<th class="res" style="min-width:28px">'+v+'.</th>';hdr2+='<th class="ptc ptc-hdr">Pte.</th>';});
+  hdr+='<th rowspan="2" class="tot tot-hdr">Total<br>Pte.</th>';
+  // Tfoot: QR2 bottom-left
+  // Marker cells in same row as QR2, aligned to bottom via inner div
+  var markerCells='<td class="marker-col"></td>';
+  st.dis.forEach(function(d){
+    var nv=d.anzahl||1;
+    for(var v=0;v<nv;v++) markerCells+='<td class="marker-empty"></td>';
+    markerCells+='<td class="marker-col"></td>';
+  });
+  markerCells+='<td class="marker-empty"></td>';
+  var tfootQR2='<tfoot><tr>'+
+    '<td class="qr2-cell"><div class="qr2-div">'+genQRImg('{"a":2}',60)+'</div></td>'+
+    markerCells+'</tr></tfoot>';
+  var rows=sus.map(function(s){
+    var cells='<td class="ncol"><div class="ncol-inner">'+esc(s.name)+' '+esc(s.vorname)+'</div></td><td class="rcol"></td>';
+    st.dis.forEach(function(d){var nv=d.anzahl||1;for(var v=0;v<nv;v++)cells+='<td class="res"></td>';cells+='<td class="ptc"></td>';});
+    cells+='<td class="tot"></td>';
+    return '<tr>'+cells+'</tr>';
+  }).join('');
+  return '<div class="lbh"><div><div class="lbtitle">'+esc(name)+'</div>'+(gel?'<div class="lbge">'+gel+'</div>':'')+' <div class="lbdate">'+esc(dat)+'</div></div>'+logoBlock()+'</div>'+
+    '<div class="lbkz"><span>Klasse <strong>'+esc(kl)+'</strong>'+(klpAuto?' &nbsp;|&nbsp; '+esc(klpAuto):'')+'</span><span style="font-size:9px;font-weight:400;color:#111">'+APP_VERSION+'</span></div>'+
+    '<div class="lbfn">* Ankreuzen wenn man nicht in der Rangliste erscheinen will</div>'+
+    '<table class="lbt"><thead><tr>'+hdrQR1+'</tr><tr>'+hdr+'</tr><tr>'+hdr2+'</tr></thead>'+tfootQR2+'<tbody>'+rows+'</tbody></table>'+
+    '<div class="lbwarn">\u270f Bitte ausschliesslich dunkle Kugelschreiber oder Filzstifte verwenden und leserlich schreiben!</div>';
+}
+function renderLB() {
+    var kl = g('lbKlasse').value, ge = g('lbGe').value, cont = g('lb-cont');
+    if (!st.sus.length) { cont.innerHTML = '<div class="card">'+emptyMsg('Keine SuS.','SuS hinzufügen','gotoSus()')+'</div>'; return; }
+    if (!kl) { cont.innerHTML = '<div class="card">'+emptyMsg('Bitte Klasse wählen.')+'</div>'; return; }
+    cont.innerHTML = '<div class="lbprev">' + buildLB(kl, ge) + '</div>'
+}
+function printLB(){var kl=g('lbKlasse').value;if(!kl){alert('Bitte Klasse wählen.');return;}doPrint('Laufblatt '+kl,buildLB(kl,g('lbGe').value),false);}
+function printAll(){
+  var combis=[];
+  st.sus.forEach(function(s){var key=s.klasse+'__'+s.geschlecht;if(!combis.find(function(c){return c.key===key;}))combis.push({key:key,kl:s.klasse,ge:s.geschlecht});});
+  combis.sort(function(a,b){return a.kl.localeCompare(b.kl,'de')||a.ge.localeCompare(b.ge);});
+  var html=combis.map(function(c){return buildLB(c.kl,c.ge)+'<div style="page-break-after:always"></div>';}).join('');
+  doPrint('Alle Laufblätter',html,false);
+}
+
+// ── RANGLISTE ──
+function getRLData(fs,fge){
+  var result=[];
+  [{key:'w',label:'Mädchen'},{key:'m',label:'Knaben'}].forEach(function(grp){
+    if(fge&&fge!==grp.key)return;
+    var stufen=[...new Set(st.sus.filter(function(s){return s.geschlecht===grp.key&&(!fs||s.jahrgangsstufe===fs);}).map(function(s){return s.jahrgangsstufe;}))].sort();
+    stufen.forEach(function(stufe){
+        var list = st.sus.filter(function (s) { return s.geschlecht === grp.key && s.jahrgangsstufe === stufe && !s.ausschluss;});
+      if(!list.length)return;
+      var scored=list.map(function(s){return Object.assign({},s,{score:getTotal(s.id)});}).sort(function(a,b){return b.score-a.score;});
+      result.push({grp:grp,stufe:stufe,list:scored});
+    });
+  });
+  return result;
+}
+function buildRLT(list){
+  if(!list.length)return emptyMsg('Keine Einträge.');
+  var h='<div class="twrap"><table class="rlt"><thead><tr><th class="nosort">Rang</th><th class="nosort">Vorname</th><th class="nosort">Name</th><th class="nosort">Klasse</th><th class="nosort">Total Punkte</th></tr></thead><tbody>';
+  var rang=0,prev=null;
+  list.forEach(function(s,i){
+    if(s.score!==prev){rang=i+1;}prev=s.score;
+    var bc=rang===1?'r1':rang===2?'r2':rang===3?'r3':'rx';
+    h+='<tr><td><span class="rb '+bc+'">'+rang+'</span></td><td>'+esc(s.vorname)+'</td><td>'+esc(s.name)+'</td><td>'+esc(s.klasse)+'</td><td class="pc">'+s.score+'</td></tr>';
+  });
+  return h+'</tbody></table></div>';
+}
+function renderR(){
+  var fs=g('fSR').value,fge=g('fGR').value;
+  var data=getRLData(fs,fge);
+  var html=data.map(function(d){return '<div class="card"><div class="ctitle">'+d.grp.label+' \u2014 '+esc(d.stufe||'\u2013')+'</div>'+buildRLT(d.list)+'</div>';}).join('');
+  g('r-cont').innerHTML=html||'<div class="card">'+emptyMsg('Keine SuS.','SuS hinzufügen','gotoSus()')+'</div>';
+}
+
+// ── RANGLISTE PRINT: one A4 per Stufe+Geschlecht with full header ──
+function buildRLPage(d){
+  var name=g('anlassName').value,dat=g('anlasDatum').value;
+  var rows='';
+  var rang=0,prev=null;
+  d.list.forEach(function(s,i){
+    if(s.score!==prev){rang=i+1;}prev=s.score;
+    var bc=rang===1?'r1':rang===2?'r2':rang===3?'r3':'rx';
+    rows+='<tr><td style="width:46px"><span class="rb '+bc+'">'+rang+'</span></td><td>'+esc(s.vorname)+'</td><td>'+esc(s.name)+'</td><td>'+esc(s.klasse)+'</td><td style="font-weight:700;color:#000">'+s.score+'</td></tr>';
+  });
+  return '<div style="page-break-inside:avoid">'+
+    '<div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #222;padding-bottom:10px;margin-bottom:14px">'+
+      '<div>'+
+        '<div style="font-size:20px;font-weight:700;letter-spacing:.3px">'+esc(name)+'</div>'+
+        '<div style="font-size:16px;font-weight:700;margin-top:5px">'+d.grp.label+' &mdash; '+esc(d.stufe||'')+'</div>'+
+        (dat?'<div style="font-size:11px;color:#555;margin-top:3px">'+esc(dat)+'</div>':'')+
+
+      '</div>'+
+      logoBlock()+
+    '</div>'+
+    '<table style="width:100%;border-collapse:collapse;font-size:11px">'+
+      '<thead><tr style="background:#d0d0d0"><th style="padding:6px 8px;text-align:left">Rang</th><th style="padding:6px 8px;text-align:left">Vorname</th><th style="padding:6px 8px;text-align:left">Name</th><th style="padding:6px 8px;text-align:left">Klasse</th><th style="padding:6px 8px;text-align:left">Total Pte.</th></tr></thead>'+
+      '<tbody>'+rows+'</tbody>'+
+    '</table>'+
+    '<div style="font-size:9px;color:#777;margin-top:8px">'+esc(name)+(dat?' &mdash; '+esc(dat):'')+' &mdash;'+APP_VERSION+'</div>'+
+  '</div>';
+}
+function printRangliste(){
+  var fs=g('fSR').value,fge=g('fGR').value,data=getRLData(fs,fge);
+  var html=data.map(function(d,i){return (i>0?'<div style="page-break-before:always"></div>':'')+buildRLPage(d);}).join('');
+  doPrint('Rangliste',html,true);
+}
+function printAlleRanglisten(){
+  var data=getRLData('','');
+  var html=data.map(function(d,i){return (i>0?'<div style="page-break-before:always"></div>':'')+buildRLPage(d);}).join('');
+  doPrint('Alle Ranglisten',html,true);
+}
+
+function logoBlock() {
+    return '<div style="text-align:right;flex-shrink:0">'
+        + '<img src="' + getLogo() + '" style="height:36px;display:block;margin-left:auto;margin-bottom:3px">'
+        + '<div style="font-size:9px;color:#555;text-align:right">' + esc(g('anlassSchulhaus').value) + '</div>'
+        + '</div>';
+}
+
+    function doPrint(title, body, portrait) {
+        var w = window.open('', '_blank');
+        w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + esc(title) + '</title><style>' +
+            'body{font-family:\'Century Gothic\',CenturyGothic,AppleGothic,Futura,\'Trebuchet MS\',Arial,sans-serif;font-size:11px;padding:12px 16px;color:#111}' +
+            'table{width:100%;border-collapse:collapse;font-size:10px;margin-bottom:10px}' +
+            'th,td{border:1px solid #888;padding:5px 6px;font-size:11px}' +
+            'th{background:#d0d0d0;font-weight:700;text-align:center}' +
+            'td{text-align:center}' +
+            'td.ncol{text-align:left;min-width:175px;font-size:11px;font-weight:500}' +
+            '.ncol-inner{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:175px;display:block}' +
+            'td.rcol{background:#fff}' +
+            'td.ptc{background:#fff}' +
+            'td.tot{background:#fff;font-weight:700;border:2px solid #555}' +
+            '.rb{display:inline-block;width:22px;height:22px;border-radius:50%;text-align:center;line-height:22px;font-weight:700;font-size:11px}' +
+            '.r1{background:#fef08a;color:#713f12}.r2{background:#e5e7eb;color:#374151}.r3{background:#fed7aa;color:#7c2d12}.rx{background:#f0f0f0;color:#555}' +
+            '.rlt tr:nth-child(1) td{background:#fefce8}.rlt tr:nth-child(2) td{background:#f9fafb}.rlt tr:nth-child(3) td{background:#fff7ed}' +
+            'tr{page-break-inside:avoid}' +
+            '.lbh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}' +
+            '.lbtitle{font-size:17px;font-weight:700}.lbge{font-size:13px;font-weight:700;margin-top:2px;color:#333}.lbdate{font-size:11px;color:#555;margin-top:3px}' +
+            '.lbkz{display:flex;justify-content:space-between;align-items:baseline;margin:6px 0 5px;font-size:14px;font-weight:700;border-bottom:2px solid #555;padding-bottom:4px}' +
+            '.lbfn{font-size:9px;color:#555;margin-bottom:5px}' +
+            '.lbwarn{font-size:13px;font-weight:700;color:#c00;border:1px solid #c00;padding:3px 8px;display:inline-block;border-radius:3px}' +
+            '.qr1-cell{width:82px;min-width:82px;padding:2px;text-align:center;vertical-align:middle;background:#fff!important;border-top:none!important;border-left:none!important;border-right:none!important;border-bottom:1px solid #555!important}' +
+            '.qr2-cell{width:64px;min-width:64px;padding:2px;text-align:center;vertical-align:middle;background:#fff!important;border-color:transparent!important}' +
+            '.qr-spacer{border:none!important;background:#fff!important;padding:0!important;height:4px!important}' +
+            '.qr1-cell img,.qr2-cell img{border:none!important;padding:0!important;display:block!important}' +
+            '.lbt th,.lbt td{border:1px solid #555;padding:4px 5px;text-align:center}' +
+            '.lbt th{background:#e8e8e8;font-weight:700;font-size:11px}' +
+            '.lbt thead tr:first-child th{background:#d8d8d8}' +
+            '.lbt td.ncol{text-align:left;font-size:11px;font-weight:500}' +
+            '.lbt td.rcol{background:#fff}.lbt td.ptc{background:#fff}' +
+            '.lbt td.tot{min-width:82px;background:#fff;font-weight:700;border:2px solid #555}' +
+            '.lbt tfoot td{border-left-color:transparent!important;border-right-color:transparent!important;border-bottom-color:transparent!important}' +
+            '.aussl-hdr{background:#e0e0e0}.ptc-hdr{background:#d8d8d8}.tot-hdr{background:#d0d0d0}' +
+            '.marker-col{background:#cccccc!important;border-color:transparent!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+            '.marker-empty{background:transparent!important;border-color:transparent!important}' +
+            '@page{size:A4 ' + (portrait ? 'portrait' : 'landscape') + ';margin:1.2cm}' +
+            '</style></head><body>' + body +
+            '<scr' + 'ipt>window.onload=function(){window.focus();setTimeout(function(){window.print();},250);}<\/scr' + 'ipt></body></html>');
+        w.document.close(); w.focus();
+    }
+
+// ── OCR Core – aus DebugTool v1.06 extrahiert ────────────────────────────────
+// ── Globale Variablen ─────────────────────────────────────────────────────────
+var scan_payload  = null;   // QR1-Daten {kl, ge, n}
+var scan_qr1data  = null;
+var scan_qr2data  = null;
+var scan_layout   = null;
+var scan_poiData  = [];
+// scan_poiInset / scan_greyThreshold / markDarkThres / markMinFrac / psm / oem
+// werden ab v1.19.005 zur Laufzeit aus `settings.*` gelesen (Setup → Erweiterte Einstellungen).
+
+// Mehrere Dateien möglich (inp.files ist FileList).
+async function startOCR(inp) {
+  if (!inp.files || !inp.files.length) return;
+  // scan_results wird NICHT geleert (akkumulierend, bis Reset).
+  // Fehler dieses Upload-Vorgangs sammeln wir lokal — sie erscheinen im Status, nicht in der Erfolgsliste.
+  scan_currentErrors = [];
+  g('ocr-prog').style.display = 'block';
+  setOcrStatus('Wird verarbeitet…', 0);
+  for (var fi = 0; fi < inp.files.length; fi++) {
+    await scan_processFile(inp.files[fi]);
+  }
+  g('ocr-prog').style.display = 'none';
+  // Status: Fehler dieses Vorgangs anzeigen (sonst leer)
+  if (scan_currentErrors.length) {
+    setOcrStatus('<span style="color:var(--danger)">'+scan_currentErrors.map(function(e){return '\u2717 '+esc(e.file)+' \u2014 '+esc(e.error);}).join('<br>')+'</span>', 0);
+  } else {
+    setOcrStatus('', 0);
+  }
+  renderScanResults();
+  inp.value = "";
+}
+
+async function scan_processFile(file) {
+  // Image laden mit Fehlerbehandlung (kaputte/ungültige Bilder)
+  var url = URL.createObjectURL(file);
+  var img = new Image();
+  try {
+    await new Promise(function(resolve, reject) {
+      img.onload = resolve;
+      img.onerror = function(){ reject(new Error('Falsches Format')); };
+      img.src = url;
+    });
+  } catch (e) {
+    URL.revokeObjectURL(url);
+    scan_currentErrors.push({file:file.name, error:'Falsches Format'}); return;
+  }
+  var tmp = document.createElement('canvas');
+  tmp.width = img.width; tmp.height = img.height;
+  // Weißer Hintergrund schützt vor PNG-Transparenz
+  var ctx = tmp.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, tmp.width, tmp.height);
+  ctx.drawImage(img, 0, 0);
+  URL.revokeObjectURL(url);
+
+  scan_payload = null; scan_qr1data = null; scan_qr2data = null;
+  scan_layout  = null; scan_poiData = [];
+
+  // 1. Grobe Rotation → QR1
+  var found = false;
+  for (var di = 0; di < 4; di++) {
+    var deg = [0, 90, 270, 180][di];
+    var tc  = deg ? scan_rotateCanvas(tmp, deg) : tmp;
+    var r1  = scan_findQR1(tc);
+    if (!r1) continue;
+    scan_payload = r1.payload; scan_qr1data = r1.qr;
+    if (deg) tmp = tc;
+    found = true; break;
+  }
+  if (!found) { scan_currentErrors.push({file:file.name, error:'Klasse nicht erkannt (QR)'}); return; }
+
+  // 1.5 SuS-Anzahl-Validierung (payload.n vs. tatsächliche SuS dieser Klasse/Geschl.)
+  var nSus = st.sus.filter(function(s){return s.klasse===scan_payload.kl && s.geschlecht===scan_payload.ge;}).length;
+  if (nSus !== scan_payload.n) { scan_currentErrors.push({file:file.name, error:'Anzahl SuS stimmt nicht'}); return; }
+
+  // 2. QR2
+  var q2 = scan_findQR2(tmp);
+  if (q2) { scan_qr2data = q2; }
+  else     { console.warn('OCR: QR2 nicht gefunden – Feinrotation eingeschränkt'); }
+
+  // 3. Layout vor Feinrotation (für Marker-Winkel)
+  var L1 = scan_qr2data ? scan_detectLayout(tmp) : null;
+
+  // 4. Feinwinkel: Marker → Linie → QR (Priorität)
+  var angle = null;
+  if (L1 && L1.ptcs.length > 0) angle = scan_detectAngleFromMarkers(tmp, L1);
+  if (angle === null)            angle = scan_detectAngleFromQR(scan_qr1data, scan_qr2data);
+
+  // 5. Feinrotation
+  if (Math.abs(angle) > 0.0005) {
+    tmp = scan_rotateCanvas(tmp, -angle * 180 / Math.PI);
+    var r1b = scan_findQR1(tmp);
+    if (r1b) { scan_payload = r1b.payload; scan_qr1data = r1b.qr; }
+    else      { console.warn('OCR: QR1 nach Feinrotation nicht gefunden'); }
+    var q2b = scan_findQR2(tmp);
+    if (q2b) { scan_qr2data = q2b; } else{ console.warn('OCR: QR2 nach Feinrotation nicht gefunden'); }
+  }
+
+  // 6. Layout final
+  scan_layout = scan_qr2data ? scan_detectLayout(tmp) : null;
+  if (!scan_layout) { scan_currentErrors.push({file:file.name, error:'Klasse nicht erkannt (QR)'}); return; }
+
+  // 6.5 Disziplinen-Anzahl-Validierung
+  if (scan_layout.ptcs.length !== st.dis.length) { scan_currentErrors.push({file:file.name, error:'Anzahl Disziplinen stimmt nicht'}); return; }
+
+  // 7. OCR
+  scan_poiData = scan_buildPOIs(scan_layout, settings.poiInset);
+  var results  = await scan_runOCR(tmp, scan_poiData, scan_payload.n);
+  var mapped = scan_mapResults(scan_payload, results);
+  var autoCount = mapped.length ? applyOCRResults(mapped) : 0;
+  scan_results.push({kl:scan_payload.kl, ge:scan_payload.ge, autoCount:autoCount});
+}
+
+// ── Canvas-Helfer ─────────────────────────────────────────────────────────────
+function scan_rotateCanvas(src, deg) {
+  var rad = deg * Math.PI / 180, r = document.createElement('canvas');
+  if (deg === 90 || deg === 270 || deg === -90) { r.width = src.height; r.height = src.width; }
+  else                                           { r.width = src.width;  r.height = src.height; }
+  var rc = r.getContext('2d');
+  rc.translate(r.width / 2, r.height / 2); rc.rotate(rad);
+  rc.drawImage(src, -src.width / 2, -src.height / 2);
+  return r;
+}
+
+// ── QR-Helfer ─────────────────────────────────────────────────────────────────
+function scan_tryQR(c) {
+  try { var d = c.getContext('2d').getImageData(0, 0, c.width, c.height); return jsQR(d.data, c.width, c.height); }
+  catch (e) { return null; }
+}
+function scan_shiftQR(qr, dx, dy) {
+  ['topLeftCorner','topRightCorner','bottomLeftCorner','bottomRightCorner'].forEach(function(k) {
+    qr.location[k] = { x: qr.location[k].x + dx, y: qr.location[k].y + dy };
+  });
+}
+function scan_searchRegion(canvas, rx, ry, rw, rh) {
+  var crop = document.createElement('canvas'); crop.width = rw; crop.height = rh;
+  crop.getContext('2d').drawImage(canvas, rx, ry, rw, rh, 0, 0, rw, rh);
+  var qr = scan_tryQR(crop); if (qr) scan_shiftQR(qr, rx, ry); return qr;
+}
+function scan_findQR1(canvas) {
+  var W = canvas.width, H = canvas.height;
+  var qr = scan_searchRegion(canvas, Math.floor(W * 0.75), 0, Math.floor(W * 0.25), Math.floor(H * 0.40));
+  if (!qr) return null;
+  var p; try { p = JSON.parse(qr.data); } catch (e) { return null; }
+  return (p && p.kl && p.ge && p.n) ? { qr: qr, payload: p } : null;
+}
+function scan_findQR2(canvas) {
+  var W = canvas.width, H = canvas.height;
+  return scan_searchRegion(canvas, 0, Math.floor(H * 0.40), Math.floor(W * 0.25), Math.floor(H * 0.60));
+}
+
+// ── Layout-Erkennung ──────────────────────────────────────────────────────────
+function scan_detectLayout(canvas) {
+  if (!scan_qr1data || !scan_qr2data) return null;
+  var l1 = scan_qr1data.location, l2 = scan_qr2data.location;
+  var sc1 = (l1.topRightCorner.x - l1.topLeftCorner.x) / 80;
+  var sc2 = (l2.topRightCorner.x - l2.topLeftCorner.x) / 60;
+  var xLeft    = l2.topLeftCorner.x     - 5 * sc2;
+  var xRight   = l1.bottomRightCorner.x + 10 * sc1;
+  var xTotLeft = l1.topLeftCorner.x     - 3 * sc1;
+  var yTop     = l1.bottomRightCorner.y + 5 * sc1;
+  var yBottom  = l2.topLeftCorner.y     - 3 * sc2;
+  var n = scan_payload.n;
+  var zh = (yBottom - yTop) / (n + 2);
+  var yData = yTop + 2 * zh;
+
+  var xProbeStart = Math.round(l2.topRightCorner.x + 3 * sc2);
+  var yProbe = Math.round(l2.topLeftCorner.y + (l2.bottomLeftCorner.y - l2.topLeftCorner.y) * 0.5);
+  var py = Math.max(0, Math.min(canvas.height - 6, yProbe));
+  if (xProbeStart >= xTotLeft || xProbeStart < 0) return null;
+
+  var MAX_GAP = 10, MIN_WIDTH = Math.round(5 * sc2);
+  var scanW   = xTotLeft - xProbeStart;
+  var imgData = canvas.getContext('2d').getImageData(xProbeStart, py, scanW, 5);
+  var dark = [], inDark = false, segStart = 0, segs = [];
+  for (var x = 0; x < scanW; x++) {
+    var d = false;
+    for (var row = 0; row < 5; row++) {
+      var idx = (row * scanW + x) * 4;
+      if ((imgData.data[idx] + imgData.data[idx+1] + imgData.data[idx+2]) / 3 < settings.greyThreshold) { d = true; break; }
+    }
+    dark.push(d);
+  }
+  for (var x = 0; x < scanW; x++) {
+    if (dark[x] && !inDark)  { inDark = true;  segStart = x; }
+    else if (!dark[x] && inDark) { inDark = false; segs.push({ x0: segStart + xProbeStart, x1: x + xProbeStart }); }
+  }
+  if (inDark) segs.push({ x0: segStart + xProbeStart, x1: scanW + xProbeStart });
+
+  var merged = [];
+  for (var i = 0; i < segs.length; i++) {
+    if (!merged.length) { merged.push({ x0: segs[i].x0, x1: segs[i].x1 }); continue; }
+    var last = merged[merged.length - 1];
+    if (segs[i].x0 - last.x1 <= MAX_GAP) last.x1 = Math.max(last.x1, segs[i].x1);
+    else merged.push({ x0: segs[i].x0, x1: segs[i].x1 });
+  }
+  var cols = merged.filter(function(s) { return (s.x1 - s.x0) >= MIN_WIDTH; });
+  if (cols.length < 2) return null;
+
+  return { aussl: cols[0], ptcs: cols.slice(1),
+    xLeft: xLeft, xRight: xRight, xTotLeft: xTotLeft,
+    yTop: yTop, yBottom: yBottom, yData: yData, zh: zh, n: n,
+    sc1: sc1, sc2: sc2, yProbe: yProbe, xProbeStart: xProbeStart };
+}
+
+// ── POI-Builder ───────────────────────────────────────────────
+function scan_buildPOIs(L, ins) {
+  ins = ins || 0;
+  var pois = [];
+  for (var i = 0; i < L.n; i++) {
+    var rowY = Math.round(L.yData + i * L.zh), rowH = Math.round(L.zh);
+    var aw = L.aussl.x1 - L.aussl.x0;
+    pois.push({ row: i, col: 'aussl', name: 'Aussl', x: L.aussl.x0 + ins, y: rowY + ins, w: aw - 2*ins, h: rowH - 2*ins });
+    L.ptcs.forEach(function(c, di) {
+      var cw = c.x1 - c.x0;
+      pois.push({ row: i, col: di, name: 'D'+(di+1), x: c.x0+ins, y: rowY+ins, w: cw-2*ins, h: rowH-2*ins });
+    });
+    var tw = L.xRight - L.xTotLeft;
+    pois.push({ row: i, col: 'total', name: 'Total', x: L.xTotLeft+ins, y: rowY+ins, w: tw-2*ins, h: rowH-2*ins, color: '#ea580c' });
+  }
+  return pois;
+}
+
+// ── Winkel-Erkennung ──────────────────────────────────────────────────────────
+// Priorität 1: untere Kante hellgrauer Marker
+function scan_detectAngleFromMarkers(canvas, L) {
+  var l2 = scan_qr2data.location;
+  var scanTop = Math.round(l2.topLeftCorner.y + (l2.bottomLeftCorner.y - l2.topLeftCorner.y) * 0.5);
+  var scanH   = Math.round(l2.bottomLeftCorner.y - scanTop + 10);
+  var ctx = canvas.getContext('2d'), points = [];
+  L.ptcs.forEach(function(seg) {
+    var sw = seg.x1 - seg.x0; if (sw <= 0) return;
+    var strip = ctx.getImageData(seg.x0, scanTop, sw, scanH);
+    for (var x = 0; x < sw; x++) {
+      var lastY = -1;
+      for (var y = 0; y < scanH; y++) {
+        var idx = (y * sw + x) * 4;
+        if ((strip.data[idx] + strip.data[idx+1] + strip.data[idx+2]) / 3 < settings.greyThreshold) lastY = y;
+      }
+      if (lastY >= 0) points.push({ x: seg.x0 + x, y: scanTop + lastY });
+    }
+  });
+  if (points.length < 50) { console.warn('OCR: Marker-Winkel: zu wenig Punkte ('+points.length+')'); return null; }
+  var n = points.length, sx = 0, sy = 0, sxx = 0, sxy = 0;
+  for (var i = 0; i < n; i++) { sx += points[i].x; sy += points[i].y; sxx += points[i].x*points[i].x; sxy += points[i].x*points[i].y; }
+  return Math.atan((n*sxy - sx*sy) / (n*sxx - sx*sx));
+}
+
+// Priorität 2: QR-Achsen (Fallback)
+function scan_detectAngleFromQR(qr1, qr2) {
+  function qrAngle(qr) { var l = qr.location; return Math.atan2(l.topRightCorner.y - l.topLeftCorner.y, l.topRightCorner.x - l.topLeftCorner.x); }
+  var a1 = qrAngle(qr1);
+  if (qr2) { var a2 = qrAngle(qr2); return a1 * (2/3) + a2 * (1/3); }
+  return a1;
+}
+
+// ── OCR ───────────────────────────────────────────────────────────────────────
+// Gibt Array von Zeilen zurück: [{row, aussl, cols:[{name,val,conf}], total}]
+async function scan_runOCR(canvas, pois, nRows) {
+  // Tuning-Werte aus settings (Setup → Erweiterte Einstellungen).
+  var markDarkThres = settings.markDarkThres;
+  var markMinFrac   = settings.markMinFrac;
+  var psm = settings.psm, oem = settings.oem;
+  var results = [];
+
+  for (var i = 0; i < nRows; i++) {
+        setOcrStatus({kl: scan_payload.kl, ge: scan_payload.ge, line: i+1, total: nRows}, 0.1 + 0.9 * (i / (nRows-1)));
+    var rowPois = pois.filter(function(p) { return p.row === i; });
+    var rowResult = { row: i, aussl: false, cols: [], total: null };
+
+    for (var j = 0; j < rowPois.length; j++) {
+      var poi = rowPois[j];
+      var px  = canvas.getContext('2d').getImageData(poi.x, poi.y, poi.w, poi.h).data;
+
+      // Aussl: Schwärzungscheck
+      if (poi.col === 'aussl') {
+        var dark = 0;
+        for (var pi = 0; pi < px.length; pi += 4) if ((px[pi]+px[pi+1]+px[pi+2])/3 < markDarkThres) dark++;
+        rowResult.aussl = dark > (poi.w * poi.h * markMinFrac);
+        continue;
+      }
+
+      // Leere Zelle
+      var darkPx = 0;
+      for (var pi2 = 0; pi2 < px.length; pi2 += 4) if ((px[pi2]+px[pi2+1]+px[pi2+2])/3 < markDarkThres) darkPx++;
+      if (darkPx / (poi.w * poi.h) < markMinFrac) {
+        if (poi.col === 'total') rowResult.total = { val: null, conf: 0 };
+        else rowResult.cols.push({ name: poi.name, val: null, conf: 0 });
+        continue;
+      }
+
+      // OCR – 3× skaliert + Kontrast
+      var crop = document.createElement('canvas'); crop.width = poi.w*3; crop.height = poi.h*3;
+      var cc = crop.getContext('2d');
+      cc.drawImage(canvas, poi.x, poi.y, poi.w, poi.h, 0, 0, poi.w*3, poi.h*3);
+      var id = cc.getImageData(0, 0, crop.width, crop.height);
+      for (var pi3 = 0; pi3 < id.data.length; pi3 += 4) {
+        var gv = (id.data[pi3] + id.data[pi3+1] + id.data[pi3+2]) / 3;
+        id.data[pi3] = id.data[pi3+1] = id.data[pi3+2] = gv < 180 ? 0 : 255;
+      }
+      cc.putImageData(id, 0, 0);
+
+      try {
+        var r = await Tesseract.recognize(crop, 'eng', { tessedit_char_whitelist: '0123456789', psm: psm, oem: oem });
+        var max = poi.col === 'total' ? getMaxTot() : getMaxDis(poi.col);
+        var res = scan_extractNumber(r, max);
+        if (poi.col === 'total') rowResult.total = res;
+        else rowResult.cols.push({ name: poi.name, val: res.val, conf: res.conf });
+      } catch (e) {
+        console.warn('OCR Fehler Z.'+(i+1)+' '+poi.name+': '+e.message);
+        if (poi.col === 'total') rowResult.total = { val: null, conf: 0 };
+        else rowResult.cols.push({ name: poi.name, val: null, conf: 0 });
+      }
+    }
+    results.push(rowResult);
+  }
+  return results;
+}
+
+// ── Zahlen-Extraktion ─────────────────────────────────────────────────────────
+function scan_extractNumber(r, maxVal) {
+  if (!r || !r.data) return { val: null, conf: 0 };
+  var map = {
+    O:'0',o:'0',D:'0',Q:'0',C:'0',c:'0',
+    I:'1',l:'1','|':'1','!':'1',A:'1',N:'1',
+    Z:'2',z:'2', H:'4',
+    S:'5',s:'5','$':'5',
+    '&':'6',G:'6',b:'6','©':'6',h:'6',
+    '+':'7',F:'7',t:'7',T:'7',E:'7',
+    B:'8', g:'9'
+  };
+  var symbols = r.data.symbols || [], raw = '', sum = 0, count = 0;
+  if (symbols.length) {
+    for (var i = 0; i < symbols.length; i++) {
+      var s = symbols[i]; if (!s || s.confidence < 30) continue;
+      var char = s.text || '';
+      if (s.choices && s.choices.length) {
+        var best = null;
+        for (var j = 0; j < s.choices.length; j++) {
+          var c = s.choices[j];
+          if (/[0-9]/.test(c.text) && (!best || c.confidence > best.confidence)) best = c;
+        }
+        if (best) char = best.text;
+      }
+      var m = map[char] !== undefined ? map[char] : char;
+      if (m >= '0' && m <= '9') { raw += m; sum += s.confidence; count++; }
+    }
+  } else { raw = (r.data.text || '').trim(); }
+    if (!raw) return { val: null, conf: 0 };
+
+  // Duplikat-Erkennung (z.B. "2929" → "29")
+  if (raw.length > 2 && raw.length % 2 === 0) {
+    var half = raw.length >> 1;
+    if (raw.slice(0, half) === raw.slice(half)) raw = raw.slice(0, half);
+  }
+  var val = parseInt(raw, 10);
+  if (isNaN(val)) return { val: null, conf: 0 };
+  var conf = count ? Math.round(sum / count) : Math.round(r.data.confidence || 0);
+
+  if (maxVal !== undefined && val > maxVal) {
+    var len = String(maxVal).length, ok = [];
+    var v1 = parseInt(raw.slice(0, len), 10);
+    var v2 = parseInt(raw.slice(-len), 10);
+    if (!isNaN(v1) && v1 <= maxVal) ok.push(v1);
+    if (!isNaN(v2) && v2 <= maxVal) ok.push(v2);
+    if (ok.length) val = Math.max.apply(null, ok);
+    else return { val: null, conf: conf };
+  }
+  if (maxVal !== undefined && val <= maxVal) conf = Math.min(100, conf + 20);
+  return { val: val, conf: conf };
+}
+
+// ── Mapper: scan_runOCR → ocrPending-Format ──────────────────────────────────
+function scan_mapResults(payload, results) {
+  var kl = payload.kl, ge = payload.ge;
+  var sus = st.sus.filter(function(s){ return s.klasse===kl && (!ge||s.geschlecht===ge); })
+    .sort(function(a,b){ return a.name.localeCompare(b.name,'de')||a.vorname.localeCompare(b.vorname,'de'); });
+  return results.map(function(r) {
+    var s = sus[r.row] || {};
+    return {
+      sid: s.id||null,
+      name: s.name ? (s.name+' '+s.vorname) : ('Zeile '+(r.row+1)),
+      kl: kl, ge: ge,
+      ausschluss: r.aussl,
+      dis: r.cols.map(function(c,ci){
+          return { did: st.dis[ci] ? st.dis[ci].id : ci, name: st.dis[ci] ? st.dis[ci].name : 'D' + (ci + 1), val: c.val, conf: c.conf };
+      }),
+      total: r.total||{val:null,conf:0}
+    };
+  });
+}
+
+// ── OCR-Validierung: Single Source of Truth ──────────────────────────────────
+// isValidOCRRow: streng — taugt für Auto-Übernahme in applyOCRResults.
+// Voraussetzungen: alle Disziplinen mit Conf≥confMin, Total mit Conf≥confMin, Summe=Total.
+// Range-Check (0..maxDis / 0..maxTot) wird hier NICHT geprüft — das macht das OCR
+// bereits beim Erkennen. Manuelle Eingaben durchlaufen dagegen clampInt (s. ocrTot).
+function isValidOCRRow(row) {
+  var CONF_MIN = settings.confMin;
+  var allVal = row.dis.every(function(d){ return d.val !== null && d.conf >= CONF_MIN; });
+  var totOK  = row.total && row.total.val !== null && row.total.conf >= CONF_MIN;
+  if (!allVal || !totOK) return false;
+  var sum = row.dis.reduce(function(s,d){ return s + (d.val||0); }, 0);
+  return row.total.val === sum;
+}
+
+function canCommitOCRRow(row) { return !!(row.total && row.total.val !== null); }
+
+function getConflictReason(row) {
+    var CONF_MIN = settings.confMin;
+    var existingTot = (st.erg[row.sid] && st.erg[row.sid]['total'] != null) ? st.erg[row.sid]['total'] : null;
+    if (existingTot !== null) {return { kind: 'existing', tooltip: 'Bereits vorhanden: ' + existingTot };}
+    // Alles übrige ist "unsichere Werte" — Tooltip differenziert:
+    if (row.dis.some(function (d) { return d.val === null; })) {return { kind: 'unsure', tooltip: 'Fehlende Werte' };}
+    if (!row.total || row.total.val === null) {return { kind: 'unsure', tooltip: 'Total nicht erkannt' };}
+    var sum = row.dis.reduce(function (s, d) { return s + (d.val || 0); }, 0);
+    if (row.total.val !== sum) {return { kind: 'unsure', tooltip: 'Summe (' + sum + ') ≠ Total (' + row.total.val + ')' };}
+    var anyLowConf = row.dis.some(function (d) { return d.conf < CONF_MIN; }) || (row.total.conf < CONF_MIN);
+    if (anyLowConf) {return { kind: 'unsure', tooltip: 'OCR-Confidence < ' + CONF_MIN + '%' };}
+    return null;
+}
+
+function ocrStatusHtml(reason, manual) {
+  if (manual) { return '<span class="ocr-icon ok">&#10003;</span> <span class="ocr-text ok">Manuell editiert</span>'; }
+  if (!reason) return '';
+  if (reason.kind === 'existing') { return '<span class="ocr-icon exist">&#8635;</span> <span class="ocr-text exist">'+esc(reason.tooltip)+'</span>'; }
+  return '<span class="ocr-icon warn">&#9888;</span> <span class="ocr-text warn">'+esc(reason.tooltip)+'</span>';
+}
+
+// Partial refresh: aktualisiert Konflikt-Icon, Total-Border und Übernehmen-Button
+// in-place (kein DOM-Rebuild → Fokus im Total-Input bleibt).
+function refreshOCRRow(ri){
+  var row = ocrPending[ri];
+  if (!row) return;
+  var canCommit = canCommitOCRRow(row);
+    var reason = getConflictReason(row);
+  var iconEl = document.getElementById('ocr-i-' + ri);
+  if (iconEl) iconEl.innerHTML = ocrStatusHtml(reason, row.total && row.total.manual);
+  // Button: disabled-Status live setzen
+  var btnEl = document.getElementById('ocr-btn-'+ri);
+  if (btnEl) {
+    btnEl.disabled = !canCommit;
+    btnEl.style.opacity = canCommit ? '' : '0.4';
+    btnEl.style.cursor  = canCommit ? '' : 'not-allowed';
+  }
+}
+
+// Called oninput/onchange auf Total-Input in der Konflikt-Tabelle.
+// oninput: live State + refreshOCRRow (kein value-Touch → Fokus bleibt)
+// onchange (mit inp): zusätzlich value-Sync auf geclippten Wert
+function ocrTot(e, ri, inp) {
+  var max = getMaxTot();
+  var n = clampInt(e.target.value, 0, max > 0 ? max : Infinity);
+  if (!ocrPending[ri].total) ocrPending[ri].total = {};
+  var t = ocrPending[ri].total;
+  t.val = n; t.conf = 100; t.manual = true;
+  if (inp && n !== null && String(n) !== inp.value) inp.value = n;
+  e.target.style.borderColor = 'var(--success)';
+  refreshOCRRow(ri);
+}
+
+// Ladebalken Scan hochladen — akzeptiert String oder {kl,ge,line,total}
+function setOcrStatus(arg, progress){
+  var msg = (typeof arg === 'string') ? arg : '<strong>'+esc(arg.kl)+' \u2014 '+esc(geLabel(arg.ge))+'</strong> \u00b7 Zeile '+arg.line+'/'+arg.total;
+  g('ocr-status').innerHTML = msg;
+  if(progress!==undefined){g('ocr-prog').style.display='block';g('ocr-bar').style.width=(progress*100)+'%';}
+}
+
+// Scan-Import: erfolgreiche Importe akkumuliert (bis Reset). Fehler werden im Status angezeigt.
+var scan_results = [];        // {kl, ge, autoCount}
+var scan_currentErrors = [];  // pro Upload-Vorgang, transient
+function renderScanResults(){
+  var el = g('ocr-import-list'); if (!el) return;
+  el.innerHTML = scan_results.map(function(r){
+    return '<div style="font-size:12px;margin-top:4px">\u2713 <strong>'+esc(r.kl)+' \u2014 '+esc(geLabel(r.ge))+'</strong> importiert'+(r.autoCount?' ('+r.autoCount+' automatisch übernommen)':'')+'</div>';
+  }).join('');
+}
+
+function applyOCRResults(results) {
+  var autoCount = 0;
+  results.forEach(function(row) {
+    if (row.ausschluss !== undefined) {
+      var s = st.sus.find(function(s){ return s.id === row.sid; });
+      if (s) s.ausschluss = row.ausschluss;
+    }
+    var hasExisting = st.erg[row.sid] && st.erg[row.sid]['total'] != null;
+    if (isValidOCRRow(row) && !hasExisting) {
+      if (!st.erg[row.sid]) st.erg[row.sid] = {};
+      row.dis.forEach(function(d){ st.erg[row.sid][d.did] = d.val; });
+      st.erg[row.sid]['total'] = row.total.val;
+      st.erg[row.sid]['_src'] = 'ocr';
+      autoCount++;
+    } else {
+      var idx = ocrPending.findIndex(function(p){ return p.sid===row.sid; });
+      if (idx >= 0) ocrPending[idx] = row;
+      else ocrPending.push(row);
+    }
+  });
+  autoSave(); renderE(); renderOCRTable();
+  return autoCount;
+}
+
+function commitOCRRow(ri) {
+  var row = ocrPending[ri];
+  if (!row) return;
+  if (!st.erg[row.sid]) st.erg[row.sid] = {};
+  row.dis.forEach(function(d){ if(d.val!==null) st.erg[row.sid][d.did] = d.val; });
+  st.erg[row.sid]['total'] = row.total&&row.total.val!==null ? row.total.val :
+    row.dis.reduce(function(s,d){ return s+(d.val||0); }, 0);
+  st.erg[row.sid]['_src'] = row.total&&row.total.manual ? 'manual' : 'ocr';
+  var s = st.sus.find(function(s){ return s.id===row.sid; });
+  if (s && row.ausschluss!==undefined) s.ausschluss = row.ausschluss;
+  ocrPending.splice(ri, 1);
+  autoSave(); renderE(); renderOCRTable();
+}
+
+// Debounced Wrapper: faltet viele schnelle Auto-Remove-Trigger zu einem Render zusammen.
+// Wird NUR vom Auto-Remove-Pfad in setTotal benutzt — direkte Aufrufe (commitOCRRow, discardOCRRow,
+// applyOCRResults) gehen weiterhin synchron, damit User-Klicks sofort wirken.
+var _ocrRenderTimer;
+function scheduleOCRRender(){
+  clearTimeout(_ocrRenderTimer);
+  _ocrRenderTimer = setTimeout(renderOCRTable, 100);
+}
+
+function renderOCRTable() {
+  var card = g('ocr-konflikte-card'), countEl = g('ocr-konflikte-count');
+  if (!ocrPending.length) {
+    if (card) card.style.display = 'none';
+    if (_ocrHadContent) { g('ocr-result').innerHTML = '<div class="al as">&#10003; Alle Ergebnisse übernommen.</div>'; if (card) card.style.display = ''; if (countEl) countEl.textContent = ''; }
+    else { g('ocr-result').innerHTML = ''; }
+    return;
+  }
+  _ocrHadContent = true;
+  if (card) card.style.display = '';
+  if (countEl) countEl.textContent = '(' + ocrPending.length + ')';
+
+  var groups = [];
+  ocrPending.forEach(function(row, ri) { var key = (row.kl||'')+'__'+(row.ge||''); var grp = groups.find(function(g){ return g.key===key; }); if (!grp) { grp={key:key,kl:row.kl,ge:row.ge,rows:[]}; groups.push(grp); } grp.rows.push({row:row,ri:ri}); });
+
+  var maxTot = getMaxTot(), h = '';
+  groups.forEach(function(grp) {
+    // String-escape für onclick-Attribute (kl/ge sind in der Praxis ASCII, aber sicherheitshalber)
+    var klEsc = (grp.kl||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    var geEsc = (grp.ge||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    var anyCommittable = grp.rows.some(function(it){ return canCommitOCRRow(it.row); });
+    // Gruppen-Header ohne Buttons
+    h += '<div style="margin:20px 0 8px;padding-bottom:4px;border-bottom:2px solid var(--border);display:flex;gap:8px;align-items:center">' +
+        (grp.kl ? '<span class="chip">' + esc(grp.kl) + '</span>' : '') +
+        (grp.ge ? geBadge(grp.ge) : '') +
+        '<span style="font-size:11px;color:var(--muted)">(' + grp.rows.length + ')</span>' +
+        '</div>';
+    h += '<div class="twrap" style="margin-bottom:24px"><table style="width:100%">'+
+         '<colgroup>'+
+           '<col>'+                                       // Name (auto)
+           '<col>'+                                       // Vorname (auto, eng an Name via padding-Trick)
+           '<col>'+                                       // Spacer 1 (Whitespace nach Vorname)
+           '<col style="width:120px">'+                   // Ausschluss
+           '<col>'+                                       // Spacer 2 (Whitespace nach Ausschluss)
+           '<col style="width:160px">'+                   // Total
+           '<col style="width:240px">'+                   // Status (Icon + Text)
+           '<col style="width:1%;white-space:nowrap">'+   // Buttons
+         '</colgroup>'+
+         '<thead><tr>'+
+           '<th class="nosort" style="padding-right:4px">Name</th>'+
+           '<th class="nosort" style="padding-left:4px">Vorname</th>'+
+           '<th></th>'+
+           '<th class="nosort" style="text-align:center">Ausschluss</th>'+
+           '<th></th>'+
+           '<th class="nosort" style="text-align:center">Total</th>'+
+           '<th class="nosort" style="padding-left:16px"></th>'+
+           '<th></th>'+
+         '</tr></thead><tbody>';
+    grp.rows.forEach(function(item) {
+      var row = item.row, ri = item.ri;
+      var nameParts = (row.name||'').split(' '), lastName = nameParts[0]||'', firstName = nameParts.slice(1).join(' ')||'';
+      var totVal = (row.total && row.total.val !== null) ? row.total.val : '';
+      var canCommit = canCommitOCRRow(row), reason = getConflictReason(row);
+      var statusHtml = ocrStatusHtml(reason, row.total && row.total.manual);
+      h += '<tr>'+
+        '<td style="padding-right:4px">'+esc(lastName)+'</td>'+
+        '<td style="padding-left:4px">'+esc(firstName)+'</td>'+
+        '<td></td>'+
+        '<td style="text-align:center"><input type="checkbox" tabindex="-1" class="cb-aussl" '+(row.ausschluss?'checked':'')+' onchange="ocrPending['+ri+'].ausschluss=this.checked"></td>'+
+        '<td></td>'+
+        '<td><input class="ei" type="number" id="ocr-t-'+ri+'" step="1" min="0" max="'+maxTot+'" value="'+totVal+'" style="width:160px" oninput="ocrTot(event,'+ri+')" onchange="ocrTot(event,'+ri+',this)"></td>'+
+        '<td id="ocr-i-'+ri+'" style="padding-left:16px">'+statusHtml+'</td>'+
+        '<td style="white-space:nowrap">'+
+          '<button class="btn btn-sm btn-p" id="ocr-btn-'+ri+'" tabindex="-1" '+(canCommit?'':'disabled ')+'style="'+(canCommit?'':'opacity:0.4;cursor:not-allowed;')+'" onclick="commitOCRRow('+ri+')">&#10003; Übernehmen</button> '+
+          '<button class="btn btn-sm btn-d" tabindex="-1" onclick="discardOCRRow('+ri+')">&#10005; Verwerfen</button>'+
+        '</td>'+
+        '</tr>';
+    });
+    h += '</tbody></table></div>';
+  });
+  h += '<div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-start"><button class="btn btn-p" tabindex="-1" onclick="commitAllOCR()">&#10003; Alle übernehmen</button> <button class="btn btn-d" tabindex="-1" onclick="discardAllOCR()">&#10005; Alle verwerfen</button></div>';
+  g('ocr-result').innerHTML = h;
+}
+
+function discardOCRRow(ri) {
+  ocrPending.splice(ri, 1);
+  autoSave(); renderOCRTable();
+}
+
+function discardAllOCR(){ ocrPending = []; autoSave(); renderOCRTable(); }
+function commitAllOCR(){
+  for (var i = ocrPending.length - 1; i >= 0; i--) {
+    if (canCommitOCRRow(ocrPending[i])) commitOCRRow(i);
+  }
+}
+
+function fillSelect(id, opts, opt0Label){
+  var el=g(id); if(!el) return;
+  var v=el.value;
+  el.innerHTML='<option value="">'+opt0Label+'</option>'+
+    opts.map(function(o){return '<option value="'+esc(o)+'"'+(v===o?' selected':'')+'>'+esc(o)+'</option>';}).join('');
+}
+function syncFilters(){
+  var klassen=[...new Set(st.sus.map(function(s){return s.klasse;}))].sort();
+  var stufen =[...new Set(st.sus.map(function(s){return s.jahrgangsstufe;}))].sort();
+  ['fKS','fKE'].forEach(function(id){ fillSelect(id, klassen, 'Alle'); });
+  fillSelect('lbKlasse', klassen, '\u2014 wählen \u2014');
+  ['fSS','fSE','fSR'].forEach(function(id){ fillSelect(id, stufen, 'Alle'); });
+}
+
+function exportData(){
+  return {version:APP_VERSION,anlass:{name:g('anlassName').value,datum:g('anlasDatum').value,schulhaus:g('anlassSchulhaus').value},
+    skalaTyp:g('skalaTyp').value,dis:st.dis,skala:st.skala,sus:st.sus,erg:st.erg,logo:st.logo||'',settings:settings,nextSid:sid,nextDid:did};
+}
+function importData(data){
+  if(!data)return;
+  if(data.anlass){if(g('anlassName'))g('anlassName').value=data.anlass.name||'';if(g('anlasDatum'))g('anlasDatum').value=data.anlass.datum||'';if(g('anlassSchulhaus'))g('anlassSchulhaus').value=data.anlass.schulhaus||'';updateLabel();}
+  if(g('skalaTyp'))g('skalaTyp').value=data.skalaTyp||'punkte';
+  st.dis=data.dis||[];st.skala=data.skala||{bereiche:[]};st.sus=data.sus||[];st.erg=data.erg||{};st.logo=data.logo||'';
+  // Settings laden, fehlende Keys mit Defaults füllen (Forward-Compat: alte JSONs ohne settings funktionieren)
+  settings = Object.assign({}, DEFAULTS.ocr, data.settings || {});
+  sid=data.nextSid||(st.sus.reduce(function(m,s){return Math.max(m,s.id);},0)+1);
+  did=data.nextDid||(st.dis.reduce(function(m,d){return Math.max(m,d.id);},0)+1);
+  renderDis();renderSkala();syncFilters();renderS();renderSettings();showLogoPreview();showStatus('<b style="color:var(--success)">Wiederhergestellt \u2713</b>');
+}
+function doSave(){
+  var blob=new Blob([JSON.stringify(exportData(),null,2)],{type:'application/json'});
+  var url=URL.createObjectURL(blob);var a=document.createElement('a');
+  a.href=url;a.download=(g('anlassName').value||'sporttag').replace(/[^a-zA-Z0-9_ -]/g,'').trim()+'.json';
+  a.click();URL.revokeObjectURL(url);autoSave();showStatus('Gespeichert \u2713');
+}
+function doLoad(inp){var f=inp.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){try{importData(JSON.parse(e.target.result));}catch(err){alert('Fehler: '+err.message);}};r.readAsText(f,'UTF-8');inp.value='';}
+function doReset(){
+  if(!confirm('Wirklich zurücksetzen? Alle Daten werden gelöscht und die Werkseinstellungen wiederhergestellt.'))return;
+  st={dis:[],skala:{bereiche:[]},sus:[],erg:{},logo:''};sid=1;did=1;
+  ocrPending=[]; _ocrHadContent=false;
+  if(g('anlassName'))    g('anlassName').value=DEFAULTS.anlass.name;
+  if(g('anlasDatum'))    g('anlasDatum').value=DEFAULTS.anlass.datum;
+  if(g('anlassSchulhaus'))g('anlassSchulhaus').value=DEFAULTS.anlass.schulhaus;
+  updateLabel();if(g('skalaTyp'))g('skalaTyp').value='punkte';
+  DEFAULTS.startDisziplinen.forEach(function(d){st.dis.push(Object.assign({},d,{id:did++}));});
+  // OCR-UI zurücksetzen
+  if(g('ocrFile')) g('ocrFile').value='';
+  if(g('ocr-prog')) g('ocr-prog').style.display='none';
+  if(g('ocr-bar'))  g('ocr-bar').style.width='0%';
+  if(g('ocr-status')) g('ocr-status').innerHTML='';
+  if(g('ocr-import-list')) g('ocr-import-list').innerHTML='';
+  scan_results = []; scan_currentErrors = [];
+  // SuS-Import-UI zurücksetzen
+  if(g('importFile')) g('importFile').value='';
+  if(g('csvText'))    g('csvText').value='';
+  if(g('import-hint')){g('import-hint').style.display='none';g('import-hint').innerHTML='';}
+  // Alle Tabs neu zeichnen
+  renderDis();renderSkala();syncFilters();renderS();renderE();renderR();renderOCRTable();renderLB();renderSettings();showLogoPreview();
+  // Settings auf Defaults
+  settings = Object.assign({}, DEFAULTS.ocr); renderSettings();
+  localStorage.removeItem('mst_save');showStatus('Zurückgesetzt \u2713');
+}
+// Debounced: speichert 500ms nach dem letzten Aufruf, faltet Tipp-Bursts zu einem Write zusammen
+var _autoSaveTimer;
+function autoSave(){
+  clearTimeout(_autoSaveTimer);
+  _autoSaveTimer = setTimeout(function(){
+    try{localStorage.setItem('mst_save',JSON.stringify(exportData()));}catch(e){}
+  }, 500);
+}
+function showStatus(msg){var el=g('save-status');if(!el)return;el.innerHTML=msg;clearTimeout(el._t);el._t=setTimeout(function(){el.innerHTML='';},3000);}
+setInterval(autoSave,30000);
+
+(function(){
+  // OCR-Hint-Text immer setzen (auch bei Restore aus localStorage)
+  var ch = g('ocr-conf-hint'); if (ch) ch.textContent = 'Es werden ausschliesslich Resultate übernommen mit einem Konfidenzwert >' + settings.confMin + '% und korrekter Summe.';
+  try{var raw=localStorage.getItem('mst_save');if(raw){importData(JSON.parse(raw));renderSettings();return;}}catch(e){}
+  g('anlassName').value=DEFAULTS.anlass.name;
+  g('anlasDatum').value=DEFAULTS.anlass.datum;
+  g('anlassSchulhaus').value=DEFAULTS.anlass.schulhaus;
+  updateLabel();
+  DEFAULTS.startDisziplinen.forEach(function(d){st.dis.push(Object.assign({},d,{id:did++}));});
+  renderDis();renderSkala();syncFilters();renderSettings();
+})();
+
+function updSetting(key,raw){
+  if(SETTING_KEYS.indexOf(key)<0) return;
+  var num = (key==='markMinFrac') ? parseFloat(raw) : parseInt(raw,10);
+  if(!isFinite(num)){ num = DEFAULTS.ocr[key]; }
+  settings[key] = num;
+  // Beide Eingabefelder synchron halten (verhindert Cursor-Sprung im aktiven Feld)
+  var disp = (key==='markMinFrac') ? num.toFixed(2) : String(num);
+  var s=g('set-'+key);  if(s  && s.value!==disp) s.value=disp;
+  var v=g('setv-'+key); if(v && v.value!==disp) v.value=disp;
+  if(key==='confMin'){var ch=g('ocr-conf-hint'); if(ch) ch.textContent='Es werden ausschliesslich Resultate übernommen mit einem Konfidenzwert >'+settings.confMin+'% und korrekter Summe.';}
+  autoSave();
+}
+function renderSettings(){
+  SETTING_KEYS.forEach(function(k){
+    var disp = (k==='markMinFrac') ? Number(settings[k]).toFixed(2) : settings[k];
+    var el=g('set-'+k);  if(el) el.value=disp;
+    var v=g('setv-'+k);  if(v)  v.value=disp;
+  });
+  var ch=g('ocr-conf-hint'); if(ch) ch.textContent='Es werden ausschliesslich Resultate übernommen mit einem Konfidenzwert >'+settings.confMin+'% und korrekter Summe.';
+}
+</script>
+</body>
+</html>
