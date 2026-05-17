@@ -9,7 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-<style>
+<style id="css-app">
 :root{
   --bg:#f5f4f1;--surface:#fff;--border:#dedad2;--border-strong:#b8b4ac;
   --text:#1a1a18;--muted:#6b6a66;--accent:#2563eb;--accent-bg:#eff6ff;--accent-hover:#1d4ed8;
@@ -20,11 +20,13 @@
   --bw-bg:#fce7f3;--bw-fg:#831843;--bw-border:#f9a8d4;
   --bx-bg:#f3e8ff;--bx-fg:#581c87;--bx-border:#d8b4fe;
   --r:8px;--rl:12px;
+  --font-print:'Century Gothic',CenturyGothic,AppleGothic,Futura,'Trebuchet MS',Arial,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
 .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .topbar h1{font-size:16px;font-weight:600}
+.divider{width:1px;background:var(--border);margin:0 30px}
 .aname{font-size:13px;color:var(--muted);font-style:italic}
 .ver{font-size:10px;color:var(--muted);}
 .tabs{display:flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:4px;margin-bottom:20px;flex-wrap:wrap}
@@ -36,7 +38,6 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 22px;margin-bottom:18px}
 .ctitle{font-size:14px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .form2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.form3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
 .fg{margin-bottom:14px}
 label{font-size:12px;font-weight:500;color:var(--muted);display:block;margin-bottom:3px}
 input[type=text],input[type=number],textarea,select{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:var(--r);font-size:13px;background:var(--surface);color:var(--text);outline:none;font-family:inherit}
@@ -86,6 +87,7 @@ tr.excl td{opacity:.4}tr.excl td.nc{text-decoration:line-through}
 .r1{background:#fef08a;color:#713f12}.r2{background:#e5e7eb;color:#374151}.r3{background:#fed7aa;color:#7c2d12}.rx{background:#f0f0f0;color:#555}
 .rlt tr:nth-child(1) td{background:#fefce8}.rlt tr:nth-child(2) td{background:#f9fafb}.rlt tr:nth-child(3) td{background:#fff7ed}
 .al{padding:10px 14px;border-radius:var(--r);font-size:12px;margin-bottom:14px}
+.al:empty{display:none}
 .ai{background:var(--accent-bg);color:#1e40af;border:1px solid #bfdbfe}
 .aw{background:var(--warn-bg);color:#92400e;border:1px solid #fde68a}
 .as{background:var(--success-bg);color:#14532d;border:1px solid #86efac}
@@ -102,8 +104,6 @@ tr.excl td{opacity:.4}tr.excl td.nc{text-decoration:line-through}
 .modal.imp{max-width:400px;padding:22px 26px}
 .imp-source{font-size:11px;color:var(--muted);margin-bottom:14px}
 .imp-source strong{color:var(--text)}
-.sec-h{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;
-  letter-spacing:.6px;margin-bottom:7px;padding-bottom:4px;border-bottom:1px solid var(--border)}
 .preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:2px}
 .preset-btn{padding:8px 10px;border-radius:var(--r);border:1.5px solid var(--border);
   background:var(--bg);cursor:pointer;text-align:left;font-family:inherit;
@@ -114,7 +114,6 @@ tr.excl td{opacity:.4}tr.excl td.nc{text-decoration:line-through}
 .preset-btn .pn{font-size:13px;font-weight:600;color:var(--text);display:block}
 .preset-btn .pd{font-size:10px;color:var(--muted);display:block}
 .preset-btn.active .pn{color:var(--accent)}
-.imp-sep{height:1px;background:var(--border);margin:12px 0 10px}
 .imp-group{margin-bottom:4px;border:1px solid rgba(184,180,172,.35);
   border-radius:var(--r);overflow:hidden;transition:border-color .12s}
 .imp-group.grp-on{border:1px solid var(--accent)}
@@ -135,16 +134,7 @@ tr.excl td{opacity:.4}tr.excl td.nc{text-decoration:line-through}
 .chk{font-size:11px;font-weight:700;width:12px;flex-shrink:0;text-align:center;color:var(--accent)}
 .imp-lbl{flex:1;font-size:13px;font-weight:500}
 .imp-info{font-size:11px;color:var(--muted);white-space:nowrap;flex-shrink:0}
-.sum-sub{font-size:11px;color:var(--muted);margin-bottom:10px}
-.sum-list{display:flex;flex-direction:column;gap:3px}
-.sum-row{display:flex;align-items:center;gap:8px;padding:5px 9px;border-radius:var(--r);font-size:12px}
-.sum-row.ok{background:var(--success-bg);border:1px solid var(--success-border)}
-.sum-row.def{background:var(--bg);border:1px solid var(--border);color:var(--muted)}
 .modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:24px;padding-top:14px;border-top:1px solid var(--border)}
-.sum-ico{width:12px;text-align:center;flex-shrink:0;font-size:11px}
-.sum-name{font-weight:500;flex:1}
-.sum-val{font-size:10px;color:var(--muted)}
-.sum-row.def .sum-name{font-weight:400}
 .modal ol{padding-left:20px;font-size:13px;line-height:1.8}
 .modal ol li{margin-bottom:6px}
 .modal code{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:12px}
@@ -153,33 +143,38 @@ tr.excl td{opacity:.4}tr.excl td.nc{text-decoration:line-through}
 .ocr-icon.ok,.ocr-text.ok{color:var(--success)}
 .ocr-icon.exist,.ocr-text.exist{color:var(--accent)}
 .ocr-icon.warn,.ocr-text.warn{color:var(--warn)}
-.lbprev{font-family:'Century Gothic',CenturyGothic,AppleGothic,Futura,'Trebuchet MS',Arial,sans-serif;font-size:11px;color:#111;background:#fff;padding:18px 20px;border:1px solid var(--border);border-radius:var(--rl);margin-bottom:14px}
-.lbh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
-.lbtitle{font-size:18px;font-weight:700;letter-spacing:.5px}
-.lbge{font-size:14px;font-weight:700;margin-top:3px;color:#333}
-.lbdate{font-size:11px;color:#555;margin-top:4px}
-.lbkz{display:flex;justify-content:space-between;align-items:baseline;margin:28px 0 6px;font-size:14px;font-weight:700;border-bottom:2px solid #555;padding-bottom:5px}
-.lbt{width:100%;border-collapse:collapse;margin-top:8px;font-size:10px}
-.lbt th,.lbt td{border:1px solid #555;padding:5px 5px;text-align:left}
-.lbt th{background:#d0d0d0;font-weight:700;font-size:10px}
-.lbt thead tr:first-child th{background:#b8b8b8}
-.lbt td.ncol{text-align:left;min-width:175px;font-size:11px;font-weight:500}
-.ncol-inner{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:175px}
-.lbt td.rcol{min-width:24px;background:#fff}
-.lbt td.res{min-width:28px}
-.lbt td.ptc{min-width:26px;background:#fff}
-.lbt td.tot{min-width:82px;background:#fff;font-weight:700;border:2px solid #555}
-.lbt tbody tr:nth-child(even) td{background:#f5f5f5}
-.lbt tbody tr:nth-child(even) td.ptc{background:#f5f5f5}
-.lbt tbody tr:nth-child(even) td.tot{background:#f0f0f0}
-.lbt tbody tr:nth-child(even) td.rcol{background:#f5f5f5}
-.lbt tfoot td {border-left-color: transparent !important;border-right-color: transparent !important;border-bottom-color: transparent !important}
-.lbprev .lbt tbody tr td,.lbprev .lbt tbody tr:nth-child(even) td{background:#fff!important}
-.lbfn{font-size:9px;color:#555;margin-bottom:5px}
-.lbwarn{font-size:15px;font-weight:400;color:#c00;border:1px solid #c00;padding:8px 14px;display:inline-block;border-radius:3px;margin-top:32px}
-.qr1-cell{width:82px;min-width:82px;padding:2px;text-align:center;vertical-align:middle;background:#fff!important;border:1px solid #555}
-.qr2-cell{width:64px;min-width:64px;padding:2px;text-align:center;vertical-align:middle;background:#fff!important;border:1px solid #555}
-.qr-spacer{border:none!important;background:#fff!important;padding:2px 6px 2px 6px!important;height:auto!important;vertical-align:middle;text-align:left}
+/* ── LB (Vorschau + Druck via body.lbprev) ───────────────────────────────── */
+.lbprev{font-family:var(--font-print);font-size:11px;color:#111;background:#fff}
+@media screen{.lbprev{border:1px solid var(--border);border-radius:var(--rl);margin-bottom:14px;padding:18px 20px}}
+.lbprev table{width:100%;border-collapse:collapse;font-size:10px;margin-bottom:10px}
+.lbprev th,.lbprev td{border:1px solid #888;padding:5px 6px;font-size:11px}
+.lbprev th{background:#d0d0d0;font-weight:700;text-align:center}
+.lbprev td{text-align:center}
+.lbprev td.ncol{text-align:left;min-width:175px;font-size:11px;font-weight:500}
+.lbprev .ncol-inner{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:175px;display:block}
+.lbprev td.rcol,.lbprev td.ptc{background:#fff}
+.lbprev td.tot{background:#fff;font-weight:700;border:2px solid #555}
+.lbprev tr{page-break-inside:avoid}
+.lbprev .lbh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.lbprev .lbtitle{font-size:17px;font-weight:700}.lbprev .lbge{font-size:13px;font-weight:700;margin-top:2px;color:#333}.lbprev .lbdate{font-size:11px;color:#555;margin-top:3px}
+.lbprev .lbkz{display:flex;justify-content:space-between;align-items:baseline;margin:6px 0 5px;font-size:14px;font-weight:700;border-bottom:2px solid #555;padding-bottom:4px}
+.lbprev .lbfn{font-size:9px;color:#555;margin-bottom:5px}
+.lbprev .qr1-cell{width:82px;min-width:82px;padding:2px;text-align:center;vertical-align:middle;background:#fff!important;border-top:none!important;border-left:none!important;border-right:none!important;border-bottom:1px solid #555!important}
+.lbprev .qr2-cell{width:64px;min-width:64px;padding:2px;text-align:center;vertical-align:middle;background:#fff!important;border-color:transparent!important}
+.lbprev .qr-spacer{border:none!important;background:#fff!important;padding:2px 6px!important;height:auto!important;vertical-align:middle;text-align:left;font-size:13px;font-weight:400!important;color:#c00}
+.lbprev .qr-spacer strong{font-weight:700}
+.lbprev .qr1-cell img,.lbprev .qr2-cell img{border:none!important;padding:0!important;display:block!important}
+.lbprev .lbt th,.lbprev .lbt td{border:1px solid #555;padding:var(--lbt-p,4px) 5px;text-align:left}
+.lbprev .lbt th{background:#e8e8e8;font-weight:700;font-size:11px}
+.lbprev .lbt thead tr:first-child th{background:#d8d8d8}
+.lbprev .lbt td.ncol{text-align:left;font-size:11px;font-weight:500}
+.lbprev .lbt td.rcol,.lbprev .lbt td.ptc{background:#fff}
+.lbprev .lbt td.tot{min-width:82px;background:#fff;font-weight:700;border:2px solid #555}
+.lbprev .lbt tfoot td{border-left-color:transparent!important;border-right-color:transparent!important;border-bottom-color:transparent!important}
+.lbprev .aussl-hdr{background:#e0e0e0}.lbprev .ptc-hdr{background:#d8d8d8}.lbprev .tot-hdr{background:#d0d0d0}
+.lbprev .marker-col{background:#cccccc!important;border-color:transparent!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.lbprev .marker-empty{background:transparent!important;border-color:transparent!important}
+.lbprev *{-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact}
 footer{text-align:center;font-size:10px;color:var(--muted);padding:16px;margin-top:8px;border-top:1px solid var(--border)}
 #bot { position: absolute; transform: translateX(20%); color: #0094ff;opacity: 0; transition: opacity .15s;}
 /* ── Bewertungs-Tab ─────────────────────────────────────── */
@@ -216,13 +211,14 @@ footer{text-align:center;font-size:10px;color:var(--muted);padding:16px;margin-t
 .vc input::-webkit-outer-spin-button,.vc input::-webkit-inner-spin-button{-webkit-appearance:none}
 .vc input:focus{border-color:var(--accent)}
 .vc .d{font-size:9px;color:var(--muted);min-height:12px;line-height:1.3;text-align:center;white-space:nowrap}
-/* ── Druckvorschau (.btprev) ─────────────────────────────────────────── */
-.btprev{font-family:'Century Gothic',CenturyGothic,AppleGothic,Futura,'Trebuchet MS',Arial,sans-serif;font-size:14px;color:#111;background:#fff;padding:32px 36px;border:1px solid var(--border);border-radius:var(--rl);overflow-x:auto}
+/* ── BT (Vorschau + Druck via body.btprev) ───────────────────────────────── */
+.btprev{font-family:var(--font-print);font-size:14px;color:#111;background:#fff;padding:18px 24px 0}
+@media screen{.btprev{border:1px solid var(--border);border-radius:var(--rl);padding:32px 36px;overflow-x:auto}}
+.btprev *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact}
+.btprev .btwrap{page-break-inside:avoid}
 .btprev .bth{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px;border-bottom:1px solid #888;padding-bottom:14px}
 .btprev .btitle{font-size:20px;font-weight:700;letter-spacing:.2px}
 .btprev .bsub{font-size:12px;color:#555;margin-top:4px}
-.btprev .blogo{height:46px;max-width:140px;border:1px solid #ccc;padding:2px}
-.btprev .blogo-ph{display:flex;align-items:center;justify-content:center;width:120px;height:46px;color:#999;font-size:13px;font-style:italic;background:#f5f5f5;border:1px solid #ccc}
 .btprev .body{display:grid;grid-template-columns:8fr 2fr;gap:24px;align-items:stretch}
 .btprev table{width:100%;border-collapse:collapse;height:100%;table-layout:fixed}
 .btprev th,.btprev td{border:1px solid #888;padding:3px 6px;text-align:center;font-size:13px;vertical-align:middle;height:var(--tr-h,auto);overflow:hidden}
@@ -236,9 +232,18 @@ footer{text-align:center;font-size:10px;color:var(--muted);padding:16px;margin-t
 .btprev .rblk h4 .vers{font-weight:300;color:#555;font-size:.92em;margin-left:2px}
 .btprev .rblk ul{padding-left:1.3em;margin:0}
 .btprev .rblk li{margin:.05em 0}
-.btprev .wblk{margin-bottom:14px;border:1.5px solid #c00;background:#fff5f5;padding:7px 16px;font-size:11.5px;border-radius:3px}
-.btprev .wblk .wlbl{color:#c00;font-weight:700;margin-right:6px}
+.wblk{margin-bottom:14px;border:1.5px solid #c00;background:#fff5f5;color:#111;padding:7px 16px;font-size:11.5px;border-radius:3px;page-break-inside:avoid}
 .btprev .bft{font-size:9px;color:#777;margin-top:36px;text-align:right}
+/* ── RL (Druck via body.rlprev) ──────────────────────────────────────────── */
+.rlprev{font-family:var(--font-print);font-size:12px;color:#111}
+.rlprev *{-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact;box-sizing:border-box}
+.rlprev table{width:100%;border-collapse:collapse;margin-bottom:12px}
+.rlprev th,.rlprev td{border:1px solid #bbb;padding:5px 8px;font-size:12px}
+.rlprev th{background:#e0e0e0;font-weight:700;text-align:left;padding:6px 8px}
+.rlprev td{text-align:left}
+.rlprev td:first-child{text-align:center;width:52px}
+.rlprev tr{page-break-inside:avoid}
+.rlprev tbody tr:nth-child(even) td{background:#f7f7f7}
 
 /* ── Zeitplan-Generator [MERGE-ADD] ─────────────────────────── */
 
@@ -298,8 +303,6 @@ footer{text-align:center;font-size:10px;color:var(--muted);padding:16px;margin-t
 .zg-btprev .bth{margin-bottom:14px;padding-bottom:10px}
 .zg-btprev .btitle{font-size:18px}
 .zg-btprev .bsub{font-size:12px;color:#555;margin-top:3px}
-.zg-btprev .blogo{height:38px;max-width:120px;border:none;padding:0}
-.zg-btprev .blogo-ph{display:flex;align-items:center;justify-content:center;width:90px;height:38px;color:#bbb;font-size:10px;background:#f5f5f5;border:1px solid #ddd}
 .zg-btprev .zt th,.zg-btprev .zt-thname,.zg-btprev .zt-thloc,
 .zg-btprev .zt-pause td,.zg-btprev .zt-stufe,.zg-btprev .zt-lp,
 .zg-btprev .zl td,.zg-btprev .zt-note{font-size:12px}
@@ -314,6 +317,12 @@ footer{text-align:center;font-size:10px;color:var(--muted);padding:16px;margin-t
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 }
 </style>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PRINT CSS TEMPLATES  (media="not all" → nie auf die App angewendet)
+     LB-CSS: pixel-locked – nie verändern (OCR-Scan abhängig)
+     ═══════════════════════════════════════════════════════════════════════ -->
+
 </head>
 <body>
 
@@ -326,7 +335,7 @@ footer{text-align:center;font-size:10px;color:var(--muted);padding:16px;margin-t
   <span id="save-status" style="font-size:11px;color:var(--muted);margin-right:4px"></span>
   <button class="btn btn-sm" onclick="doSave()">&#128190; Speichern</button>
   <label class="btn btn-sm" style="cursor:pointer;margin:0">&#128194; Laden
-    <input type="file" accept=".json" onchange="doLoad(this)" style="display:none">
+    <input type="file" accept=".sskr,.json" onchange="doLoad(this)" style="display:none">
   </label>
   <button class="btn btn-sm btn-d" onclick="doReset()">&#128465; Reset</button>
 </div>
@@ -358,471 +367,489 @@ footer{text-align:center;font-size:10px;color:var(--muted);padding:16px;margin-t
     <div class="tabs">
         <button class="tab active" data-tab="setup" onclick="showTab('setup')">&#9881;&#65039; Setup</button>
         <button class="tab" data-tab="sus" onclick="showTab('sus')">&#128101; SuS</button>
+        <button class="tab" data-tab="ergebnisse" onclick="showTab('ergebnisse')">&#128221; Ergebnisse</button>
+        <div class="divider"></div>
         <button class="tab" data-tab="laufblatt" onclick="showTab('laufblatt')">&#128196; Laufblatt</button>
         <button class="tab" data-tab="bewertung" onclick="showTab('bewertung')">&#128202; Bewertung</button>
         <button class="tab" data-tab="zeitplan" onclick="showTab('zeitplan')">&#128197; Zeitplan</button>
-        <button class="tab" data-tab="ergebnisse" onclick="showTab('ergebnisse')">&#128221; Ergebnisse</button>
         <button class="tab" data-tab="rangliste" onclick="showTab('rangliste')">&#127942; Rangliste</button>
     </div>
 
-    <!-- SETUP -->
-    <div class="page active" id="page-setup">
-        <div class="card">
-            <div class="ctitle">&#127914; Anlass</div>
-            <div class="form2">
-                <div class="fg">
-                    <label>Anlassname</label>
-                    <input type="text" id="anlassName" placeholder="z.B. Mittelstufensporttag 2026" oninput="updateLabel();autoSave()">
+        <!-- SETUP -->
+        <div class="page active" id="page-setup">
+            <div class="card">
+                <div class="ctitle">&#127914; Anlass</div>
+                <div class="form2">
+                    <div class="fg">
+                        <label>Anlassname</label>
+                        <input type="text" id="anlassName" placeholder="z.B. Mittelstufensporttag 2026" oninput="updateLabel();autoSave()">
+                    </div>
+                    <div class="fg">
+                        <label>Datum</label>
+                        <input type="text" id="anlasDatum" placeholder="z.B. 03. Juni 2026" oninput="autoSave()">
+                    </div>
                 </div>
                 <div class="fg">
-                    <label>Datum</label>
-                    <input type="text" id="anlasDatum" placeholder="z.B. 03. Juni 2026" oninput="autoSave()">
+                    <label>Schulhaus</label>
+                    <input type="text" id="anlassSchulhaus" placeholder="z.B. Primarschule Steinacker / Obermatt" oninput="autoSave()">
+                </div>
+                <div class="fg">
+                    <label>Logo (PNG/SVG/JPG)</label>
+                    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                        <label class="btn btn-sm" style="cursor:pointer;margin:0">
+                            &#128247; Logo laden
+                            <input type="file" accept="image/*" onchange="loadLogo(this)" style="display:none">
+                        </label>
+                        <img id="logo-prev" style="height:36px;display:none;border:1px solid var(--border);border-radius:6px;padding:3px">
+                        <button class="btn btn-sm btn-d" id="logo-del" style="display:none" onclick="delLogo()">&#10005; Entfernen</button>
+                    </div>
                 </div>
             </div>
-            <div class="fg">
-                <label>Schulhaus</label>
-                <input type="text" id="anlassSchulhaus" placeholder="z.B. Primarschule Steinacker / Obermatt" oninput="autoSave()">
-            </div>
-            <div class="fg">
-                <label>Logo (PNG/SVG/JPG)</label>
-                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-                    <label class="btn btn-sm" style="cursor:pointer;margin:0">
-                        &#128247; Logo laden
-                        <input type="file" accept="image/*" onchange="loadLogo(this)" style="display:none">
-                    </label>
-                    <img id="logo-prev" style="height:36px;display:none;border:1px solid var(--border);border-radius:6px;padding:3px">
-                    <button class="btn btn-sm btn-d" id="logo-del" style="display:none" onclick="delLogo()">&#10005; Entfernen</button>
+            <div class="card" id="disziplinen-card">
+                <div class="ctitle">&#127885; Disziplinen</div>
+                <div style="display:grid;grid-template-columns:1fr 60px 80px 60px 32px;gap:8px;margin-bottom:6px;padding:0 2px">
+                    <span style="font-size:11px;color:var(--muted)">Name</span>
+                    <span style="font-size:11px;color:var(--muted)">Versuche</span>
+                    <span style="font-size:11px;color:var(--muted)">Einheit</span>
+                    <span style="font-size:11px;color:var(--muted)">Max. Pte</span>
+                    <span></span>
                 </div>
+                <div id="dis-liste"></div>
+                <button class="btn btn-p" onclick="addDis()" style="margin-top:8px">+ Disziplin</button>
             </div>
-        </div>
-        <div class="card" id="disziplinen-card">
-            <div class="ctitle">&#127885; Disziplinen</div>
-            <div class="al ai">Name &middot; Versuche &middot; Einheit &middot; Max. Punkte</div>
-            <div style="display:grid;grid-template-columns:1fr 60px 80px 60px 32px;gap:8px;margin-bottom:6px;padding:0 2px">
-                <span style="font-size:11px;color:var(--muted)">Name</span>
-                <span style="font-size:11px;color:var(--muted)">Versuche</span>
-                <span style="font-size:11px;color:var(--muted)">Einheit</span>
-                <span style="font-size:11px;color:var(--muted)">Max</span>
-                <span></span>
-            </div>
-            <div id="dis-liste"></div>
-            <button class="btn btn-p" onclick="addDis()" style="margin-top:8px">+ Disziplin</button>
-        </div>
-        <div class="card">
-            <details id="adv-card">
-                <summary style="cursor:pointer;font-weight:600;font-size:14px;list-style:none;display:flex;align-items:center;gap:6px">
-                    <span class="adv-arrow" style="display:inline-block;transition:transform .2s">&#9656;</span>
-                    &#9881;&#65039; Erweiterte Einstellungen
-                    <span style="font-size:11px;color:var(--muted);font-weight:400;margin-left:4px">(OCR-Tuning)</span>
-                </summary>
-                <div style="margin-top:14px">
-                    <div class="al ai" style="margin-bottom:12px">Diese Werte beeinflussen die OCR-Texterkennung. Defaults sind für Standard-Scans optimiert.</div>
-                    <div class="adv-cols">
-                        <div class="adv-col">
-                            <h4>OCR-Engine: Tesseract</h4>
-                            <div class="fg">
-                                <label title="Mindestkonfidenz [%], ab der OCR-Werte als sicher erkannt behandelt werden.">Konfidenz-Schwelle [%]   &#9432;</label>
-                                <div class="adv-slider">
-                                    <input type="range" id="set-confMin" min="0" max="100" step="1" oninput="updSetting('confMin',this.value)">
-                                    <input type="number" id="setv-confMin" min="0" max="100" step="1" class="val" oninput="updSetting('confMin',this.value)">
+            <div class="card">
+                <details id="adv-card">
+                    <summary style="cursor:pointer;font-weight:600;font-size:14px;list-style:none;display:flex;align-items:center;gap:6px">
+                        <span class="adv-arrow" style="display:inline-block;transition:transform .2s">&#9656;</span>
+                        &#9881;&#65039; Erweiterte Einstellungen
+                        <span style="font-size:11px;color:var(--muted);font-weight:400;margin-left:4px">(OCR-Tuning)</span>
+                    </summary>
+                    <div style="margin-top:14px">
+                        <div class="al ai" style="margin-bottom:12px">Diese Werte beeinflussen die OCR-Texterkennung. Defaults sind für Standard-Scans optimiert.</div>
+                        <div class="adv-cols">
+                            <div class="adv-col">
+                                <h4>OCR-Engine: Tesseract</h4>
+                                <div class="fg">
+                                    <label title="Mindestkonfidenz [%], ab der OCR-Werte als sicher erkannt behandelt werden.">Konfidenz-Schwelle [%]   &#9432;</label>
+                                    <div class="adv-slider">
+                                        <input type="range" id="set-confMin" min="0" max="100" step="1" oninput="updSetting('confMin',this.value)">
+                                        <input type="number" id="setv-confMin" min="0" max="100" step="1" class="val" oninput="updSetting('confMin',this.value)">
+                                    </div>
+                                </div>
+                                <div class="fg">
+                                    <label title="Tesseract OCR Engine Mode (OEM)">OCR Modus   &#9432;</label>
+                                    <select id="set-oem" onchange="updSetting('oem',this.value)">
+                                        <option value="0">0 — Legacy</option>
+                                        <option value="1">1 — LSTM (App-Default)</option>
+                                        <option value="2">2 — Legacy + LSTM</option>
+                                    </select>
+                                </div>
+                                <div class="fg">
+                                    <label title="Tesseract Page Segmentation Mode (PSM)">Seitensegmentierung   &#9432;</label>
+                                    <select id="set-psm" onchange="updSetting('psm',this.value)">
+                                        <option value="7">7 — Einzelne Textzeile</option>
+                                        <option value="8">8 — Einzelnes Wort (App-Default)</option>
+                                        <option value="10">10 — Einzelnes Zeichen</option>
+                                        <option value="11">11 — Verstreuter Text</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="fg">
-                                <label title="Tesseract OCR Engine Mode (OEM)">OCR Modus   &#9432;</label>
-                                <select id="set-oem" onchange="updSetting('oem',this.value)">
-                                    <option value="0">0 — Legacy</option>
-                                    <option value="1">1 — LSTM (App-Default)</option>
-                                    <option value="2">2 — Legacy + LSTM</option>
-                                </select>
+                            <div class="adv-col">
+                                <h4>Zahlenanalyse</h4>
+                                <div class="fg">
+                                    <label title="Mindest-Anteil dunkler Pixel in Boolean-Zellen.">Grauanteil in Auswahlzellen   &#9432</label>
+                                    <div class="adv-slider">
+                                        <input type="range" id="set-markMinFrac" min="0" max="1" step="0.01" oninput="updSetting('markMinFrac',this.value)">
+                                        <input type="number" id="setv-markMinFrac" min="0" max="1" step="0.01" class="val" oninput="updSetting('markMinFrac',this.value)">
+                                    </div>
+                                </div>
+                                <div class="fg">
+                                    <label title="Helligkeit, ab der Pixel als Hintergrund gelten.">Grauwertschwelle (0–255)   &#9432</label>
+                                    <div class="adv-slider">
+                                        <input type="range" id="set-greyThreshold" min="0" max="255" step="1" oninput="updSetting('greyThreshold',this.value)">
+                                        <input type="number" id="setv-greyThreshold" min="0" max="255" step="1" class="val" oninput="updSetting('greyThreshold',this.value)">
+                                    </div>
+                                </div>
+                                <div class="fg">
+                                    <label title="Pixel-Inset beim Beschneiden der POI-Zellen.">Zellenbeschnitt [px]   &#9432</label>
+                                    <div class="adv-slider">
+                                        <input type="range" id="set-poiInset" min="0" max="20" step="1" oninput="updSetting('poiInset',this.value)">
+                                        <input type="number" id="setv-poiInset" min="0" max="20" step="1" class="val" oninput="updSetting('poiInset',this.value)">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="fg">
-                                <label title="Tesseract Page Segmentation Mode (PSM)">Seitensegmentierung   &#9432;</label>
-                                <select id="set-psm" onchange="updSetting('psm',this.value)">
-                                    <option value="7">7 — Einzelne Textzeile</option>
-                                    <option value="8">8 — Einzelnes Wort (App-Default)</option>
-                                    <option value="10">10 — Einzelnes Zeichen</option>
-                                    <option value="11">11 — Verstreuter Text</option>
-                                </select>
+                            <div class="adv-col">
+                                <h4>Passermarken</h4>
+                                <div class="fg">
+                                    <label title="Helligkeit, ab der ein Pixel als Passermarke gewertet wird.">Grauwertschwelle (0–255)   &#9432</label>
+                                    <div class="adv-slider">
+                                        <input type="range" id="set-markDarkThres" min="0" max="255" step="1" oninput="updSetting('markDarkThres',this.value)">
+                                        <input type="number" id="setv-markDarkThres" min="0" max="255" step="1" class="val" oninput="updSetting('markDarkThres',this.value)">
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="adv-col">
-                            <h4>Zahlenanalyse</h4>
-                            <div class="fg">
-                                <label title="Mindest-Anteil dunkler Pixel in Boolean-Zellen.">Grauanteil in Auswahlzellen   &#9432</label>
-                                <div class="adv-slider">
-                                    <input type="range" id="set-markMinFrac" min="0" max="1" step="0.01" oninput="updSetting('markMinFrac',this.value)">
-                                    <input type="number" id="setv-markMinFrac" min="0" max="1" step="0.01" class="val" oninput="updSetting('markMinFrac',this.value)">
-                                </div>
-                            </div>
-                            <div class="fg">
-                                <label title="Helligkeit, ab der Pixel als Hintergrund gelten.">Grauwertschwelle (0–255)   &#9432</label>
-                                <div class="adv-slider">
-                                    <input type="range" id="set-greyThreshold" min="0" max="255" step="1" oninput="updSetting('greyThreshold',this.value)">
-                                    <input type="number" id="setv-greyThreshold" min="0" max="255" step="1" class="val" oninput="updSetting('greyThreshold',this.value)">
-                                </div>
-                            </div>
-                            <div class="fg">
-                                <label title="Pixel-Inset beim Beschneiden der POI-Zellen.">Zellenbeschnitt [px]   &#9432</label>
-                                <div class="adv-slider">
-                                    <input type="range" id="set-poiInset" min="0" max="20" step="1" oninput="updSetting('poiInset',this.value)">
-                                    <input type="number" id="setv-poiInset" min="0" max="20" step="1" class="val" oninput="updSetting('poiInset',this.value)">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="adv-col">
-                            <h4>Passermarken</h4>
-                            <div class="fg">
-                                <label title="Helligkeit, ab der ein Pixel als Passermarke gewertet wird.">Grauwertschwelle (0–255)   &#9432</label>
-                                <div class="adv-slider">
-                                    <input type="range" id="set-markDarkThres" min="0" max="255" step="1" oninput="updSetting('markDarkThres',this.value)">
-                                    <input type="number" id="setv-markDarkThres" min="0" max="255" step="1" class="val" oninput="updSetting('markDarkThres',this.value)">
-                                </div>
-                            </div>
+                        <div style="margin-top:12px"><button class="btn btn-sm" onclick="resetSettings()">&#8634; Auf Defaults zurücksetzen</button></div>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <!-- SUS -->
+        <div class="page" id="page-sus">
+            <div class="card">
+                <div class="ctitle">
+                    &#128229; SuS importieren
+                    <button class="btn btn-sm" onclick="openModal('modal-sus')" style="margin-left:4px">&#10067; Anleitung</button>
+                </div>
+                <div class="al ai">
+                    Felder: <strong>Name &middot; Vorname &middot; Klasse &middot; Geschlecht &middot; Jahrgangsstufe &middot; Klassenlehrperson</strong><br>
+                    <strong>JSON / XLS / XLSX</strong>: Felder als Spaltenköpfe oder JSON-Keys &nbsp;&middot;&nbsp;
+                    <strong>CSV / TXT / Copy&amp;Paste</strong>: Tab- oder Semikolon-getrennt in obiger Reihenfolge
+                </div>
+                <div class="form2">
+                    <div>
+                        <label>JSON / XLS / XLSX / CSV / TXT</label>
+                        <label class="btn btn-p" style="cursor:pointer">
+                            &#128101; SuS importieren
+                            <input type="file" id="importFile" accept=".json,.csv,.txt,.xls,.xlsx" onchange="importFile(this)" style="display:none">
+                        </label>
+                    </div>
+                    <div>
+                        <label>Copy/Paste: Name;Vorname;Klasse;Geschlecht;Jahrgangsstufe;Klassenlehrperson</label>
+                        <div style="display:flex;gap:8px">
+                            <textarea id="csvText" placeholder="Muster;Anna;PST P 5a;w;5. Klasse;A. Muster" style="flex:1;min-height:60px;font-size:12px"></textarea>
+                            <button class="btn btn-p" style="align-self:flex-start" onclick="importText()">Import</button>
                         </div>
                     </div>
-                    <div style="margin-top:12px"><button class="btn btn-sm" onclick="resetSettings()">&#8634; Auf Defaults zurücksetzen</button></div>
                 </div>
-            </details>
+                <div id="import-hint" style="display:none"></div>
+            </div>
+            <div class="card">
+                <div class="ctitle">
+                    &#128101; SuS-Liste
+                    <span id="s-count" style="font-size:11px;font-weight:400;color:var(--muted)"></span>
+                    <div style="flex:1"></div>
+                    <button class="btn btn-sm" onclick="addManual()">+ Manuell</button>
+                    <button class="btn btn-sm btn-d" onclick="clearSus()">Alle löschen</button>
+                </div>
+                <div class="fbar">
+                    <label>Klasse:</label>
+                    <select id="fKS" onchange="renderS()"><option value="">Alle</option></select>
+                    <label>Stufe:</label>
+                    <select id="fSS" onchange="renderS()"><option value="">Alle</option></select>
+                    <label>Geschlecht:</label>
+                    <select id="fGS" onchange="renderS()"><option value="" selected>Alle</option><option value="w">Mädchen</option><option value="m">Knaben</option></select>
+                </div>
+                <div class="twrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="sortS('nr')">#</th>
+                                <th onclick="sortS('name')">Name</th>
+                                <th onclick="sortS('vorname')">Vorname</th>
+                                <th onclick="sortS('jahrgangsstufe')">Stufe</th>
+                                <th onclick="sortS('klasse')">Klasse</th>
+                                <th onclick="sortS('geschlecht')">Geschlecht</th>
+                                <th onclick="sortS('klassenlehrperson')">Klassenlehrperson</th>
+                                <th class="nosort" style="text-align:center">Ausschluss</th>
+                                <th class="nosort"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="s-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <!-- SUS -->
-    <div class="page" id="page-sus">
-        <div class="card">
-            <div class="ctitle">
-                &#128229; SuS importieren
-                <button class="btn btn-sm" onclick="openModal('modal-sus')" style="margin-left:4px">&#10067; Anleitung</button>
-            </div>
-            <div class="al ai">
-                Felder: <strong>Name &middot; Vorname &middot; Klasse &middot; Geschlecht &middot; Jahrgangsstufe &middot; Klassenlehrperson</strong><br>
-                <strong>JSON / XLS / XLSX</strong>: Felder als Spaltenköpfe oder JSON-Keys &nbsp;&middot;&nbsp;
-                <strong>CSV / TXT / Copy&amp;Paste</strong>: Tab- oder Semikolon-getrennt in obiger Reihenfolge
-            </div>
-            <div class="form2">
-                <div>
-                    <label>JSON / XLS / XLSX / CSV / TXT</label>
+        <!-- ERGEBNISSE -->
+        <div class="page" id="page-ergebnisse">
+            <div class="card">
+                <div class="ctitle">
+                    &#128269; Laufblätter scannen (OCR)
+                    <button class="btn btn-sm" onclick="openModal('modal-scan')" style="margin-left:4px">&#10067; Anleitung</button>
+                </div>
+                <div class="al ai" style="margin-bottom:10px">
+                    Gescannte Laufblätter hochladen <strong>JPG / PNG</strong> &nbsp;&middot;&nbsp; Es können gleichzeitig mehrere Dokumente hochgeladen werden.<br>
+                    <strong id="ocr-conf-hint"></strong>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
                     <label class="btn btn-p" style="cursor:pointer">
-                        &#128101; SuS importieren
-                        <input type="file" id="importFile" accept=".json,.csv,.txt,.xls,.xlsx" onchange="importFile(this)" style="display:none">
+                        &#128196; Scans hochladen
+                        <input type="file" id="ocrFile" accept="image/jpeg,image/png" multiple onchange="startOCR(this)" style="display:none">
                     </label>
+                    <span id="ocr-status" style="font-size:12px;color:var(--muted)"></span>
                 </div>
-                <div>
-                    <label>Copy/Paste: Name;Vorname;Klasse;Geschlecht;Jahrgangsstufe;Klassenlehrperson</label>
-                    <div style="display:flex;gap:8px">
-                        <textarea id="csvText" placeholder="Muster;Anna;PST P 5a;w;5. Klasse;A. Muster" style="flex:1;min-height:60px;font-size:12px"></textarea>
-                        <button class="btn btn-p" style="align-self:flex-start" onclick="importText()">Import</button>
+                <div id="ocr-prog" style="display:none;margin-top:10px">
+                    <div style="background:var(--border);border-radius:4px;height:6px;width:100%">
+                        <div id="ocr-bar" style="background:var(--accent);height:6px;border-radius:4px;width:0%;transition:width .3s"></div>
                     </div>
                 </div>
+                <div id="ocr-import-list" style="margin-top:10px"></div>
             </div>
-            <div id="import-hint" style="display:none"></div>
-        </div>
-        <div class="card">
-            <div class="ctitle">
-                &#128101; SuS-Liste
-                <span id="s-count" style="font-size:11px;font-weight:400;color:var(--muted)"></span>
-                <div style="flex:1"></div>
-                <button class="btn btn-sm" onclick="addManual()">+ Manuell</button>
-                <button class="btn btn-sm btn-d" onclick="clearSus()">Alle löschen</button>
+            <div class="card" id="ocr-konflikte-card" style="display:none;background-color:var(--accent-bg)">
+                <div class="ctitle">&#9888; Konflikte aus Scans <span id="ocr-konflikte-count" style="font-size:11px;font-weight:400;color:var(--muted)"></span></div>
+                <div id="ocr-result"></div>
             </div>
-            <div class="fbar">
-                <label>Klasse:</label>
-                <select id="fKS" onchange="renderS()"><option value="">Alle</option></select>
-                <label>Stufe:</label>
-                <select id="fSS" onchange="renderS()"><option value="">Alle</option></select>
-                <label>Geschlecht:</label>
-                <select id="fGS" onchange="renderS()"><option value="" selected>Alle</option><option value="w">Mädchen</option><option value="m">Knaben</option></select>
-            </div>
-            <div class="twrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th onclick="sortS('nr')">#</th>
-                            <th onclick="sortS('name')">Name</th>
-                            <th onclick="sortS('vorname')">Vorname</th>
-                            <th onclick="sortS('jahrgangsstufe')">Stufe</th>
-                            <th onclick="sortS('klasse')">Klasse</th>
-                            <th onclick="sortS('geschlecht')">Geschlecht</th>
-                            <th onclick="sortS('klassenlehrperson')">Klassenlehrperson</th>
-                            <th class="nosort" style="text-align:center">Ausschluss</th>
-                            <th class="nosort"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="s-tbody"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- ERGEBNISSE -->
-    <div class="page" id="page-ergebnisse">
-        <div class="card">
-            <div class="ctitle">
-                &#128269; Laufblätter scannen (OCR)
-                <button class="btn btn-sm" onclick="openModal('modal-scan')" style="margin-left:4px">&#10067; Anleitung</button>
-            </div>
-            <div class="al ai" style="margin-bottom:10px">
-                Gescannte Laufblätter hochladen <strong>JPG / PNG</strong> &nbsp;&middot;&nbsp; Es können gleichzeitig mehrere Dokumente hochgeladen werden.<br>
-                <strong id="ocr-conf-hint"></strong>
-            </div>
-            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-                <label class="btn btn-p" style="cursor:pointer">
-                    &#128196; Scans hochladen
-                    <input type="file" id="ocrFile" accept="image/jpeg,image/png" multiple onchange="startOCR(this)" style="display:none">
-                </label>
-                <span id="ocr-status" style="font-size:12px;color:var(--muted)"></span>
-            </div>
-            <div id="ocr-prog" style="display:none;margin-top:10px">
-                <div style="background:var(--border);border-radius:4px;height:6px;width:100%">
-                    <div id="ocr-bar" style="background:var(--accent);height:6px;border-radius:4px;width:0%;transition:width .3s"></div>
+            <div class="card">
+                <div class="ctitle">&#128221; Ergebnisse <span id="e-fill-status" style="font-size:11px;font-weight:400;color:var(--muted)"></span></div>
+                <div class="fbar">
+                    <label>Klasse:</label>
+                    <select id="fKE" onchange="renderE()"><option value="">Alle</option></select>
+                    <label>Stufe:</label>
+                    <select id="fSE" onchange="renderE()"><option value="">Alle</option></select>
+                    <label>Geschlecht:</label>
+                    <select id="fGE" onchange="renderE()">
+                        <option value="" selected>Alle</option>
+                        <option value="w">Mädchen</option>
+                        <option value="m">Knaben</option>
+                    </select>
                 </div>
-            </div>
-            <div id="ocr-import-list" style="margin-top:10px"></div>
-        </div>
-        <div class="card" id="ocr-konflikte-card" style="display:none;background-color:var(--accent-bg)">
-            <div class="ctitle">&#9888; Konflikte aus Scans <span id="ocr-konflikte-count" style="font-size:11px;font-weight:400;color:var(--muted)"></span></div>
-            <div id="ocr-result"></div>
-        </div>
-        <div class="card">
-            <div class="ctitle">&#128221; Ergebnisse <span id="e-fill-status" style="font-size:11px;font-weight:400;color:var(--muted)"></span></div>
-            <div class="fbar">
-                <label>Klasse:</label>
-                <select id="fKE" onchange="renderE()"><option value="">Alle</option></select>
-                <label>Stufe:</label>
-                <select id="fSE" onchange="renderE()"><option value="">Alle</option></select>
-                <label>Geschlecht:</label>
-                <select id="fGE" onchange="renderE()">
-                    <option value="" selected>Alle</option>
-                    <option value="w">Mädchen</option>
-                    <option value="m">Knaben</option>
-                </select>
-            </div>
-            <div class="twrap">
-                <table><thead id="e-thead"></thead><tbody id="e-tbody"></tbody></table>
-            </div>
-        </div>
-    </div>
-
-    <!-- LAUFBLATT -->
-    <div class="page" id="page-laufblatt">
-        <div class="card">
-            <div class="ctitle">&#128196; Laufblatt</div>
-            <div class="fbar" style="margin-bottom:0">
-                <label>Klasse:</label>
-                <select id="lbKlasse" onchange="renderLB()"><option value="">&#8212; wählen &#8212;</option></select>
-                <label>Geschlecht:</label>
-                <select id="lbGe" onchange="renderLB()">
-                    <option value="w" selected>Mädchen</option>
-                    <option value="m">Knaben</option>
-                </select>
-                <button class="btn btn-p" onclick="printLB()">&#128424;&#65039; Drucken</button>
-                <button class="btn" onclick="printAll()">&#128424;&#65039; Alle Klassen</button>
-            </div>
-        </div>
-        <div id="lb-cont"></div>
-    </div>
-
-    <!-- RANGLISTE -->
-    <div class="page" id="page-rangliste">
-        <div class="card">
-            <div class="ctitle">&#127942; Rangliste</div>
-            <div class="fbar" style="margin-bottom:12px">
-                <label>Stufe:</label>
-                <select id="fSR" onchange="renderR()"><option value="">Alle Stufen</option></select>
-                <label>Geschlecht:</label>
-                <select id="fGR" onchange="renderR()">
-                    <option value="w" selected>Mädchen</option>
-                    <option value="m">Knaben</option>
-                </select>
-                <button class="btn btn-p" onclick="printRangliste()">&#128424;&#65039; Drucken</button>
-                <button class="btn" onclick="printAlleRanglisten()">&#128424;&#65039; Alle Ranglisten</button>
-            </div>
-        </div>
-        <div id="r-cont"></div>
-    </div>
-
-    <!-- BEWERTUNG -->
-    <div class="page" id="page-bewertung">
-        <div class="card">
-            <div class="ctitle">&#128202; Bewertungstabelle</div>
-            <div class="fbar">
-                <button class="btn" onclick="openHinweis()" id="btn-hinweis">&#9998; Allgemeiner Hinweis</button>
-                <button class="btn btn-tg on" onclick="toggleFarbe()" id="btn-farbe">&#127912; Farbe</button>
-                <button class="btn btn-p" onclick="printBT()">&#128424; Drucken</button>
-            </div>
-            <div id="bw-liste"></div>
-        </div>
-        <div id="preview-container"></div>
-    </div>
-
-    <!-- ZEITPLAN -->
-    <div class="page" id="page-zeitplan">
-        <div class="card">
-            <div class="ctitle">&#128202; Zeitplan</div>
-            <div class="fbar">
-                <button class="btn btn-tg on" id="zg-farbe" onclick="zgToggleFarbe()">&#127912; Farbe</button>
-                <button class="btn btn-p" onclick="doPrintZG()">&#128424; Drucken</button>
-            </div>
-            <div class="al aw" id="zg-warn"></div>
-            <div class="zg-cols">
-                <div class="zg-col-l">
-                    <div class="zg-col-title">&#9203; Zeiten</div>
-                    <ul class="slot-list" id="slot-list"></ul>
-                    <button class="btn btn-p" onclick="zgAddSlot()">&#65291; Runde</button>
-                </div>
-                <div class="zg-col-r">
-                    <div class="zg-col-title">&#127885; Disziplinen</div>
-                    <ul class="dis-list" id="zg-dis-list"></ul>
-                    <button class="btn btn-p" style="margin-top:8px" onclick="zgAddExtra()">&#65291; Zusatzposten</button>
+                <div class="twrap">
+                    <table><thead id="e-thead"></thead><tbody id="e-tbody"></tbody></table>
                 </div>
             </div>
         </div>
-        <div class="btprev zg-btprev" id="zg-preview"></div>
-    </div>
 
-
-    <!-- _______________________________________MODALS___________________________________________ -->
-    <!-- Scan Import Modal -->
-    <div class="modal-bg" id="modal-scan" onclick="if(event.target===this)closeModal('modal-scan')">
-        <div class="modal">
-            <button class="mclose" onclick="closeModal('modal-scan')">&#10005;</button>
-            <h2>&#128203; Laufblätter scannen &mdash; Anleitung</h2>
-            <ol>
-                <li>Laufblätter in den <strong>Automatischen Dokumente-Einzug</strong> legen (Vorderseite oben)</li>
-                <li><strong>Scannen wählen</strong> <code>Scan-OneDrive empfohlen</code></li>
-                <li>In den Einstellungen <strong>JPEG</strong> und <strong>Einseitig</strong> wählen</li>
-                <li>Scan <strong>starten</strong> <code> -> OneDrive\Apps\Scans for PaperCut MF</code></li>
-                <li>Scans hier <strong>hochladen</strong></li>
-            </ol>
-            <br><div style="border-top:1px solid #444;margin:10px 0;"></div>
-            <p style="font-size:12px;color:var(--muted);margin-top:14px">
-                <strong>Wichtig:</strong> Verschmutzte und zerknitterte Laufblätter liefern schlechtere Resultate.
-            </p>
-        </div>
-    </div>
-
-    <!-- Regeln Modal -->
-    <div class="modal-bg" id="modal-regeln" onclick="if(event.target===this)closeRegeln()">
-        <div class="modal">
-            <button class="mclose" onclick="closeRegeln()">&#10005;</button>
-            <h2>&#9998; Regeln</h2>
-            <div class="fg">
-                <label>Eine Regel pro Zeile</label>
-                <textarea id="regeln-text" rows="8" placeholder="z.B. Absprung ab einem Bein&#10;Keine Hechtrolle"></textarea>
-            </div>
-            <button class="btn btn-p" onclick="saveRegeln()">&#10003; Speichern</button>
-        </div>
-    </div>
-    <!-- Hinweis Modal -->
-    <div class="modal-bg" id="modal-hinweis" onclick="if(event.target===this)closeHinweis()">
-        <div class="modal">
-            <button class="mclose" onclick="closeHinweis()">&#10005;</button>
-            <h2>&#9998; Allgemeiner Hinweis</h2>
-            <div class="fg">
-                <label>Erscheint auf der Bewertungstabelle (leer = kein Hinweis)</label>
-                <textarea id="hinweis-text" rows="4" placeholder="z.B. Alle Resultate werden abgerundet."></textarea>
-            </div>
-            <button class="btn btn-p" onclick="saveHinweis()">&#10003; Speichern</button>
-        </div>
-    </div>
-
-    <!-- LP-Name-Check Modal -->
-    <div class="modal-bg" id="modal-lp-check" onclick="if(event.target===this)lpCheckSkip()">
-        <div class="modal" style="max-width:440px">
-            <h2>&#9888; Langer LP-Name</h2>
-            <p id="lp-check-msg" style="font-size:13px;margin-bottom:10px"></p>
-            <input type="text" id="lp-check-input" style="width:100%;margin-bottom:14px"
-                   onkeydown="if(event.key==='Enter')lpCheckConfirm()">
-            <div style="display:flex;gap:8px;justify-content:flex-end">
-                <button class="btn" onclick="lpCheckSkip()">Behalten</button>
-                <button class="btn btn-p" onclick="lpCheckConfirm()">Ersetzen</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- IMPORT MODAL -->
-    <div class="modal-bg" id="modal-import" onclick="if(event.target===this)closeModal('modal-import')">
-        <div class="modal imp">
-            <button class="mclose" onclick="closeModal('modal-import')">&#10005;</button>
-            <div id="imp-main">
-                <h2>Import</h2>
-                <div class="imp-source">aus <strong id="imp-src">—</strong></div>
-                <div class="preset-grid">
-                    <button class="preset-btn active" onclick="applyImpPreset('alles',this)">
-                        <span class="pi">📥</span><span class="pn">Alles</span>
-                        <span class="pd">Vollständig übernehmen</span>
-                    </button>
-                    <button class="preset-btn" onclick="applyImpPreset('aufAnlass',this)">
-                        <span class="pi">📅</span><span class="pn">Auf Anlass aufbauen</span>
-                        <span class="pd">Ohne SuS & Rangliste</span>
-                    </button>
-                    <button class="preset-btn" onclick="applyImpPreset('nurSus',this)">
-                        <span class="pi">👥</span><span class="pn">Nur SuS & Rangliste</span>
-                        <span class="pd">Disziplinen unverändert</span>
-                    </button>
-                    <button class="preset-btn" onclick="applyImpPreset('custom',this)">
-                        <span class="pi">⚙️</span><span class="pn">Benutzerdefiniert</span>
-                        <span class="pd">Manuell auswählen</span>
-                    </button>
+        <!-- LAUFBLATT -->
+        <div class="page" id="page-laufblatt">
+            <div class="card">
+                <div class="ctitle">&#128196; Laufblatt</div>
+                <div class="fbar" style="margin-bottom:0">
+                    <label>Klasse:</label>
+                    <select id="lbKlasse" onchange="renderLB()"><option value="">&#8212; wählen &#8212;</option></select>
+                    <label>Geschlecht:</label>
+                    <select id="lbGe" onchange="renderLB()">
+                        <option value="w" selected>Mädchen</option>
+                        <option value="m">Knaben</option>
+                    </select>
+                    <button class="btn" onclick="openLBHinweis()" id="btn-lb-hinweis">&#9998; Allgemeiner Hinweis</button>
+                    <button class="btn btn-p" onclick="printLB()">&#128424;&#65039; Drucken</button>
+                    <button class="btn" onclick="printAll()">&#128424;&#65039; Alle Klassen</button>
                 </div>
-                <div style="margin-top:14px">
-                    <div class="imp-group grp-on" id="ig-anlass">
-                        <div class="imp-row on" id="ir-anlass" onclick="togImpOpt('anlass')">
-                            <span class="chk">✓</span><span class="imp-lbl">Anlass</span>
-                            <span class="imp-info">Name, Datum, Schulhaus</span>
-                        </div>
+            </div>
+            <div id="lb-cont"></div>
+        </div>
+
+        <!-- RANGLISTE -->
+        <div class="page" id="page-rangliste">
+            <div class="card">
+                <div class="ctitle">&#127942; Rangliste</div>
+                <div class="fbar" style="margin-bottom:12px">
+                    <label>Stufe:</label>
+                    <select id="fSR" onchange="renderR()"><option value="">Alle Stufen</option></select>
+                    <label>Geschlecht:</label>
+                    <select id="fGR" onchange="renderR()">
+                        <option value="w" selected>Mädchen</option>
+                        <option value="m">Knaben</option>
+                    </select>
+                    <button class="btn btn-p" onclick="printRangliste()">&#128424;&#65039; Drucken</button>
+                    <button class="btn" onclick="printAlleRanglisten()">&#128424;&#65039; Alle Ranglisten</button>
+                </div>
+            </div>
+            <div id="r-cont"></div>
+        </div>
+
+        <!-- BEWERTUNG -->
+        <div class="page" id="page-bewertung">
+            <div class="card">
+                <div class="ctitle">&#128202; Bewertungstabelle</div>
+                <div class="fbar">
+                    <button class="btn" onclick="openHinweis()" id="btn-hinweis">&#9998; Allgemeiner Hinweis</button>
+                    <button class="btn btn-tg on" onclick="toggleFarbe()" id="btn-farbe">&#127912; Farbe</button>
+                    <button class="btn btn-p" onclick="printBT()">&#128424; Drucken</button>
+                </div>
+                <div id="bw-liste"></div>
+            </div>
+            <div id="preview-container"></div>
+        </div>
+
+        <!-- ZEITPLAN -->
+        <div class="page" id="page-zeitplan">
+            <div class="card">
+                <div class="ctitle">&#128202; Zeitplan</div>
+                <div class="fbar">
+                    <button class="btn btn-tg on" id="zg-farbe" onclick="zgToggleFarbe()">&#127912; Farbe</button>
+                    <button class="btn btn-p" onclick="doPrintZG()">&#128424; Drucken</button>
+                </div>
+                <div class="al aw" id="zg-warn"></div>
+                <div class="zg-cols">
+                    <div class="zg-col-l">
+                        <div class="zg-col-title">&#9203; Zeiten</div>
+                        <ul class="slot-list" id="slot-list"></ul>
+                        <button class="btn btn-p" onclick="zgAddSlot()">&#65291; Runde</button>
                     </div>
-                    <div class="imp-group grp-on" id="ig-logo">
-                        <div class="imp-row on" id="ir-logo" onclick="togImpOpt('logo')">
-                            <span class="chk">✓</span><span class="imp-lbl">Logo</span>
-                        </div>
+                    <div class="zg-col-r">
+                        <div class="zg-col-title">&#127885; Disziplinen</div>
+                        <ul class="dis-list" id="zg-dis-list"></ul>
+                        <button class="btn btn-p" style="margin-top:8px" onclick="zgAddExtra()">&#65291; Zusatzposten</button>
                     </div>
-                    <div class="imp-group grp-on" id="ig-sus">
-                        <div class="imp-row on" id="ir-sus" onclick="togImpOpt('sus')">
-                            <span class="chk">✓</span><span class="imp-lbl">SuS</span>
-                            <span class="imp-info">Schüler, Klassen, LP</span>
-                        </div>
-                        <div class="imp-row on tree-child" id="ir-erg" onclick="togImpOpt('erg')">
-                            <span class="chk">✓</span><span class="imp-lbl">Rangliste</span>
-                            <span class="imp-info">Messwerte, Punkte</span>
-                        </div>
-                    </div>
-                    <div class="imp-group grp-on" id="ig-dis">
-                        <div class="imp-row on" id="ir-disBew" onclick="togImpOpt('disBew')">
-                            <span class="chk">✓</span><span class="imp-lbl">Bewertete Disziplinen</span>
-                            <span class="imp-info">Skala, Regeln</span>
-                        </div>
-                        <div class="imp-row on" id="ir-disUnbew" onclick="togImpOpt('disUnbew')">
-                            <span class="chk">✓</span><span class="imp-lbl">Nicht bewertete Disziplinen</span>
-                        </div>
-                    </div>
-                    <div class="imp-group grp-on" id="ig-zg">
-                        <div class="imp-row on" id="ir-zg" onclick="togImpOpt('zg')">
-                            <span class="chk">✓</span><span class="imp-lbl">Zeitplan</span>
-                            <span class="imp-info">Zeiten, Orte, Reihenfolge</span>
-                        </div>
-                    </div>
-                    <div class="imp-group grp-on" id="ig-ocr">
-                        <div class="imp-row on" id="ir-ocr" onclick="togImpOpt('ocr')">
-                            <span class="chk">✓</span><span class="imp-lbl">OCR-Einstellungen</span>
-                            <span class="imp-info">Konfidenz, PSM, Grenzwerte</span>
-                        </div>
-                    </div>
+                </div>
+            </div>
+            <div class="btprev zg-btprev" id="zg-preview"></div>
+        </div>
+
+
+        <!-- _______________________________________MODALS___________________________________________ -->
+        <!-- Scan Import Modal -->
+        <div class="modal-bg" id="modal-scan" onclick="if(event.target===this)closeModal('modal-scan')">
+            <div class="modal">
+                <button class="mclose" onclick="closeModal('modal-scan')">&#10005;</button>
+                <h2>&#128203; Laufblätter scannen &mdash; Anleitung</h2>
+                <ol>
+                    <li>Laufblätter in den <strong>Automatischen Dokumente-Einzug</strong> legen (Vorderseite oben)</li>
+                    <li><strong>Scannen wählen</strong> <code>Scan-OneDrive empfohlen</code></li>
+                    <li>In den Einstellungen <strong>JPEG</strong> und <strong>Einseitig</strong> wählen</li>
+                    <li>Scan <strong>starten</strong> <code> -> OneDrive\Apps\Scans for PaperCut MF</code></li>
+                    <li>Scans hier <strong>hochladen</strong></li>
+                </ol>
+                <br><div style="border-top:1px solid #444;margin:10px 0;"></div>
+                <p style="font-size:12px;color:var(--muted);margin-top:14px">
+                    <strong>Wichtig:</strong> Verschmutzte und zerknitterte Laufblätter liefern schlechtere Resultate.
+                </p>
+            </div>
+        </div>
+
+        <!-- Regeln Modal -->
+        <div class="modal-bg" id="modal-regeln" onclick="if(event.target===this)closeRegeln()">
+            <div class="modal">
+                <button class="mclose" onclick="closeRegeln()">&#10005;</button>
+                <h2>&#9998; Regeln</h2>
+                <div class="fg">
+                    <label>Eine Regel pro Zeile</label>
+                    <textarea id="regeln-text" rows="8" placeholder="z.B. Absprung ab einem Bein&#10;Keine Hechtrolle"></textarea>
+                </div>
+                <button class="btn btn-p" onclick="saveRegeln()">&#10003; Speichern</button>
+            </div>
+        </div>
+        <!-- Hinweis Modal – Bewertungstabelle -->
+        <div class="modal-bg" id="modal-hinweis" onclick="if(event.target===this)closeHinweis()">
+            <div class="modal">
+                <button class="mclose" onclick="closeHinweis()">&#10005;</button>
+                <h2>&#9998; Allgemeiner Hinweis</h2>
+                <div class="fg">
+                    <label id="lbl-hinweis-bt"></label>
+                    <textarea id="hinweis-text" rows="4"></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-sm" onclick="closeModal('modal-import')">Abbrechen</button>
-                    <button class="btn btn-sm btn-p" onclick="confirmImport()">Importieren</button>
+                    <button class="btn btn-p" onclick="saveHinweis()">&#10003; Speichern</button>
                 </div>
             </div>
         </div>
-    </div>
 
-</div><!-- /content -->
+        <!-- Hinweis Modal – Laufblatt -->
+        <div class="modal-bg" id="modal-lb-hinweis" onclick="if(event.target===this)closeLBHinweis()">
+            <div class="modal">
+                <button class="mclose" onclick="closeLBHinweis()">&#10005;</button>
+                <h2>&#9998; Hinweis Laufblatt</h2>
+                <div class="fg">
+                    <label id="lbl-hinweis-lb"></label>
+                    <textarea id="lb-hinweis-text" rows="4"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-p" onclick="saveLBHinweis()">&#10003; Speichern</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- LP-Name-Check Modal -->
+        <div class="modal-bg" id="modal-lp-check" onclick="if(event.target===this)lpCheckSkip()">
+            <div class="modal" style="max-width:440px">
+                <h2>&#9888; Langer LP-Name</h2>
+                <p id="lp-check-msg" style="font-size:13px;margin-bottom:10px"></p>
+                <input type="text" id="lp-check-input" style="width:100%;margin-bottom:14px"
+                       onkeydown="if(event.key==='Enter')lpCheckConfirm()">
+                <div style="display:flex;gap:8px;justify-content:flex-end">
+                    <button class="btn" onclick="lpCheckSkip()">Behalten</button>
+                    <button class="btn btn-p" onclick="lpCheckConfirm()">Ersetzen</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- IMPORT MODAL -->
+        <div class="modal-bg" id="modal-import" onclick="if(event.target===this)closeModal('modal-import')">
+            <div class="modal imp">
+                <button class="mclose" onclick="closeModal('modal-import')">&#10005;</button>
+                <div id="imp-main">
+                    <h2>Import</h2>
+                    <div class="imp-source">aus <strong id="imp-src">—</strong></div>
+                    <div class="preset-grid">
+                        <button class="preset-btn active" onclick="applyImpPreset('alles',this)">
+                            <span class="pi">📥</span><span class="pn">Alles</span>
+                            <span class="pd">Vollständig übernehmen</span>
+                        </button>
+                        <button class="preset-btn" onclick="applyImpPreset('aufAnlass',this)">
+                            <span class="pi">📅</span><span class="pn">Auf Anlass aufbauen</span>
+                            <span class="pd">Ohne SuS & Rangliste</span>
+                        </button>
+                        <button class="preset-btn" onclick="applyImpPreset('nurSus',this)">
+                            <span class="pi">👥</span><span class="pn">Nur SuS & Rangliste</span>
+                            <span class="pd">Disziplinen unverändert</span>
+                        </button>
+                        <button class="preset-btn" onclick="applyImpPreset('custom',this)">
+                            <span class="pi">⚙️</span><span class="pn">Benutzerdefiniert</span>
+                            <span class="pd">Manuell auswählen</span>
+                        </button>
+                    </div>
+                    <div style="margin-top:14px">
+                        <div class="imp-group grp-on" id="ig-anlass">
+                            <div class="imp-row on" id="ir-anlass" onclick="togImpOpt('anlass')">
+                                <span class="chk">✓</span><span class="imp-lbl">Anlass</span>
+                                <span class="imp-info">Name, Datum, Schulhaus</span>
+                            </div>
+                        </div>
+                        <div class="imp-group grp-on" id="ig-logo">
+                            <div class="imp-row on" id="ir-logo" onclick="togImpOpt('logo')">
+                                <span class="chk">✓</span><span class="imp-lbl">Logo</span>
+                            </div>
+                        </div>
+                        <div class="imp-group grp-on" id="ig-sus">
+                            <div class="imp-row on" id="ir-sus" onclick="togImpOpt('sus')">
+                                <span class="chk">✓</span><span class="imp-lbl">SuS</span>
+                                <span class="imp-info">Schüler, Klassen, LP</span>
+                            </div>
+                            <div class="imp-row on tree-child" id="ir-erg" onclick="togImpOpt('erg')">
+                                <span class="chk">✓</span><span class="imp-lbl">Rangliste</span>
+                                <span class="imp-info">Messwerte, Punkte</span>
+                            </div>
+                        </div>
+                        <div class="imp-group grp-on" id="ig-dis">
+                            <div class="imp-row on" id="ir-disBew" onclick="togImpOpt('disBew')">
+                                <span class="chk">✓</span><span class="imp-lbl">Bewertete Disziplinen</span>
+                                <span class="imp-info">Skala, Regeln</span>
+                            </div>
+                            <div class="imp-row on" id="ir-disUnbew" onclick="togImpOpt('disUnbew')">
+                                <span class="chk">✓</span><span class="imp-lbl">Nicht bewertete Disziplinen</span>
+                            </div>
+                        </div>
+                        <div class="imp-group grp-on" id="ig-zg">
+                            <div class="imp-row on" id="ir-zg" onclick="togImpOpt('zg')">
+                                <span class="chk">✓</span><span class="imp-lbl">Zeitplan</span>
+                                <span class="imp-info">Zeiten, Orte, Reihenfolge</span>
+                            </div>
+                        </div>
+                        <div class="imp-group grp-on" id="ig-ocr">
+                            <div class="imp-row on" id="ir-ocr" onclick="togImpOpt('ocr')">
+                                <span class="chk">✓</span><span class="imp-lbl">OCR-Einstellungen</span>
+                                <span class="imp-info">Konfidenz, PSM, Grenzwerte</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm" onclick="closeModal('modal-import')">Abbrechen</button>
+                        <button class="btn btn-sm btn-p" onclick="confirmImport()">Importieren</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /content -->
 
 <footer>&copy; 2026 Schule Pfäffikon &nbsp;&middot;&nbsp; C.Bucher &nbsp;&middot;&nbsp; <span class="ver"></span><span id="bot">🤖 Props an Andi</span></footer>
 
 <script>
 var LOGO='data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNS4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkViZW5lXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KICAgICB3aWR0aD0iMTg2Ljc1cHgiIGhlaWdodD0iMzcuNDhweCIgdmlld0JveD0iMCAwIDE4Ni43NSAzNy40OCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTg2Ljc1IDM3LjQ4IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxwYXRoIGZpbGw9IiMyMzFGMjAiIGQ9Ik00My40NDgsMjMuMTY4bDAuOTE2LTAuNTVjMC42NDUsMS4xODcsMS4zODksMS43NzksMi4yMzQsMS43NzljMC4zNjEsMCwwLjcwMS0wLjA4NCwxLjAxOC0wLjI1Mg0KCWMwLjMxNy0wLjE2OCwwLjU1OS0wLjM5NCwwLjcyNS0wLjY3OGMwLjE2Ni0wLjI4MywwLjI1LTAuNTgzLDAuMjUtMC45MDFjMC0wLjM2MS0wLjEyMy0wLjcxNS0wLjM2OC0xLjA2Mg0KCWMtMC4zMzYtMC40NzktMC45NTEtMS4wNTUtMS44NDUtMS43MjljLTAuODk5LTAuNjc5LTEuNDU3LTEuMTctMS42NzctMS40NzJjLTAuMzgxLTAuNTA4LTAuNTcxLTEuMDU3LTAuNTcxLTEuNjQ4DQoJYzAtMC40NjksMC4xMTItMC44OTYsMC4zMzctMS4yODJjMC4yMjQtMC4zODYsMC41NDEtMC42ODksMC45NDgtMC45MTJjMC40MDgtMC4yMjIsMC44NS0wLjMzMywxLjMzLTAuMzMzDQoJYzAuNTA3LDAsMC45ODIsMC4xMjYsMS40MjQsMC4zNzdjMC40NDIsMC4yNTIsMC45MDksMC43MTQsMS40MDIsMS4zODhsLTAuODc5LDAuNjY3Yy0wLjQwNS0wLjUzOC0wLjc1LTAuODkyLTEuMDM2LTEuMDYyDQoJYy0wLjI4NS0wLjE3MS0wLjU5Ny0wLjI1Ny0wLjkzNC0wLjI1N2MtMC40MzQsMC0wLjc5LDAuMTMyLTEuMDY1LDAuMzk2Yy0wLjI3NiwwLjI2My0wLjQxNCwwLjU4OC0wLjQxNCwwLjk3NA0KCWMwLDAuMjM0LDAuMDQ5LDAuNDYxLDAuMTQ2LDAuNjgxYzAuMDk4LDAuMjIsMC4yNzYsMC40NTksMC41MzYsMC43MThjMC4xNCwwLjEzNiwwLjYwNCwwLjQ5NSwxLjM5LDEuMDc2DQoJYzAuOTMzLDAuNjg5LDEuNTcyLDEuMzAyLDEuOTIsMS44MzljMC4zNDYsMC41MzcsMC41MiwxLjA3NiwwLjUyLDEuNjE4YzAsMC43ODEtMC4yOTcsMS40Ni0wLjg5LDIuMDM2DQoJYy0wLjU5NCwwLjU3Ni0xLjMxNSwwLjg2NC0yLjE2NSwwLjg2NGMtMC42NTQsMC0xLjI0Ny0wLjE3NS0xLjc3OS0wLjUyM0M0NC4zODgsMjQuNTczLDQzLjg5NywyMy45ODgsNDMuNDQ4LDIzLjE2OCIvPg0KICAgIDxwYXRoIGZpbGw9IiMyMzFGMjAiIGQ9Ik01OS43NzgsMTguODYxbC0wLjgxMywwLjUwNWMtMC43MDMtMC45MzItMS42NjEtMS4zOTgtMi44NzUtMS4zOThjLTAuOTcsMC0xLjc3NywwLjMxMi0yLjQxNywwLjkzNg0KCWMtMC42NDIsMC42MjQtMC45NjMsMS4zODMtMC45NjMsMi4yNzVjMCwwLjU4MSwwLjE0OCwxLjEyNywwLjQ0MywxLjYzOWMwLjI5NSwwLjUxMiwwLjY5OSwwLjkxLDEuMjE0LDEuMTkyDQoJYzAuNTE0LDAuMjgzLDEuMDkyLDAuNDI1LDEuNzMsMC40MjVjMS4xNywwLDIuMTI2LTAuNDY3LDIuODY4LTEuMzk5bDAuODEzLDAuNTM1Yy0wLjM4MSwwLjU3My0wLjg5MywxLjAxOS0xLjUzNCwxLjMzNQ0KCWMtMC42NDMsMC4zMTUtMS4zNzQsMC40NzUtMi4xOTUsMC40NzVjLTEuMjU5LDAtMi4zMDQtMC40MDEtMy4xMzQtMS4yMDJjLTAuODMtMC44LTEuMjQ0LTEuNzc0LTEuMjQ0LTIuOTIyDQoJYzAtMC43NzEsMC4xOTMtMS40ODgsMC41ODItMi4xNWMwLjM4Ny0wLjY2MSwwLjkyLTEuMTc4LDEuNTk5LTEuNTQ5YzAuNjc5LTAuMzcxLDEuNDM5LTAuNTU2LDIuMjc5LTAuNTU2DQoJYzAuNTI3LDAsMS4wMzYsMC4wOCwxLjUyNywwLjI0MWMwLjQ5LDAuMTYxLDAuOTA2LDAuMzcyLDEuMjQ5LDAuNjNDNTkuMjQ4LDE4LjEzMSw1OS41MzksMTguNDYxLDU5Ljc3OCwxOC44NjEiLz4NCiAgICA8cGF0aCBmaWxsPSIjMjMxRjIwIiBkPSJNNjEuOTAxLDE0LjEzaDEuMDI1djQuNTA0YzAuNDE1LTAuNTQ2LDAuODcyLTAuOTU1LDEuMzctMS4yMjdjMC40OTgtMC4yNywxLjAzOC0wLjQwNiwxLjYxOS0wLjQwNg0KCWMwLjU5NSwwLDEuMTI0LDAuMTUxLDEuNTg2LDAuNDU0YzAuNDYxLDAuMzAzLDAuODAxLDAuNzEsMS4wMjEsMS4yMmMwLjIyLDAuNTEsMC4zMywxLjMwOSwwLjMzLDIuMzk4djQuMTAzaC0xLjAyNXYtMy44MDINCgljMC0wLjkxOC0wLjAzNy0xLjUzLTAuMTExLTEuODM5Yy0wLjEyNy0wLjUyNy0wLjM1Ny0wLjkyNC0wLjY5Mi0xLjE4OWMtMC4zMzQtMC4yNjYtMC43NzItMC4zOTktMS4zMTQtMC4zOTkNCgljLTAuNjIxLDAtMS4xNzYsMC4yMDUtMS42NjYsMC42MTVjLTAuNDkyLDAuNDEtMC44MTUsMC45MTgtMC45NzEsMS41MjRjLTAuMDk4LDAuMzktMC4xNDcsMS4xMTItMC4xNDcsMi4xNjh2Mi45MjJoLTEuMDI1VjE0LjEzIi8+DQogICAgPHBhdGggZmlsbD0iIzIzMUYyMCIgZD0iTTcxLjI4NCwxNy4yMDZoMS4wMjV2My43MjFjMCwwLjkwOCwwLjA0OSwxLjUzMywwLjE0NywxLjg3NWMwLjE0NiwwLjQ4NywwLjQyNywwLjg3NCwwLjg0LDEuMTU2DQoJYzAuNDEzLDAuMjgzLDAuOTA2LDAuNDI2LDEuNDc4LDAuNDI2YzAuNTczLDAsMS4wNTgtMC4xMzksMS40NTYtMC40MTRjMC4zOTktMC4yNzYsMC42NzMtMC42MzksMC44MjUtMS4wODgNCgljMC4xMDMtMC4zMDgsMC4xNTQtMC45NTksMC4xNTQtMS45NTV2LTMuNzIxaDEuMDQ4djMuOTExYzAsMS4xLTAuMTI4LDEuOTI4LTAuMzg1LDIuNDgzYy0wLjI1NiwwLjU1Ny0wLjY0MiwwLjk5My0xLjE1NywxLjMwNw0KCWMtMC41MTUsMC4zMTYtMS4xNiwwLjQ3NC0xLjkzOCwwLjQ3NGMtMC43NzUsMC0xLjQyNC0wLjE1Ny0xLjk0NC0wLjQ3NGMtMC41Mi0wLjMxMy0wLjkwOC0wLjc1NC0xLjE2NC0xLjMxNw0KCWMtMC4yNTctMC41NjQtMC4zODUtMS40MTItMC4zODUtMi41NDVWMTcuMjA2Ii8+DQogICAgPHJlY3QgeD0iODAuODA1IiB5PSIxNC4xMyIgZmlsbD0iIzIzMUYyMCIgd2lkdGg9IjEuMDI1IiBoZWlnaHQ9IjExLjA0NSIvPg0KICAgIDxwYXRoIGZpbGw9IiMyMzFGMjAiIGQ9Ik05MS4wODMsMjIuNTMxbDAuODY0LDAuNDU0Yy0wLjI4MywwLjU1Ny0wLjYxMSwxLjAwNi0wLjk4MiwxLjM0OGMtMC4zNzEsMC4zNDMtMC43ODksMC42MDMtMS4yNTQsMC43OA0KCWMtMC40NjQsMC4xNzgtMC45ODksMC4yNjgtMS41NzYsMC4yNjhjLTEuMywwLTIuMzE3LTAuNDI3LTMuMDQ5LTEuMjc4Yy0wLjczMy0wLjg1My0xLjEwMS0xLjgxNS0xLjEwMS0yLjg4OQ0KCWMwLTEuMDEyLDAuMzExLTEuOTEzLDAuOTMyLTIuNzA0YzAuNzg2LTEuMDA2LDEuODQtMS41MDksMy4xNTktMS41MDljMS4zNTksMCwyLjQ0NCwwLjUxNSwzLjI1NSwxLjU0Ng0KCWMwLjU3NywwLjcyNywwLjg3LDEuNjM1LDAuODgsMi43MjRIODUuMDRjMC4wMiwwLjkyNiwwLjMxNSwxLjY4NSwwLjg4OCwyLjI3N2MwLjU3MiwwLjU5MSwxLjI3OCwwLjg4NywyLjExOSwwLjg4Nw0KCWMwLjQwNiwwLDAuODAxLTAuMDcsMS4xODQtMC4yMTFjMC4zODQtMC4xNDIsMC43MS0wLjMyOSwwLjk3OS0wLjU2M1M5MC43NywyMy4wNTIsOTEuMDgzLDIyLjUzMSBNOTEuMDgzLDIwLjM4NQ0KCWMtMC4xMzctMC41NDctMC4zMzYtMC45ODQtMC41OTgtMS4zMTFjLTAuMjYxLTAuMzI3LTAuNjA3LTAuNTkxLTEuMDM4LTAuNzkxYy0wLjQyOS0wLjItMC44ODItMC4zLTEuMzU2LTAuMw0KCWMtMC43ODIsMC0xLjQ1NCwwLjI1MS0yLjAxNywwLjc1NGMtMC40MSwwLjM2Ni0wLjcyMSwwLjkxNi0wLjkzLDEuNjQ4SDkxLjA4M3oiLz4NCiAgICA8cGF0aCBmaWxsPSIjMjMxRjIwIiBkPSJNOTguOTU2LDE0LjQwMWgyLjE3NmMxLjE3NywwLDIuMDI1LDAuMTA4LDIuNTQ1LDAuMzI1YzAuNTIxLDAuMjE4LDAuOTMxLDAuNTcsMS4yMywxLjA1NQ0KCWMwLjMwMSwwLjQ4NiwwLjQ1MSwxLjA2OCwwLjQ1MSwxLjc0N2MwLDAuNzUyLTAuMTk3LDEuMzc3LTAuNTksMS44NzVjLTAuMzk0LDAuNDk4LTAuOTI3LDAuODQ1LTEuNjAxLDEuMDQNCgljLTAuMzk2LDAuMTEyLTEuMTE2LDAuMTY4LTIuMTYxLDAuMTY4djQuNTYzaC0yLjA1MVYxNC40MDEgTTEwMS4wMDcsMTguNjEyaDAuNjUyYzAuNTEzLDAsMC44NjktMC4wMzcsMS4wNjktMC4xMQ0KCWMwLjItMC4wNzQsMC4zNTctMC4xOTUsMC40NzMtMC4zNjRjMC4xMTQtMC4xNjksMC4xNzItMC4zNzQsMC4xNzItMC42MTNjMC0wLjQxNy0wLjE2MS0wLjcyMS0wLjQ4My0wLjkxMg0KCWMtMC4yMzQtMC4xNDItMC42NjktMC4yMTMtMS4zMDQtMC4yMTNoLTAuNTc5VjE4LjYxMnoiLz4NCiAgICA8cGF0aCBmaWxsPSIjMjMxRjIwIiBkPSJNMTA2LjcyOSwxNy4yMDZoMC43MTJjMC4wMDQtMS4wNDUsMC4wMjEtMS42NjIsMC4wNTEtMS44NTNjMC4wNTQtMC40MzksMC4yMzctMC43ODgsMC41NTMtMS4wNDMNCgljMC4zMTUtMC4yNTcsMC43NjEtMC4zODUsMS4zMzctMC4zODVjMC40MTUsMCwwLjg4NCwwLjA5NSwxLjQwNiwwLjI4NXYxLjUyNGMtMC4yODgtMC4wODMtMC41MjUtMC4xMjUtMC43MS0wLjEyNQ0KCWMtMC4yMzQsMC0wLjQwNiwwLjA0OS0wLjUxNCwwLjE0N2MtMC4wNzgsMC4wNzMtMC4xMTcsMC4yMjUtMC4xMTcsMC40NTRsLTAuMDA3LDAuOTk2aDEuMjY3djEuNjkyaC0xLjI2N3Y2LjI3N2gtMS45OTl2LTYuMjc3DQoJaC0wLjcxMlYxNy4yMDYiLz4NCiAgICA8cGF0aCBmaWxsPSIjMjMxRjIwIiBkPSJNMTE4LjA2MSwxNy4yMDZoMS45OTl2Ny45NjloLTEuOTk5di0wLjg0M2MtMC4zOTEsMC4zNzEtMC43ODIsMC42MzktMS4xNzUsMC44MDMNCgljLTAuMzkzLDAuMTYzLTAuODE4LDAuMjQ1LTEuMjc2LDAuMjQ1Yy0xLjAyOSwwLTEuOTE5LTAuMzk5LTIuNjctMS4xOTdjLTAuNzUxLTAuNzk5LTEuMTI2LTEuNzkxLTEuMTI2LTIuOTc5DQoJYzAtMS4yMjksMC4zNjItMi4yMzksMS4wODktMy4wMjRjMC43MjctMC43ODYsMS42MDktMS4xNzksMi42NDgtMS4xNzljMC40NzgsMCwwLjkyNywwLjA5LDEuMzQ2LDAuMjcxDQoJYzAuNDIsMC4xODEsMC44MDgsMC40NTIsMS4xNjQsMC44MTNWMTcuMjA2IE0xMTQuNDcxLDEzLjY1NGMwLjI5MywwLDAuNTQzLDAuMTAyLDAuNzQ4LDAuMzA4YzAuMjA1LDAuMjA1LDAuMzA3LDAuNDUxLDAuMzA3LDAuNzM5DQoJYzAsMC4yOTMtMC4xMDIsMC41NDItMC4zMDcsMC43NDdjLTAuMjA1LDAuMjA2LTAuNDU1LDAuMzA4LTAuNzQ4LDAuMzA4Yy0wLjI4OCwwLTAuNTM0LTAuMTAyLTAuNzM5LTAuMzA4DQoJYy0wLjIwNS0wLjIwNS0wLjMwOC0wLjQ1NC0wLjMwOC0wLjc0N2MwLTAuMjg4LDAuMTAzLTAuNTM0LDAuMzA4LTAuNzM5QzExMy45MzcsMTMuNzU2LDExNC4xODMsMTMuNjU0LDExNC40NzEsMTMuNjU0eg0KCSBNMTE1Ljk1OCwxOC44NDdjLTAuNjE4LDAtMS4xMzIsMC4yMTktMS41NCwwLjY1NWMtMC40MDksMC40MzgtMC42MTMsMC45OTctMC42MTMsMS42ODFjMCwwLjY4OCwwLjIwOCwxLjI1NSwwLjYyNCwxLjY5OQ0KCXMwLjkyOSwwLjY2NywxLjUzNiwwLjY2N2MwLjYyOCwwLDEuMTQ5LTAuMjE5LDEuNTYzLTAuNjU1YzAuNDE0LTAuNDM4LDAuNjIxLTEuMDEsMC42MjEtMS43MThjMC0wLjY5My0wLjIwNy0xLjI1NS0wLjYyMS0xLjY4Ng0KCUMxMTcuMTE0LDE5LjA2MiwxMTYuNTkxLDE4Ljg0NywxMTUuOTU4LDE4Ljg0N3ogTTExNy43MTYsMTMuNjU0YzAuMjkzLDAsMC41NDIsMC4xMDIsMC43NDcsMC4zMDgNCgljMC4yMDUsMC4yMDUsMC4zMDksMC40NTEsMC4zMDksMC43MzljMCwwLjI5My0wLjEwNCwwLjU0Mi0wLjMwOSwwLjc0N2MtMC4yMDUsMC4yMDYtMC40NTQsMC4zMDgtMC43NDcsMC4zMDgNCgljLTAuMjg4LDAtMC41MzQtMC4xMDItMC43MzktMC4zMDhjLTAuMjA1LTAuMjA1LTAuMzA5LTAuNDU0LTAuMzA5LTAuNzQ3YzAtMC4yODgsMC4xMDQtMC41MzQsMC4zMDktMC43MzkNCglDMTE3LjE4MiwxMy43NTYsMTE3LjQyOCwxMy42NTQsMTE3LjcxNiwxMy42NTR6Ii8+DQogICAgPHBhdGggZmlsbD0iIzIzMUYyMCIgZD0iTTEyMS43NTksMTcuMjA2aDAuNzExYzAuMDA0LTEuMDQ1LDAuMDIxLTEuNjYyLDAuMDUyLTEuODUzYzAuMDUzLTAuNDM5LDAuMjM3LTAuNzg4LDAuNTUyLTEuMDQzDQoJYzAuMzE1LTAuMjU3LDAuNzYxLTAuMzg1LDEuMzM3LTAuMzg1YzAuNDE1LDAsMC44ODQsMC4wOTUsMS40MDYsMC4yODV2MS41MjRjLTAuMjg4LTAuMDgzLTAuNTI1LTAuMTI1LTAuNzEtMC4xMjUNCgljLTAuMjM0LDAtMC40MDYsMC4wNDktMC41MTQsMC4xNDdjLTAuMDc4LDAuMDczLTAuMTE3LDAuMjI1LTAuMTE3LDAuNDU0bC0wLjAwNywwLjk5NmgxLjI2N3YxLjY5MmgtMS4yNjd2Ni4yNzdoLTEuOTk5di02LjI3Nw0KCWgtMC43MTFWMTcuMjA2Ii8+DQogICAgPHBhdGggZmlsbD0iIzIzMUYyMCIgZD0iTTEyNy4wNjUsMTcuMjA2aDAuNzExYzAuMDA0LTEuMDQ1LDAuMDIxLTEuNjYyLDAuMDUxLTEuODUzYzAuMDU0LTAuNDM5LDAuMjM4LTAuNzg4LDAuNTUzLTEuMDQzDQoJYzAuMzE1LTAuMjU3LDAuNzYxLTAuMzg1LDEuMzM3LTAuMzg1YzAuNDE1LDAsMC44ODQsMC4wOTUsMS40MDYsMC4yODV2MS41MjRjLTAuMjg4LTAuMDgzLTAuNTI1LTAuMTI1LTAuNzEtMC4xMjUNCgljLTAuMjM0LDAtMC40MDYsMC4wNDktMC41MTQsMC4xNDdjLTAuMDc4LDAuMDczLTAuMTE3LDAuMjI1LTAuMTE3LDAuNDU0bC0wLjAwNywwLjk5NmgxLjI2N3YxLjY5MmgtMS4yNjd2Ni4yNzdoLTEuOTk5di02LjI3Nw0KCWgtMC43MTFWMTcuMjA2Ii8+DQogICAgPHBhdGggZmlsbD0iIzIzMUYyMCIgZD0iTTEzMy45MSwxMy45MjVjMC4zNTEsMCwwLjY1MSwwLjEyNywwLjkwMSwwLjM4MWMwLjI1MiwwLjI1NCwwLjM3NywwLjU2MSwwLjM3NywwLjkyMw0KCWMwLDAuMzU2LTAuMTI1LDAuNjYtMC4zNzMsMC45MTJjLTAuMjQ4LDAuMjUxLTAuNTQ0LDAuMzc3LTAuODkxLDAuMzc3Yy0wLjM1NSwwLTAuNjU5LTAuMTI4LTAuOTA5LTAuMzg1DQoJYy0wLjI1MS0wLjI1Ni0wLjM3Ny0wLjU2OC0wLjM3Ny0wLjkzNGMwLTAuMzUxLDAuMTI1LTAuNjUyLDAuMzczLTAuOTAxUzEzMy41NiwxMy45MjUsMTMzLjkxLDEzLjkyNSBNMTMyLjkxLDE3LjIwNmgydjcuOTY4aC0yDQoJVjE3LjIwNnoiLz4NCiAgICA8cG9seWxpbmUgZmlsbD0iIzIzMUYyMCIgcG9pbnRzPSIxMzcuMjE0LDE0LjEzIDEzOS4yMTQsMTQuMTMgMTM5LjIxNCwyMC40OTEgMTQyLjE1NywxNy4yMDYgMTQ0LjY2OSwxNy4yMDYgMTQxLjIzNiwyMS4wMjYNCgkxNDUuMDc5LDI1LjE3NSAxNDIuNTk3LDI1LjE3NSAxMzkuMjE0LDIxLjUwMiAxMzkuMjE0LDI1LjE3NSAxMzcuMjE0LDI1LjE3NSAxMzcuMjE0LDE0LjEzICIvPg0KICAgIDxwYXRoIGZpbGw9IiMyMzFGMjAiIGQ9Ik0xNDkuNDY0LDE3LjAwMWMwLjc1MSwwLDEuNDU4LDAuMTg4LDIuMTIsMC41NjRjMC42NjEsMC4zNzYsMS4xNzgsMC44ODYsMS41NDksMS41Mw0KCWMwLjM3MSwwLjY0NSwwLjU1NywxLjM0MSwwLjU1NywyLjA4OGMwLDAuNzUyLTAuMTg3LDEuNDU1LTAuNTYxLDIuMTA4Yy0wLjM3MywwLjY1NC0wLjg4MiwxLjE2Ni0xLjUyNiwxLjUzNQ0KCWMtMC42NDUsMC4zNjgtMS4zNTUsMC41NTQtMi4xMzIsMC41NTRjLTEuMTQzLDAtMi4xMTgtMC40MDctMi45MjYtMS4yMjFjLTAuODA5LTAuODEzLTEuMjEyLTEuOC0xLjIxMi0yLjk2Mw0KCWMwLTEuMjQ1LDAuNDU2LTIuMjgyLDEuMzY5LTMuMTEyQzE0Ny41MDMsMTcuMzYyLDE0OC40MjMsMTcuMDAxLDE0OS40NjQsMTcuMDAxIE0xNDkuNDk2LDE4Ljg4M2MtMC42MjEsMC0xLjEzOSwwLjIxNi0xLjU1MiwwLjY0OA0KCWMtMC40MTMsMC40MzQtMC42MTksMC45ODUtMC42MTksMS42NTljMCwwLjY5MywwLjIwNCwxLjI1NSwwLjYxMiwxLjY4NXMwLjkyNiwwLjY0NSwxLjU1MiwwLjY0NXMxLjE0Ni0wLjIxNywxLjU2My0wLjY1Mg0KCWMwLjQxNi0wLjQzNCwwLjYyMy0wLjk5MywwLjYyMy0xLjY3N3MtMC4yMDQtMS4yMzktMC42MTItMS42NjZTMTUwLjEzMiwxOC44ODMsMTQ5LjQ5NiwxOC44ODN6Ii8+DQogICAgPHBhdGggZmlsbD0iIzIzMUYyMCIgZD0iTTE1NS41NzgsMTcuMjA2aDEuOTk5djAuODE2YzAuNDU0LTAuMzgxLDAuODY0LTAuNjQ3LDEuMjMyLTAuNzk3YzAuMzY4LTAuMTQ5LDAuNzQ1LTAuMjI0LDEuMTMtMC4yMjQNCgljMC43ODksMCwxLjQ2MSwwLjI3NiwyLjAxMiwwLjgyOGMwLjQ2MywwLjQ2OCwwLjY5NSwxLjE2MiwwLjY5NSwyLjA4djUuMjY3aC0xLjk3OHYtMy40OWMwLTAuOTUxLTAuMDQzLTEuNTgyLTAuMTI5LTEuODk1DQoJYy0wLjA4NS0wLjMxMi0wLjIzMy0wLjU0OS0wLjQ0NS0wLjcxM2MtMC4yMTItMC4xNjMtMC40NzQtMC4yNDUtMC43ODUtMC4yNDVjLTAuNDA0LDAtMC43NTIsMC4xMzUtMS4wNDEsMC40MDYNCgljLTAuMjksMC4yNzEtMC40OTEsMC42NDYtMC42MDQsMS4xMjNjLTAuMDU5LDAuMjQ5LTAuMDg4LDAuNzg4LTAuMDg4LDEuNjE3djMuMTk3aC0xLjk5OVYxNy4yMDYiLz4NCiAgICA8cG9seWxpbmUgZmlsbD0iIzIzMUYyMCIgcG9pbnRzPSIxNjkuMDI0LDE0LjQwMSAxNzUuNTQzLDE0LjQwMSAxNzEuNzA3LDIzLjIwNSAxNzUuMjk0LDIzLjIwNSAxNzUuMjk0LDI1LjE3NSAxNjguNzA5LDI1LjE3NQ0KCTE3Mi41MjgsMTYuNDMgMTY5LjAyNCwxNi40MyAxNjkuMDI0LDE0LjQwMSAiLz4NCiAgICA8cG9seWxpbmUgZmlsbD0iIzIzMUYyMCIgcG9pbnRzPSIxNzcuNDY1LDE0LjQwMSAxNzkuNTQ1LDE0LjQwMSAxNzkuNTQ1LDE4LjQ2NiAxODMuMTQyLDE4LjQ2NiAxODMuMTQyLDE0LjQwMSAxODUuMjE1LDE0LjQwMQ0KCTE4NS4yMTUsMjUuMTc1IDE4My4xNDIsMjUuMTc1IDE4My4xNDIsMjAuNDUxIDE3OS41NDUsMjAuNDUxIDE3OS41NDUsMjUuMTc1IDE3Ny40NjUsMjUuMTc1IDE3Ny40NjUsMTQuNDAxICIvPg0KICAgIDxnPg0KCTxkZWZzPg0KCQk8cmVjdCBpZD0iU1ZHSURfMV8iIHg9IjAuMDYiIHdpZHRoPSIxODUuMTU1IiBoZWlnaHQ9IjM3LjQyIi8+DQoJPC9kZWZzPg0KICAgICAgICA8Y2xpcFBhdGggaWQ9IlNWR0lEXzJfIj4NCgkJPHVzZSB4bGluazpocmVmPSIjU1ZHSURfMV8iICBvdmVyZmxvdz0idmlzaWJsZSIvPg0KCTwvY2xpcFBhdGg+DQogICAgICAgIDxwYXRoIGNsaXAtcGF0aD0idXJsKCNTVkdJRF8yXykiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBmaWxsPSIjRTMwNjEzIiBkPSJNMTAuMTIzLDQuNDIxDQoJCWMwLDAuMDU4LDAsMC4wNTgsMCwwLjExNkMxMC4wMDYsNC43MTIsOS45NDksNC45NDUsOS44OSw1LjExOWMwLDAuOTMxLDAsMS41MTMsMC4wNTksMi4yMTFjMCwwLjY0LDAuNDY1LDEuMzk2LDEuMjc5LDEuNjg3DQoJCWMtMS41NywwLjQwNy0yLjQ0MywxLjIyMi0zLjAyNCwyLjczNGMtMC41MjQtMC4xNzQtMC41ODItMS4zOTYtMC41ODItMS44NjFjMC0xLjgwNCwwLjExNi0zLjMxNiwwLjExNi00LjU5Ng0KCQlDNi4zNDEsMy41NDksOC4wMjksMi45MDksOC40MzYsMS44MDNjMC4xMTYtMC40MDctMC4yOTEtMS4wNDctMC43NTctMC45ODljMC44NzMtMC40NjUsMS4xNjQtMC4wNTgsMS4zOTYsMC4xNzUNCgkJYzAuMjMyLTAuMTc1LDAuMjkxLTAuNjQsMC0wLjk4OUM5Ljc3NCwwLjM0OSw5Ljk0OSwwLjc1Niw5Ljg5LDEuMTA1YzAuMzQ5LDAuMDU4LDAuNjk4LTAuNDY1LDAuNDY2LTAuOTMNCgkJYzEuMTYzLDAuODcyLDAuMTc0LDEuNTEyLDAuMjMyLDEuNjg3YzAsMCwwLjA1OSwwLDAuMDU5LDAuMDU4YzAuMjksMCwwLjY5Ny0wLjM0OSwwLjc1Ni0wLjgxNWMwLjUyMywxLjE2NC0wLjQwNywxLjU3MS0wLjY0LDEuNzQ1DQoJCUMxMC43MDUsMy40MzIsMTAuNDcyLDQuMDE0LDEwLjEyMyw0LjQyMSBNMC45ODksMTAuOTM3Yy0wLjM0OSwwLTAuNzU2LDAuMDU4LTAuOTg5LDAuODcyYzAuMjkxLTAuMjkxLDEuMDQ3LTAuMTc0LDEuMzM4LDANCgkJYzAuOTMxLDAuOTMxLDAuODc0LDIuNzM1LDIuOTY3LDIuMzg2YzEuMDQ4LDAuNTgyLDEuODYxLDEuODYxLDIuNTYsMi41MDFsMi41NiwyLjczNWMxLjYzLDEuMzM3LDMuNjY1LDAuMTE2LDMuNzgzLTEuNjg3DQoJCWMwLjI5MS0yLjMyOC0yLjMyOC0zLjI1OC0zLjcyNC0zLjU0OWMtMS4zOTYtMC4yOTEtMS40NTQtMC4xMTctMy4yNTgtMS4yOGMtMC4yMzItMC4xMTYtMC41MjMtMC4yOTEtMC43NTYtMC40NjUNCgkJYy0wLjExNi0xLjM5Ny0xLjUxMy0xLjM5Ny0xLjkyLTIuMjExYy0wLjExNi0wLjIzMy0wLjExNi0xLjI4LTEuNTcxLTEuMDQ3YzAuNDY2LDAuMTE2LDAuNjQxLDAuNTIzLDAuNTgyLDAuODE0SDIuNTAxDQoJCWMtMC4yMzIsMC0wLjUyMy0xLjI4LTEuOTE5LTAuNDY1YzAuNTI0LTAuMDU4LDAuOTMxLDAuNDA3LDAuODczLDAuNjk4Yy0wLjI5Mi0wLjE3NS0wLjc1Ni0wLjIzMy0xLjM5NywwLjIzMw0KCQlDMC41MjQsMTAuMzU1LDAuOTMxLDEwLjY0NiwwLjk4OSwxMC45Mzd6IE0xNC41NDQsNS41ODVjLTAuMTE2LDEuMTA1LDAuODcyLDEuODAzLDEuOTIsMi41NTljMC4yMzMtMC45ODgsMC4yOS0xLjM5NiwxLjI4LTEuNTEyDQoJCWMwLjE3NCwwLjA1OCwwLjQwNy0wLjUyNCwwLjY5OC0wLjM0OWMwLjgxNCwwLjUyNCwxLjkyLDEuMjgsMi43OTIsMS44NjFjMC40NjYsMC4zNSwwLjkzMSwwLjU4MiwwLjc1NywxLjEwNg0KCQljMC40MDcsMC4zNDksMC41ODIsMC41MjMsMC44NzMsMC43NTZjMC4yOSwwLjI5MSwwLjI5LDAuMjMzLDAsMC42OThjLTAuNTI1LDAuOTMxLTEuODA0LDEuMzM4LTIuNDQ1LDAuNjQNCgkJYy0wLjE3My0wLjE3NC0wLjE3My0wLjE3NC0wLjM0OC0wLjI5MWMtMC40MDcsMC40NjUtMS42MjksMS4zMzgtMS45NzgsMC44NzNjLTAuMzQ5LTAuMjkxLTAuNzU3LTAuNjk4LTEuMjgtMS4yOA0KCQljLTEuMTYzLDAuMjkxLTEuNjg4LTEuMzM4LTAuNTgyLTEuODAzQzE0LjY2MSw4LjAyOCwxMy40OTgsNi44MDcsMTQuNTQ0LDUuNTg1eiBNMTcuNjg2LDEwLjAwNg0KCQljLTAuNzU3LDAuNDA3LTEuNjg4LTAuMzQ5LTEuMzk2LTEuMTYzQzE2LjkyOSw5LjE5MiwxNy40NTQsOS40ODMsMTcuNjg2LDEwLjAwNnogTTE2LjQ2NCwxMS40NjENCgkJYzAuNDA4LDAuNDY1LDAuNzU2LDAuODcyLDEuMTA1LDEuMTYzYzAuNjk5LDAuNzU2LDEuNjMsMC4xNzUsMi4zMjctMC41MjRjMC40MDcsMC4zNSwwLjU4MiwwLjQwOCwxLjEwNSwwLjQ2Ng0KCQljMC40NjYsMS4zOTYsMC4yMzMsMi4xNTItMC40MDcsMy4wMjVjLTEuODAzLDIuNTAyLTQuMjQ2LDMuMDgzLTYuODY0LDMuMjU3YzAuOTMxLTIuMTUyLTAuMjkxLTMuNjA2LTEuNDU1LTQuNDIxDQoJCWMtMC45ODgtMC41ODEtMi42MTctMC45MzEtMy42MDYtMS4xMDVjLTAuMDU5LTIuNzkyLDIuNzM0LTQuMjQ3LDUuMjM1LTMuMzc0YzAuMzQ5LDAuMTc0LDAuNjk4LDAuNDA3LDEuMTA1LDAuNzU2DQoJCUMxNS4zNTksMTEuMDUzLDE1LjY1LDExLjYzNSwxNi40NjQsMTEuNDYxeiBNMjQuMjU5LDI1LjY1NWMtMC40NjUtMC42OTgtMS41Ny0xLjkyLTMuNjY1LTEuODYNCgkJYzAuNDA3LTAuNjQxLDEuMzM5LTAuOTg5LDIuMDM2LTAuODE1QzIzLjQ0NSwyMy4xNTQsMjQuMzE4LDI0Ljc4MywyNC4yNTksMjUuNjU1eiBNMTcuODAyLDkuOTQ4DQoJCWMtMC4xNzUtMC43NTYtMC41MjMtMS4zMzgtMS4yOC0xLjc0NUMxNy41NjksNy43MzcsMTguODQ5LDkuMDE3LDE3LjgwMiw5Ljk0OHogTTE4LjczMyw3LjI3MmMwLjQwNywwLjI5MSwwLjg3MiwwLjUyNCwxLjI4LDAuODcyDQoJCWMtMC4yMzMsMC0wLjY0LDAuMTE3LTAuNzU3LDAuMzVDMTkuMTQsOC4xNDQsMTguOTA4LDcuNjc5LDE4LjczMyw3LjI3MnogTTEyLjEwMSwyMi4yMjNjLTAuMjkxLDAtMC42OTgsMC4xMTYtMC45MzEsMC44MTMNCgkJYzAuMjMzLTAuMjMxLDAuOTg5LTAuMTc0LDEuMjgsMGMxLjA0OCwwLjgxNSwwLjQ2NSwyLjczNSwyLjczNCwyLjU2MWMwLjIzMiwwLjM0OSwwLjQ2NiwxLjMzOCwxLjIyMiwyLjE1Mg0KCQljMS4wNDgsMS4xNjQsMi42MTgsMS41Nyw0LjY1NCwxLjUxM2MwLjc1NiwwLjA1OCwxLjMzOCwwLjExNiwxLjMzOC0wLjgxNHYtMS4xNjRjMC0wLjI5MSwwLjExNi0wLjQ2NSwwLjQ2Ni0wLjUyMmwxLjM5NSwwLjA1OA0KCQljLTAuMTc1LDQuMzA1LDEuMDQ4LDUuNTg1LDQuNjU1LDUuNTg1YzAuMDU4LDEuMjIxLDAuMDU4LDIuNDQzLTAuOTksMi42MTdjLTAuNjM5LTEuMjc5LTEuNDU0LTAuODcyLTEuNjg2LTEuNTEyDQoJCWMtMC4xMTYtMC4yOTEtMC4xNzUtMS4xNjMtMS41MTMtMC45ODljMC40MDcsMC4xMTYsMC41ODIsMC40NjUsMC41ODIsMC43NTZjLTAuMDU5LDAtMC4xMTcsMC0wLjExNywwDQoJCWMtMC4yMzMsMC0wLjUyNC0xLjI3OS0xLjkxOS0wLjQ2NWMwLjUyMy0wLjA1OCwwLjkzMSwwLjQwNywwLjg3MiwwLjY5OGMtMC4yOTEtMC4xNzYtMC42OTgtMC4xNzYtMS4yNzksMC4xNzQNCgkJYzAuNDY1LTAuMDU5LDAuODE0LDAuMjkyLDAuODE0LDAuNTgyYy0wLjI5MSwwLTAuNjk4LDAuMDU5LTAuOTMxLDAuODE0YzAuMjMzLTAuMjkxLDAuOTg5LTAuMTc1LDEuMjgsMC4wNTkNCgkJYzEuMzM4LDAuODEzLDEuMTYzLDMuMjU4LDMuODk3LDEuOTc4YzEuMTY0LTAuNDY2LDEuODYzLTEuMDQ3LDMuMDI2LTEuODYxYzEuMjc5LTAuOTg5LDAuOTg5LTIuMzg2LDAuOTg5LTQuNjU0DQoJCWMtMC4xMTYtMC4xNzUtMC4zNS0wLjI5MS0wLjQ2Ni0wLjI5MWMtMS42MjksMC4wNTktMi4yMS0wLjE3NS0yLjIxLTAuODE0di0yLjYxN2wxLjk3OCwyLjA5NGMxLjgwMywxLjk3OCw1LjM1Mi0xLjA0NywzLjA4My0zLjM3NA0KCQlsLTguMjAyLTguNTUyYzAuMTE2LTAuOTg5LTAuMTc1LTEuMzM4LTEuMjgxLTIuMDk0Yy0xLjE2My0wLjg3MywwLjIzMy0yLjUwMSwwLjUyNC0yLjc5MmMtMS4yODEsMC4yMzItMy40OTEsMS43NDUtMi45MDgsMy44MzkNCgkJYzAuMjksMC44NzMsMS4wNDYsMS44MDQsMi41NTksMi4xNTNsOC4zNzcsOC43MjdjMC41ODIsMC42NC0wLjUyMywxLjQ1NC0wLjk4OSwwLjkzMUwyMS4xMTksMTYuMTE1DQoJCWMtMi4yNywzLjU0OS01Ljg3NiwzLjE5OS03LjYyMSwzLjQ5YzAuNDA2LDAuMjkxLDAuODcyLDAuNTI0LDEuMzM3LDAuNzU2YzAuMDU4LDAsMC4wNTgsMCwwLjExNywwLjA2DQoJCWMyLjM4NCwwLjkzLDUuMjk0LDAuNDA2LDcuMjcxLDIuMTUxYy0xLjQ1NC0wLjQwNy0yLjY3NiwwLjY0MS0yLjczNCwxLjYyOWMwLDAuNTgyLTAuMDU4LDEuMTYzLTAuMDU4LDEuNjg4DQoJCWMtMC4yOTEsMC4yOTEtMS4xNjMsMC0xLjU3MS0wLjE3NWMtMC40NjUtMC4yMzItMS4wNDctMC44MTQtMS4zOTYtMS4zMzljMC4xNzQtMS45MTktMS42ODctMi4wMzUtMS44NjItMi45MDcNCgkJYy0wLjA1OC0wLjM1LTAuMjMyLTEuMTA2LTEuNDU0LTAuOTg5YzAuMzUsMC4xNzQsMC41MjMsMC40NjUsMC41MjMsMC42OThjMCwwLTAuMDU3LDAtMC4xMTYsMGMtMC4xNzUsMC0wLjQ2Ni0xLjIyMy0xLjg2MS0wLjQ2Ng0KCQljMC41MjMsMCwwLjkzLDAuNDY2LDAuODE0LDAuNzU3Yy0wLjIzMy0wLjE3Ni0wLjYzOS0wLjE3Ni0xLjIyMSwwLjExNWMwLjQ2NCwwLDAuNzU1LDAuMjkxLDAuODE0LDAuNTgyDQoJCUMxMi4xMDEsMjIuMjIzLDEyLjEwMSwyMi4yMjMsMTIuMTAxLDIyLjIyM3oiLz4NCjwvZz4NCiAgICA8cG9seWxpbmUgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGw9IiNFMzA2MTMiIHBvaW50cz0iMzUuNTg2LDE3LjY0NCAyMC43NywyLjgyNyAzNS41ODYsMi44MjcgMzUuNTg2LDE3LjY0NA0KCSIvPg0KICAgIDxwb2x5bGluZSBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iI0UzMDYxMyIgcG9pbnRzPSIzLjE5NCwyMC40MDIgMTguMDExLDM1LjIxOSAzLjE5NCwzNS4yMTkgMy4xOTQsMjAuNDAyDQoJIi8+DQo8L3N2Zz4=';
-var APP_VERSION = "1.35.000";
+var APP_VERSION = "1.40.008";
 var APP_NAME = "Sporttag-Sekretär";
 
 var DEFAULTS = {
@@ -843,7 +870,10 @@ var DEFAULTS = {
       { name: 'Klettern', anzahl: 2, einheit: 'm', maxPunkte: 8, zeroVal: 1.5, bestVal: 5, ort: 'Turnhalle', regeln: '8 s Zeit\nVertikale Stange' },
   ],
   wichtig: {
-    text: 'Alle Messresultate werden auf den nächsten Wert ABGERUNDET (Pfeilrichtung).',
+    text: 'Alle Messresultate werden auf den nächsten Wert *abgerundet* (Pfeilrichtung).',
+  },
+  lbHinweis: {
+    text: 'Bitte nur *dunkle Stifte* verwenden und in *Druckschrift in die Felder* schreiben.\nDie *Totale der letzten Klasse* am Posten (11:30) berechnen und im *Zimmer 14* abgeben.',
   },
   ocr: {
     confMin: 70,           // Mindest-Konfidenz [%] für Auto-Übernahme
@@ -877,7 +907,7 @@ var DEFAULTS = {
 // Aktive Settings (initial = Defaults, werden durch importData/Reset überschrieben)
 var settings = Object.assign({}, DEFAULTS.ocr);
 
-var state={bewDis:[],unbewDis:[],sus:[],erg:{},logo:'',wichtig:'',farbig:true};
+var state={bewDis:[],unbewDis:[],sus:[],erg:{},logo:'',wichtig:'',lbHinweis:'',farbig:true};
 var nextSid=1,nextDid=1;
 var sortCol='klasse',sortDir=1;
 var scanPending=[];
@@ -890,7 +920,20 @@ var _appNameEl = g('app-name'); if (_appNameEl) _appNameEl.textContent = APP_NAM
 document.querySelectorAll(".ver").forEach(el => { el.textContent = " v" + APP_VERSION; });
 
 function g(id){return document.getElementById(id);}
+// Lookup-Helpers für die zwei häufigsten Patterns (10x bzw. 1x im Code)
+function findDis(id){return state.bewDis.find(function(d){return d.id===id;});}
+function findSus(id){return state.sus.find(function(s){return s.id===id;});}
+var HINWEIS_LABEL = 'leer = kein Hinweis &middot; <em>*fett*</em> mit Sternchen &middot; mehrere Zeilen m\u00f6glich';
 function debounce(fn,ms){var t;return function(){clearTimeout(t);t=setTimeout(fn,ms);};}
+// Rendert Hinweis-Text: Zeilenumbrüche → Listeneinträge, *fett* → <strong>
+function renderHinweis(text){
+  if(!text||!text.trim())return '';
+  return '<ul style="margin:0;padding-left:1.1em;list-style:none">'+
+    text.split('\n').filter(function(l){return l.trim();})
+      .map(function(l){return '<li>'+esc(l).replace(/\*([^*]+)\*/g,'<strong>$1</strong>')+'</li>';})
+      .join('')+
+    '</ul>';
+}
 function esc(s){var s2=String(s||'');s2=s2.split('&').join('&amp;');s2=s2.split('<').join('&lt;');s2=s2.split('>').join('&gt;');s2=s2.split('"').join('&quot;');s2=s2.split("'").join('&#39;');return s2;}
 function geBadge(v){if(v==='w')return '<span class="bw">\u2640 Mädchen</span>';if(v==='m')return '<span class="bm">\u2642 Knaben</span>';return '<span class="bx">\u2295</span>';}
 function geLabel(v){return v==='w'?'MÄDCHEN':v==='m'?'KNABEN':'';}
@@ -953,7 +996,7 @@ function addDis(){
 }
 function remDis(id){state.bewDis=state.bewDis.filter(function(d){return d.id!==id;});renderDis();autoSave();}
 function updDis(id,f,v){
-  var d=state.bewDis.find(function(d){return d.id===id;}); if(!d) return;
+  var d=findDis(id); if(!d) return;
   if(f==='anzahl'||f==='maxPunkte') d[f]=parseInt(v)||0;
   else if(f==='zeroVal'||f==='bestVal') d[f]=parseFloat(v)||0;
   else if(f==='excluded') d[f]=!!v;
@@ -1000,7 +1043,9 @@ function renderDis(){
 function parseGe(v){v=(v||'').trim().toLowerCase();if(v==='male'||v==='m')return 'm';if(v==='female'||v==='w')return 'w';return 'x';}
 function addSus(name,vorname,klasse,ge,klp,stufe){
   if(!name||!vorname||!klasse)return false;
-  state.sus.push({id:nextSid++,name:name.trim(),vorname:vorname.trim(),klasse:klasse.trim(),
+  var n=name.trim(),vn=vorname.trim(),kl=klasse.trim();
+  if(state.sus.some(function(s){return s.name===n&&s.vorname===vn&&s.klasse===kl;}))return false;
+  state.sus.push({id:nextSid++,name:n,vorname:vn,klasse:kl,
     geschlecht:ge,klassenlehrperson:(klp||'').trim(),jahrgangsstufe:(stufe||'').trim(),ausschluss:false});
   return true;
 }
@@ -1096,7 +1141,7 @@ function addManual(){
   };
 }
 function clearSus(){if(!confirm('Alle SuS löschen?'))return;state.sus=[];state.erg={};syncFilters();renderS();autoSave();}
-function toggleAussl(id){var s=state.sus.find(function(s){return s.id===id;});if(s)s.ausschluss=!s.ausschluss;renderS();autoSave();}
+function toggleAussl(id){var s=findSus(id);if(s)s.ausschluss=!s.ausschluss;renderS();autoSave();}
 function remSus(id){state.sus=state.sus.filter(function(s){return s.id!==id;});delete state.erg[id];renderS();autoSave();}
 function sortS(col){if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}renderS();}
 function renderS(){
@@ -1198,7 +1243,12 @@ function buildLB(kl,ge){
   // Row 0 (new): QR1 top-right, spanning above Total column
   var n=sus.length;
   var qr1img=genQRImg(JSON.stringify({kl:kl,ge:ge,n:n}),80);
-  var hdrQR1='<th colspan="'+(totalCols-1)+'" class="qr-spacer"><span style="font-size:12px;color:#c00;font-weight:600">\u270f Damit die Daten zuverl\u00e4ssig erkannt werden: Bitte nur <strong>dunkle Stifte, Druckschrift</strong> und <strong>sauber in die Felder schreiben</strong>. Vielen Dank.</span></th>'+
+  var hdrQR1='<th colspan="'+(totalCols-1)+'" class="qr-spacer">'+
+    (state.lbHinweis?
+      '<div class="wblk">'+
+      renderHinweis(state.lbHinweis)+
+      '</div>':'')+
+    '</th>'+
     '<th class="qr1-cell"><div class="qr1-div">'+qr1img+'</div></th>';
   // Row 1: group headers (no QR column now)
   var hdr='<th rowspan="2" class="ncol">Name / Vorname</th><th rowspan="2" class="rcol aussl-hdr">Aussl.*</th>';
@@ -1223,10 +1273,13 @@ function buildLB(kl,ge){
     cells+='<td class="tot"></td>';
     return '<tr>'+cells+'</tr>';
   }).join('');
+  // Zeilenhöhe: bei n > 14 proportional reduzieren (308 = 14×22px nominal)
+  var padPx = n > 14 ? Math.max(1, Math.floor((308/n - 14) / 2)) : 4;
+  var lbtS  = padPx < 4 ? ' style="--lbt-p:'+padPx+'px"' : '';
   return '<div class="lbh"><div><div class="lbtitle">'+esc(name)+'</div>'+(gel?'<div class="lbge">'+gel+'</div>':'')+' <div class="lbdate">'+esc(dat)+'</div></div>'+logoBlock()+'</div>'+
     '<div class="lbkz"><span>Klasse <strong>'+esc(kl)+'</strong>'+(klpAuto?' &nbsp;|&nbsp; '+esc(klpAuto):'')+'</span><span style="font-size:9px;font-weight:400;color:#111">'+APP_NAME+' v'+APP_VERSION+'</span></div>'+
     '<div class="lbfn">* Ankreuzen wenn man nicht in der Rangliste erscheinen will</div>'+
-    '<table class="lbt"><thead><tr>'+hdrQR1+'</tr><tr>'+hdr+'</tr><tr>'+hdr2+'</tr></thead>'+tfootQR2+'<tbody>'+rows+'</tbody></table>';
+    '<table class="lbt"'+lbtS+'><thead><tr>'+hdrQR1+'</tr><tr>'+hdr+'</tr><tr>'+hdr2+'</tr></thead>'+tfootQR2+'<tbody>'+rows+'</tbody></table>';
 }
 function renderLB() {
     var kl = g('lbKlasse').value, ge = g('lbGe').value, cont = g('lb-cont');
@@ -1234,13 +1287,13 @@ function renderLB() {
     if (!kl) { cont.innerHTML = '<div class="card">'+emptyMsg('Bitte Klasse wählen.')+'</div>'; return; }
     cont.innerHTML = '<div class="lbprev">' + buildLB(kl, ge) + '</div>'
 }
-function printLB(){var kl=g('lbKlasse').value;if(!kl){alert('Bitte Klasse wählen.');return;}doPrint('Laufblatt '+kl,buildLB(kl,g('lbGe').value),false);}
+function printLB(){var kl=g('lbKlasse').value;if(!kl){alert('Bitte Klasse wählen.');return;}doPrintLB('Laufblatt '+kl,buildLB(kl,g('lbGe').value));}
 function printAll(){
   var combis=[];
   state.sus.forEach(function(s){var key=s.klasse+'__'+s.geschlecht;if(!combis.find(function(c){return c.key===key;}))combis.push({key:key,kl:s.klasse,ge:s.geschlecht});});
   combis.sort(function(a,b){return a.kl.localeCompare(b.kl,'de')||a.ge.localeCompare(b.ge);});
   var html=combis.map(function(c,i){return buildLB(c.kl,c.ge)+(i<combis.length-1?'<div style="page-break-after:always"></div>':'');}).join('');
-  doPrint('Alle Laufblätter',html,false);
+  doPrintLB('Alle Laufblätter',html);
 }
 
 // ── RANGLISTE ──
@@ -1278,7 +1331,6 @@ function renderR(){
 }
 
 // ── RANGLISTE PRINT: one A4 per Stufe+Geschlecht with full header ──
-var RL_PRINT_CSS = 'table{font-size:12px}' + 'th,td{padding:2px 6px;font-size:12px}' + 'th{padding:3px 6px}' + 'td{text-align:left}' + 'td:first-child{text-align:center}' + '.rb{width:14px;height:14px;line-height:14px;font-size:9px}';
 function buildRLPage(d){
   var name=g('anlassName').value,dat=g('anlasDatum').value;
   var rows='';
@@ -1294,7 +1346,6 @@ function buildRLPage(d){
         '<div style="font-size:20px;font-weight:700;letter-spacing:.3px">'+esc(name)+'</div>'+
         '<div style="font-size:16px;font-weight:700;margin-top:5px">'+d.grp.label+' &mdash; '+esc(d.stufe||'')+'</div>'+
         (dat?'<div style="font-size:11px;color:#555;margin-top:3px">'+esc(dat)+'</div>':'')+
-
       '</div>'+
       logoBlock()+
     '</div>'+
@@ -1302,7 +1353,7 @@ function buildRLPage(d){
       '<thead><tr style="background:#d0d0d0"><th style="padding:6px 8px;text-align:left">Rang</th><th style="padding:6px 8px;text-align:left">Vorname</th><th style="padding:6px 8px;text-align:left">Name</th><th style="padding:6px 8px;text-align:left">Klasse</th><th style="padding:6px 8px;text-align:left">Total Pte.</th></tr></thead>'+
       '<tbody>'+rows+'</tbody>'+
     '</table>'+
-    '<div style="font-size:9px;color:#777;margin-top:8px">'+esc(name)+(dat?' &mdash; '+esc(dat):'')+' &mdash;'+APP_VERSION+'</div>'+
+    '<div style="font-size:9px;color:#777;margin-top:8px">'+esc(name)+(dat?' &mdash; '+esc(dat):'')+' &mdash; v'+APP_VERSION+'</div>'+
   '</div>';
 }
 function _buildRLHtml(data){
@@ -1310,10 +1361,10 @@ function _buildRLHtml(data){
 }
 function printRangliste(){
   var fs=g('fSR').value,fge=g('fGR').value;
-  doPrint('Rangliste',_buildRLHtml(getRLData(fs,fge)),true,RL_PRINT_CSS);
+  doPrintRL('Rangliste',_buildRLHtml(getRLData(fs,fge)));
 }
 function printAlleRanglisten(){
-  doPrint('Alle Ranglisten',_buildRLHtml(getRLData('','')),true,RL_PRINT_CSS);
+  doPrintRL('Alle Ranglisten',_buildRLHtml(getRLData('','')));
 }
 
 function logoBlock() {
@@ -1323,47 +1374,41 @@ function logoBlock() {
         + '</div>';
 }
 
-    function doPrint(title, body, portrait, extraCss) {
-        var w = window.open('', '_blank');
-        w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + esc(title) + '</title><style>' +
-            'body{font-family:\'Century Gothic\',CenturyGothic,AppleGothic,Futura,\'Trebuchet MS\',Arial,sans-serif;font-size:11px;padding:12px 16px 0;color:#111}' +
-            'table{width:100%;border-collapse:collapse;font-size:10px;margin-bottom:10px}' +
-            'th,td{border:1px solid #888;padding:5px 6px;font-size:11px}' +
-            'th{background:#d0d0d0;font-weight:700;text-align:center}' +
-            'td{text-align:center}' +
-            'td.ncol{text-align:left;min-width:175px;font-size:11px;font-weight:500}' +
-            '.ncol-inner{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:175px;display:block}' +
-            'td.rcol{background:#fff}' +
-            'td.ptc{background:#fff}' +
-            'td.tot{background:#fff;font-weight:700;border:2px solid #555}' +
-            '.rb{display:inline-block;width:22px;height:22px;border-radius:50%;text-align:center;line-height:22px;font-weight:700;font-size:11px}' +
-            '.r1{background:#fef08a;color:#713f12}.r2{background:#e5e7eb;color:#374151}.r3{background:#fed7aa;color:#7c2d12}.rx{background:#f0f0f0;color:#555}' +
-            '.rlt tr:nth-child(1) td{background:#fefce8}.rlt tr:nth-child(2) td{background:#f9fafb}.rlt tr:nth-child(3) td{background:#fff7ed}' +
-            'tr{page-break-inside:avoid}' +
-            '.lbh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}' +
-            '.lbtitle{font-size:17px;font-weight:700}.lbge{font-size:13px;font-weight:700;margin-top:2px;color:#333}.lbdate{font-size:11px;color:#555;margin-top:3px}' +
-            '.lbkz{display:flex;justify-content:space-between;align-items:baseline;margin:6px 0 5px;font-size:14px;font-weight:700;border-bottom:2px solid #555;padding-bottom:4px}' +
-            '.lbfn{font-size:9px;color:#555;margin-bottom:5px}' +
-            '.lbwarn{font-size:15px;font-weight:400;color:#c00;border:1px solid #c00;padding:8px 14px;display:inline-block;border-radius:3px;margin-top:32px}' +
-            '.qr1-cell{width:82px;min-width:82px;padding:2px;text-align:center;vertical-align:middle;background:#fff!important;border-top:none!important;border-left:none!important;border-right:none!important;border-bottom:1px solid #555!important}' +
-            '.qr2-cell{width:64px;min-width:64px;padding:2px;text-align:center;vertical-align:middle;background:#fff!important;border-color:transparent!important}' +
-            '.qr-spacer{border:none!important;background:#fff!important;padding:2px 6px 2px 6px!important;height:auto!important;vertical-align:middle;text-align:left}' +
-            '.qr1-cell img,.qr2-cell img{border:none!important;padding:0!important;display:block!important}' +
-            '.lbt th,.lbt td{border:1px solid #555;padding:4px 5px;text-align:left}' +
-            '.lbt th{background:#e8e8e8;font-weight:700;font-size:11px}' +
-            '.lbt thead tr:first-child th{background:#d8d8d8}' +
-            '.lbt td.ncol{text-align:left;font-size:11px;font-weight:500}' +
-            '.lbt td.rcol{background:#fff}.lbt td.ptc{background:#fff}' +
-            '.lbt td.tot{min-width:82px;background:#fff;font-weight:700;border:2px solid #555}' +
-            '.lbt tfoot td{border-left-color:transparent!important;border-right-color:transparent!important;border-bottom-color:transparent!important}' +
-            '.aussl-hdr{background:#e0e0e0}.ptc-hdr{background:#d8d8d8}.tot-hdr{background:#d0d0d0}' +
-            '.marker-col{background:#cccccc!important;border-color:transparent!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
-            '.marker-empty{background:transparent!important;border-color:transparent!important}' +
-            (extraCss || '') + '@page{size:A4 ' + (portrait ? 'portrait' : 'landscape') + ';margin:1.2cm}' +
-            '</style></head><body>' + body +
-            '<scr' + 'ipt>window.onload=function(){window.focus();setTimeout(function(){window.print();},250);}<\/scr' + 'ipt></body></html>');
-        w.document.close(); w.focus();
-    }
+// ── Print-Kern ────────────────────────────────────────────────────────────────
+// Gemeinsamer Wrapper: öffnet ein leeres Fenster und schreibt HTML+CSS hinein.
+var _ONLOAD_PRINT    = 'window.onload=function(){window.focus();setTimeout(function(){window.print();},250);}';
+var _ONLOAD_PRINT_ZG = 'window.onload=function(){window.print();}';
+var _ONLOAD_PRINT_BT = 'function fitRegelnBoxes(){var blks=document.querySelectorAll(".rblk");blks.forEach(function(el){el.style.fontSize="";var fs=11;while(el.scrollHeight>el.clientHeight+1&&fs>6){fs-=0.25;el.style.fontSize=fs+"px";}});}'+
+                       'window.onload=function(){window.focus();fitRegelnBoxes();setTimeout(function(){window.print();},250);}';
+var _CSS_APP = function(){ return document.getElementById('css-app').textContent; };
+
+function openPrintWindow(title, css, body, onloadScript, bodyClass) {
+  var w = window.open('', '_blank');
+  if (!w) { alert('Druck blockiert: Bitte Pop-ups erlauben.'); return; }
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + esc(title) + '</title>' +
+    '<style>' + css + '</style></head><body' + (bodyClass?' class="'+bodyClass+'"':'') + '>' + body +
+    '<scr' + 'ipt>' + (onloadScript || _ONLOAD_PRINT) + '<\/scr' + 'ipt></body></html>');
+  w.document.close(); w.focus();
+}
+
+// Laufblatt – pixel-locked (Scope .lbprev, @page landscape 1.2cm)
+function doPrintLB(title, body) {
+  openPrintWindow(title, _CSS_APP()+'@page{size:A4 landscape;margin:1.2cm}', body, null, 'lbprev');
+}
+// Rangliste (Scope .rlprev, @page portrait 1.5cm)
+function doPrintRL(title, body) {
+  openPrintWindow(title, _CSS_APP()+'@page{size:A4 portrait;margin:1.5cm}', body, null, 'rlprev');
+}
+// Bewertungstabelle (Scope .btprev, @page landscape 1.5cm)
+function doPrintBT(title, body) {
+  openPrintWindow(title, _CSS_APP()+'@page{size:A4 landscape;margin:1.5cm}', body, _ONLOAD_PRINT_BT, 'btprev');
+}
+// Zeitplan (Scope .btprev.zg-btprev, @page landscape 1cm)
+function doPrintZG() {
+  var title = 'Zeitplan_' + (g('anlassName') ? g('anlassName').value : '');
+  openPrintWindow(title, _CSS_APP()+'body{padding:16px 20px 0}@page{size:A4 landscape;margin:1cm}',
+    '<div class="zg-btprev">' + g('zg-preview').innerHTML + '</div>', _ONLOAD_PRINT_ZG, 'btprev');
+}
 
 // ── OCR Core – aus DebugTool v1.06 extrahiert ────────────────────────────────
 // ── Globale Variablen ─────────────────────────────────────────────────────────
@@ -1844,7 +1889,7 @@ function applyOCRResults(results) {
   var autoCount = 0;
   results.forEach(function(row) {
     if (row.ausschluss !== undefined) {
-      var s = state.sus.find(function(s){ return s.id === row.sid; });
+      var s = findSus(row.sid);
       if (s) s.ausschluss = row.ausschluss;
     }
     var hasExisting = state.erg[row.sid] && state.erg[row.sid]['total'] != null;
@@ -1871,7 +1916,7 @@ function _writeOCRRow(row){
   state.erg[row.sid]['total'] = row.total&&row.total.val!==null ? row.total.val :
     row.dis.reduce(function(s,d){ return s+(d.val||0); }, 0);
   state.erg[row.sid]['_src'] = row.total&&row.total.manual ? 'manual' : 'ocr';
-  var s=state.sus.find(function(s){ return s.id===row.sid; });
+  var s=findSus(row.sid);
   if(s&&row.ausschluss!==undefined) s.ausschluss=row.ausschluss;
 }
 function commitOCRRow(ri) {
@@ -1887,6 +1932,72 @@ function commitOCRRow(ri) {
 // applyOCRResults) gehen weiterhin synchron, damit User-Klicks sofort wirken.
 var scheduleOCRRender = debounce(renderOCRTable, 100);
 
+// renderOCRTable aufgeteilt:
+//   _ocrGroupPending — gruppiert scanPending nach Klasse+Geschlecht
+//   _ocrGroupHeader  — Gruppen-Überschrift (Klasse-Chip + Geschlecht-Badge + Count)
+//   _ocrRowHtml      — eine Konfliktzeile (Name/Vorname/Ausschluss/Total/Status/Btns)
+//   _ocrTableShell   — colgroup + thead — gleiches Layout für jede Gruppe
+function _ocrGroupPending(){
+  var groups = [];
+  scanPending.forEach(function(row, ri){
+    var key = (row.kl||'')+'__'+(row.ge||'');
+    var grp = groups.find(function(g){ return g.key===key; });
+    if (!grp) { grp={key:key,kl:row.kl,ge:row.ge,rows:[]}; groups.push(grp); }
+    grp.rows.push({row:row,ri:ri});
+  });
+  return groups;
+}
+function _ocrGroupHeader(grp){
+  return '<div style="margin:20px 0 8px;padding-bottom:4px;border-bottom:2px solid var(--border);display:flex;gap:8px;align-items:center">'+
+    (grp.kl ? '<span class="chip">'+esc(grp.kl)+'</span>' : '')+
+    (grp.ge ? geBadge(grp.ge) : '')+
+    '<span style="font-size:11px;color:var(--muted)">('+grp.rows.length+')</span>'+
+    '</div>';
+}
+function _ocrTableShell(){
+  // colgroup + thead — gemeinsam für alle Gruppen, kein Gruppen-spezifischer Inhalt
+  return '<div class="twrap" style="margin-bottom:24px"><table style="width:100%">'+
+    '<colgroup>'+
+      '<col>'+                                       // Name (auto)
+      '<col>'+                                       // Vorname (auto, eng an Name via padding-Trick)
+      '<col>'+                                       // Spacer 1 (Whitespace nach Vorname)
+      '<col style="width:120px">'+                   // Ausschluss
+      '<col>'+                                       // Spacer 2 (Whitespace nach Ausschluss)
+      '<col style="width:160px">'+                   // Total
+      '<col style="width:240px">'+                   // Status (Icon + Text)
+      '<col style="width:1%;white-space:nowrap">'+   // Buttons
+    '</colgroup>'+
+    '<thead><tr>'+
+      '<th class="nosort" style="padding-right:4px">Name</th>'+
+      '<th class="nosort" style="padding-left:4px">Vorname</th>'+
+      '<th></th>'+
+      '<th class="nosort" style="text-align:center">Ausschluss</th>'+
+      '<th></th>'+
+      '<th class="nosort" style="text-align:center">Total</th>'+
+      '<th class="nosort" style="padding-left:16px"></th>'+
+      '<th></th>'+
+    '</tr></thead><tbody>';
+}
+function _ocrRowHtml(item, maxTot){
+  var row = item.row, ri = item.ri;
+  var s=findSus(row.sid); var lastName=s?s.name:'', firstName=s?s.vorname:'';
+  var totVal = (row.total && row.total.val !== null) ? row.total.val : '';
+  var canCommit = canCommitOCRRow(row), reason = getConflictReason(row);
+  var statusHtml = ocrStatusHtml(reason, row.total && row.total.manual);
+  return '<tr>'+
+    '<td style="padding-right:4px">'+esc(lastName)+'</td>'+
+    '<td style="padding-left:4px">'+esc(firstName)+'</td>'+
+    '<td></td>'+
+    '<td style="text-align:center"><input type="checkbox" tabindex="-1" class="cb-aussl" '+(row.ausschluss?'checked':'')+' onchange="scanPending['+ri+'].ausschluss=this.checked"></td>'+
+    '<td></td>'+
+    '<td><input class="ei" type="number" id="ocr-t-'+ri+'" step="1" min="0" max="'+maxTot+'" value="'+totVal+'" style="width:160px" oninput="ocrTot(event,'+ri+')" onchange="ocrTot(event,'+ri+',this)"></td>'+
+    '<td id="ocr-i-'+ri+'" style="padding-left:16px">'+statusHtml+'</td>'+
+    '<td style="white-space:nowrap">'+
+      '<button class="btn btn-sm btn-p" id="ocr-btn-'+ri+'" tabindex="-1" '+(canCommit?'':'disabled ')+'style="'+(canCommit?'':'opacity:0.4;cursor:not-allowed;')+'" onclick="commitOCRRow('+ri+')">&#10003; Übernehmen</button> '+
+      '<button class="btn btn-sm btn-d" tabindex="-1" onclick="discardOCRRow('+ri+')">&#10005; Verwerfen</button>'+
+    '</td>'+
+    '</tr>';
+}
 function renderOCRTable() {
   var card = g('ocr-konflikte-card'), countEl = g('ocr-konflikte-count');
   if (!scanPending.length) {
@@ -1899,62 +2010,12 @@ function renderOCRTable() {
   if (card) card.style.display = '';
   if (countEl) countEl.textContent = '(' + scanPending.length + ')';
 
-  var groups = [];
-  scanPending.forEach(function(row, ri) { var key = (row.kl||'')+'__'+(row.ge||''); var grp = groups.find(function(g){ return g.key===key; }); if (!grp) { grp={key:key,kl:row.kl,ge:row.ge,rows:[]}; groups.push(grp); } grp.rows.push({row:row,ri:ri}); });
-
+  var groups = _ocrGroupPending();
   var maxTot = getMaxTot(), h = '';
   groups.forEach(function(grp) {
-    // String-escape für onclick-Attribute (kl/ge sind in der Praxis ASCII, aber sicherheitshalber)
-    var klEsc = (grp.kl||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-    var geEsc = (grp.ge||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-    var anyCommittable = grp.rows.some(function(it){ return canCommitOCRRow(it.row); });
-    // Gruppen-Header ohne Buttons
-    h += '<div style="margin:20px 0 8px;padding-bottom:4px;border-bottom:2px solid var(--border);display:flex;gap:8px;align-items:center">' +
-        (grp.kl ? '<span class="chip">' + esc(grp.kl) + '</span>' : '') +
-        (grp.ge ? geBadge(grp.ge) : '') +
-        '<span style="font-size:11px;color:var(--muted)">(' + grp.rows.length + ')</span>' +
-        '</div>';
-    h += '<div class="twrap" style="margin-bottom:24px"><table style="width:100%">'+
-         '<colgroup>'+
-           '<col>'+                                       // Name (auto)
-           '<col>'+                                       // Vorname (auto, eng an Name via padding-Trick)
-           '<col>'+                                       // Spacer 1 (Whitespace nach Vorname)
-           '<col style="width:120px">'+                   // Ausschluss
-           '<col>'+                                       // Spacer 2 (Whitespace nach Ausschluss)
-           '<col style="width:160px">'+                   // Total
-           '<col style="width:240px">'+                   // Status (Icon + Text)
-           '<col style="width:1%;white-space:nowrap">'+   // Buttons
-         '</colgroup>'+
-         '<thead><tr>'+
-           '<th class="nosort" style="padding-right:4px">Name</th>'+
-           '<th class="nosort" style="padding-left:4px">Vorname</th>'+
-           '<th></th>'+
-           '<th class="nosort" style="text-align:center">Ausschluss</th>'+
-           '<th></th>'+
-           '<th class="nosort" style="text-align:center">Total</th>'+
-           '<th class="nosort" style="padding-left:16px"></th>'+
-           '<th></th>'+
-         '</tr></thead><tbody>';
-    grp.rows.forEach(function(item) {
-      var row = item.row, ri = item.ri;
-      var s=state.sus.find(function(s){return s.id===row.sid;}); var lastName=s?s.name:'', firstName=s?s.vorname:'';
-      var totVal = (row.total && row.total.val !== null) ? row.total.val : '';
-      var canCommit = canCommitOCRRow(row), reason = getConflictReason(row);
-      var statusHtml = ocrStatusHtml(reason, row.total && row.total.manual);
-      h += '<tr>'+
-        '<td style="padding-right:4px">'+esc(lastName)+'</td>'+
-        '<td style="padding-left:4px">'+esc(firstName)+'</td>'+
-        '<td></td>'+
-        '<td style="text-align:center"><input type="checkbox" tabindex="-1" class="cb-aussl" '+(row.ausschluss?'checked':'')+' onchange="scanPending['+ri+'].ausschluss=this.checked"></td>'+
-        '<td></td>'+
-        '<td><input class="ei" type="number" id="ocr-t-'+ri+'" step="1" min="0" max="'+maxTot+'" value="'+totVal+'" style="width:160px" oninput="ocrTot(event,'+ri+')" onchange="ocrTot(event,'+ri+',this)"></td>'+
-        '<td id="ocr-i-'+ri+'" style="padding-left:16px">'+statusHtml+'</td>'+
-        '<td style="white-space:nowrap">'+
-          '<button class="btn btn-sm btn-p" id="ocr-btn-'+ri+'" tabindex="-1" '+(canCommit?'':'disabled ')+'style="'+(canCommit?'':'opacity:0.4;cursor:not-allowed;')+'" onclick="commitOCRRow('+ri+')">&#10003; Übernehmen</button> '+
-          '<button class="btn btn-sm btn-d" tabindex="-1" onclick="discardOCRRow('+ri+')">&#10005; Verwerfen</button>'+
-        '</td>'+
-        '</tr>';
-    });
+    h += _ocrGroupHeader(grp);
+    h += _ocrTableShell();
+    grp.rows.forEach(function(item){ h += _ocrRowHtml(item, maxTot); });
     h += '</tbody></table></div>';
   });
   h += '<div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-start"><button class="btn btn-p" tabindex="-1" onclick="commitAllOCR()">&#10003; Alle übernehmen</button> <button class="btn btn-d" tabindex="-1" onclick="discardAllOCR()">&#10005; Alle verwerfen</button></div>';
@@ -1995,10 +2056,98 @@ function syncFilters(){
 function exportData(){
   return {version:APP_VERSION,anlass:{name:g('anlassName').value,datum:g('anlasDatum').value,schulhaus:g('anlassSchulhaus').value},
     bewDis:state.bewDis,unbewDis:state.unbewDis,sus:state.sus,erg:state.erg,logo:state.logo||'',
-    wichtig:{text:state.wichtig||''},farbig:!!state.farbig,
+    wichtig:{text:state.wichtig||''},lbHinweis:{text:state.lbHinweis||''},farbig:!!state.farbig,
     settings:settings,nextSid:nextSid,nextDid:nextDid,
     zg:{order:ZG.order,slots:ZG.slots,farbig:ZG.farbig,_eid:ZG._eid}};
 }
+// ── State-Pipeline: Section-Helpers (E4 — gemeinsame Basis für importData, importDataSelective, doReset) ──
+// Jeder Helper applyt eine logische Section. data=null wird wie 'leere Daten' behandelt (Defaults greifen).
+function _resetState(){
+  state = {bewDis:[],unbewDis:[],sus:[],erg:{},logo:'',wichtig:'',lbHinweis:'',farbig:true};
+  nextSid = 1; nextDid = 1;
+  ZG.order = []; ZG.farbig = true; ZG._eid = -1;
+  ZG.slots = DEFAULTS.zg.slots.map(function(s){return Object.assign({},s);});
+}
+function _applyAnlass(data, include){
+  var al = (include && data && data.anlass) ? data.anlass : DEFAULTS.anlass;
+  if(g('anlassName'))    g('anlassName').value     = al.name||'';
+  if(g('anlasDatum'))    g('anlasDatum').value     = al.datum||'';
+  if(g('anlassSchulhaus')) g('anlassSchulhaus').value = al.schulhaus||'';
+  updateLabel();
+}
+function _applyLogo(data, include){
+  state.logo = (include && data && data.logo) ? data.logo : '';
+}
+function _applyDisBew(data, include){
+  var raw = (include && data) ? (data.bewDis || data.dis) : null;
+  if(raw){
+    state.bewDis = raw;
+    state.bewDis.forEach(migrateDisziplin);
+    nextDid = (data && data.nextDid) || (state.bewDis.reduce(function(m,d){return Math.max(m,d.id);},0)+1);
+  } else if(include && data){
+    // Save-Datei vorhanden aber leere bewDis (z.B. nach Reset gespeichert) → leer behalten, keine Defaults
+    state.bewDis = []; nextDid = 1;
+  } else {
+    // include=false ODER data=null (Reset/Werks-Init) → Default-Disziplinen
+    initDefaultDisziplinen();
+  }
+  state.wichtig   = (include && data && data.wichtig   && data.wichtig.text!=null)   ? data.wichtig.text   : (DEFAULTS.wichtig.text||'');
+  state.lbHinweis = (include && data && data.lbHinweis && data.lbHinweis.text!=null) ? data.lbHinweis.text : (DEFAULTS.lbHinweis.text||'');
+}
+function _applyDisUnbew(data, include){
+  if(include && data){
+    if(data.unbewDis){ state.unbewDis = data.unbewDis; return; }
+    if(data.zg && data.zg.extras){
+      // Backward-compat: alte Saves hatten zg.extras{loc} statt unbewDis{ort}
+      state.unbewDis = data.zg.extras.map(function(e){return{id:e.id,name:e.name,ort:e.loc||''};});
+      return;
+    }
+  }
+  state.unbewDis = DEFAULTS.unbewDis.map(function(d){return Object.assign({},d);});
+}
+function _applySusErg(data, includeSus, includeErg){
+  if(includeSus && data && data.sus){
+    state.sus = data.sus;
+    nextSid = (data.nextSid) || (state.sus.reduce(function(m,s){return Math.max(m,s.id);},0)+1);
+  }
+  if(includeSus && includeErg && data && data.erg) state.erg = data.erg;
+}
+function _applyFarbig(data){
+  state.farbig = !data || (data.farbig !== false);
+}
+function _applyOcrSettings(data, include){
+  settings = Object.assign({}, DEFAULTS.ocr, (include && data && data.settings) ? data.settings : {});
+}
+function _applyZg(data, include){
+  if(include && data && data.zg){
+    ZG.order  = (data.zg.order && data.zg.order.length)  ? data.zg.order  : DEFAULTS.zg.order.slice();
+    ZG.slots  = (data.zg.slots && data.zg.slots.length)  ? data.zg.slots  : DEFAULTS.zg.slots.map(function(s){return Object.assign({},s);});
+    ZG.farbig = (data.zg.farbig !== false);
+    ZG._eid   = (data.zg._eid != null) ? data.zg._eid : DEFAULTS.zg._eid;
+  } else {
+    zgApplyDefaults();
+  }
+}
+function _syncUIAfterApply(){
+  if(g('btn-farbe')) g('btn-farbe').classList.toggle('on',state.farbig);
+  var zgf=g('zg-farbe'); if(zgf) zgf.classList.toggle('on',ZG.farbig);
+  zgInitOrder();
+  renderDis(); syncFilters(); renderS(); renderSettings(); showLogoPreview();
+}
+// Zentrale State-Apply Pipeline: nutzt Section-Helpers.
+function _applyState(data, opts){
+  _resetState();
+  _applyAnlass(data, opts.anlass);
+  _applyLogo(data, opts.logo);
+  _applyDisBew(data, opts.disBew);
+  _applyDisUnbew(data, opts.disUnbew);
+  _applySusErg(data, opts.sus, opts.erg);
+  _applyFarbig(data);
+  _applyOcrSettings(data, opts.ocr);
+  _applyZg(data, opts.zg);
+  _syncUIAfterApply();
+}
+
 // ── Disziplinen-Migration: Single Source of Truth für Save-Kompatibilität ────
 // Normalisiert alte Save-Formate (genConfig / range) auf das aktuelle Schema.
 function migrateDisziplin(d){
@@ -2013,39 +2162,14 @@ function migrateDisziplin(d){
   if(d.ort==null)d.ort='';
 }
 function importData(data){
-  if(!data)return;
-  if(data.anlass){if(g('anlassName'))g('anlassName').value=data.anlass.name||'';if(g('anlasDatum'))g('anlasDatum').value=data.anlass.datum||'';if(g('anlassSchulhaus'))g('anlassSchulhaus').value=data.anlass.schulhaus||'';updateLabel();}
-  // Backward-compat: alte Saves haben 'dis' statt 'bewDis'
-  state.bewDis=data.bewDis||data.dis||[];
-  // Backward-compat: alte Saves haben 'zg.extras' mit 'loc' statt 'unbewDis' mit 'ort'
-  state.unbewDis=data.unbewDis||(data.zg&&data.zg.extras
-    ?data.zg.extras.map(function(e){return{id:e.id,name:e.name,ort:e.loc||''};}) 
-    :DEFAULTS.unbewDis.map(function(d){return Object.assign({},d);}));
-  state.sus=data.sus||[];state.erg=data.erg||{};state.logo=data.logo||'';
-  settings = Object.assign({}, DEFAULTS.ocr, data.settings || {});
-  // BT-Felder laden / migrieren
-  state.wichtig=(data.wichtig&&data.wichtig.text!=null)?data.wichtig.text:(DEFAULTS.wichtig.text||'');
-  state.farbig=(data.farbig!==false);
-  state.bewDis.forEach(migrateDisziplin);
-  if(g('btn-farbe'))g('btn-farbe').classList.toggle('on',state.farbig);
-  nextSid=data.nextSid||(state.sus.reduce(function(m,s){return Math.max(m,s.id);},0)+1);
-  nextDid=data.nextDid||(state.bewDis.reduce(function(m,d){return Math.max(m,d.id);},0)+1);
-  if(data.zg){
-    ZG.order  = data.zg.order  || DEFAULTS.zg.order.slice();
-    ZG.slots  = (data.zg.slots && data.zg.slots.length)
-                  ? data.zg.slots
-                  : DEFAULTS.zg.slots.map(function(s){return Object.assign({},s);});
-    ZG.farbig = (data.zg.farbig !== false);
-    ZG._eid   = (data.zg._eid != null) ? data.zg._eid : DEFAULTS.zg._eid;
-    var zgf=g('zg-farbe');if(zgf)zgf.classList.toggle('on',ZG.farbig);
-  }
-  zgInitOrder();
-  renderDis();syncFilters();renderS();renderSettings();showLogoPreview();showStatus('<b style="color:var(--success)">Wiederhergestellt \u2713</b>');
+  if(!data) return;
+  _applyState(data, _IMP_PRESETS.alles);
+  showStatus('<b style="color:var(--success)">Wiederhergestellt \u2713</b>');
 }
 function doSave(){
   var blob=new Blob([JSON.stringify(exportData(),null,2)],{type:'application/json'});
   var url=URL.createObjectURL(blob);var a=document.createElement('a');
-  a.href=url;a.download = (`sptskrData_${(g('anlassName')?.value || 'Default').trim()}`).replace(/[^a-zA-Z0-9_ -]/g, '') + '.json';
+  a.href=url;a.download = (`sskrData_${(g('anlassName')?.value || 'Default').trim()}`).replace(/[^a-zA-Z0-9_ -]/g, '') + '.sskr';
   a.click();URL.revokeObjectURL(url);autoSave();showStatus('Gespeichert \u2713');
 }
 function doLoad(inp){var f=inp.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){try{openImportModal(JSON.parse(e.target.result));}catch(err){alert('Fehler beim Lesen: '+err.message);}};r.readAsText(f,'UTF-8');inp.value='';}
@@ -2096,7 +2220,7 @@ function applyImpPreset(k,btn){
 function openImportModal(data){
   _impData=data;
   var anlass=data&&data.anlass;
-  g('imp-src').textContent=anlass?(anlass.name||'?')+' · '+(anlass.datum||'?'):'(kein Anlass)';
+  g('imp-src').textContent=anlass?(anlass.name||'?') : '(kein Anlass)';
   g('imp-main').style.display='';
   Object.assign(_impOpts,_IMP_PRESETS.alles);
   document.querySelectorAll('#modal-import .preset-btn').forEach(function(b){b.classList.remove('active');});
@@ -2104,104 +2228,35 @@ function openImportModal(data){
   _impRender();
   openModal('modal-import');
 }
-function _impDetail(k){
-  var d=_impData;if(!d)return'—';
-  if(k==='anlass')return d.anlass?(d.anlass.name||''):'—';
-  if(k==='logo')return d.logo?'Vorhanden':'—';
-  if(k==='sus')return d.sus?d.sus.length+' SuS':'—';
-  if(k==='erg')return d.erg?Object.keys(d.erg).length+' Eintr.':'—';
-  if(k==='disBew'){var bd=d.bewDis||d.dis;return bd?bd.length+' Disziplinen':'—';}
-  if(k==='disUnbew'){var ud=d.unbewDis||(d.zg&&d.zg.extras);return ud?ud.length+' Disziplinen':'—';}
-  if(k==='zg')return(d.zg&&d.zg.slots)?d.zg.slots.length+' Slots':'—';
-  return'Übernommen';
-}
 function confirmImport() {closeModal('modal-import'); importDataSelective(_impData, _impOpts);}
 
 function importDataSelective(data,opts){
-  if(!data)return;
-  state={bewDis:[],unbewDis:[],sus:[],erg:{},logo:'',wichtig:'',farbig:true};
-  nextSid=1;nextDid=1;
-  ZG.order=[];ZG.farbig=true;ZG._eid=-1;
-  ZG.slots=DEFAULTS.zg.slots.map(function(s){return Object.assign({},s);});
-  // Anlass
-  var al=opts.anlass&&data.anlass?data.anlass:DEFAULTS.anlass;
-  if(g('anlassName'))g('anlassName').value=al.name||'';
-  if(g('anlasDatum'))g('anlasDatum').value=al.datum||'';
-  if(g('anlassSchulhaus'))g('anlassSchulhaus').value=al.schulhaus||'';
-  updateLabel();
-  // Logo
-  state.logo=(opts.logo&&data.logo)?data.logo:'';
-  // bewDis + Hinweis (auto mit disBew)
-  if(opts.disBew){
-    var rawDis=data.bewDis||data.dis;
-    if(rawDis){
-      state.bewDis=rawDis;
-      state.bewDis.forEach(migrateDisziplin);
-      nextDid=data.nextDid||(state.bewDis.reduce(function(m,d){return Math.max(m,d.id);},0)+1);
-    }else{state.bewDis=[];nextDid=1;initDefaultDisziplinen();}
-    state.wichtig=(data.wichtig&&data.wichtig.text!=null)?data.wichtig.text:(DEFAULTS.wichtig.text||'');
-  }else{initDefaultDisziplinen();state.wichtig=DEFAULTS.wichtig.text||'';}
-  // unbewDis
-  if(opts.disUnbew){
-    if(data.unbewDis){state.unbewDis=data.unbewDis;}
-    else if(data.zg&&data.zg.extras){state.unbewDis=data.zg.extras.map(function(e){return{id:e.id,name:e.name,ort:e.loc||''};});}
-    else{state.unbewDis=DEFAULTS.unbewDis.map(function(d){return Object.assign({},d);});}
-  }else{state.unbewDis=DEFAULTS.unbewDis.map(function(d){return Object.assign({},d);});}
-  // SuS
-  if(opts.sus&&data.sus){
-    state.sus=data.sus;
-    nextSid=data.nextSid||(state.sus.reduce(function(m,s){return Math.max(m,s.id);},0)+1);
-  }
-  // Ergebnisse (nur wenn SuS auch importiert)
-  if(opts.sus&&opts.erg&&data.erg)state.erg=data.erg;
-  // farbig
-  state.farbig=(data.farbig!==false);
-  if(g('btn-farbe'))g('btn-farbe').classList.toggle('on',state.farbig);
-  // Settings
-  settings=Object.assign({},DEFAULTS.ocr,opts.ocr&&data.settings?data.settings:{});
-  // ZG
-  if(opts.zg&&data.zg){
-    ZG.order=(data.zg.order&&data.zg.order.length)?data.zg.order:DEFAULTS.zg.order.slice();
-    ZG.slots=(data.zg.slots&&data.zg.slots.length)?data.zg.slots:DEFAULTS.zg.slots.map(function(s){return Object.assign({},s);});
-    ZG.farbig=(data.zg.farbig!==false);
-    ZG._eid=(data.zg._eid!=null)?data.zg._eid:DEFAULTS.zg._eid;
-  }else{zgApplyDefaults();}
-  var zgf=g('zg-farbe');if(zgf)zgf.classList.toggle('on',ZG.farbig);
-  zgInitOrder();
-  renderDis();syncFilters();renderS();renderSettings();showLogoPreview();
+  if(!data) return;
+  _applyState(data, opts);
 }
 
-function doReset(){
-  if(!confirm('Wirklich zurücksetzen? Alle Daten werden gelöscht und die Werkseinstellungen wiederhergestellt.'))return;
-  state={bewDis:[],unbewDis:[],sus:[],erg:{},logo:'',wichtig:DEFAULTS.wichtig.text||'',farbig:true};nextSid=1;nextDid=1;
+// Reset-spezifische UI-Cleanups (OCR-Vorschau, SuS-Import-UI). State-Apply selbst läuft über _applyState.
+function _doResetUICleanup(){
   scanPending=[]; scanHadContent=false;
-  if(g('anlassName'))    g('anlassName').value=DEFAULTS.anlass.name;
-  if(g('anlasDatum'))    g('anlasDatum').value=DEFAULTS.anlass.datum;
-  if(g('anlassSchulhaus'))g('anlassSchulhaus').value=DEFAULTS.anlass.schulhaus;
-  updateLabel();
-  initDefaultDisziplinen();
-  if(g('btn-farbe'))g('btn-farbe').classList.toggle('on',state.farbig);
-  // OCR-UI zurücksetzen
-  if(g('ocrFile')) g('ocrFile').value='';
-  if(g('ocr-prog')) g('ocr-prog').style.display='none';
-  if(g('ocr-bar'))  g('ocr-bar').style.width='0%';
-  if(g('ocr-status')) g('ocr-status').innerHTML='';
-  if(g('ocr-import-list')) g('ocr-import-list').innerHTML='';
-  scanResults = []; scanCurrentErrors = [];
-  // SuS-Import-UI zurücksetzen
-  if(g('importFile')) g('importFile').value='';
-  if(g('csvText'))    g('csvText').value='';
-  if(g('import-hint')){g('import-hint').style.display='none';g('import-hint').innerHTML='';}
-  // Alle Tabs neu zeichnen
-  renderDis();syncFilters();renderS();renderE();renderR();renderOCRTable();renderLB();renderSettings();showLogoPreview();
-  // ZG zurücksetzen
-  ZG={order:[],slots:DEFAULTS.zg.slots.map(function(s){return Object.assign({},s);}),farbig:true,_eid:-1};
-  zgApplyDefaults();
-  zgRefresh();
-  var zgf=g('zg-farbe');if(zgf)zgf.classList.toggle('on',ZG.farbig);
-  // Settings auf Defaults
-  settings = Object.assign({}, DEFAULTS.ocr); renderSettings();
-  localStorage.removeItem('mst_save');showStatus('Zurückgesetzt \u2713');
+  scanResults=[]; scanCurrentErrors=[];
+  if(g('ocrFile'))        g('ocrFile').value='';
+  if(g('ocr-prog'))       g('ocr-prog').style.display='none';
+  if(g('ocr-bar'))        g('ocr-bar').style.width='0%';
+  if(g('ocr-status'))     g('ocr-status').innerHTML='';
+  if(g('ocr-import-list'))g('ocr-import-list').innerHTML='';
+  if(g('importFile'))     g('importFile').value='';
+  if(g('csvText'))        g('csvText').value='';
+  if(g('import-hint')){ g('import-hint').style.display='none'; g('import-hint').innerHTML=''; }
+}
+function doReset(){
+  if(!confirm('Wirklich zurücksetzen? Alle Daten werden gelöscht und die Werkseinstellungen wiederhergestellt.')) return;
+  // data=null + alles aktiviert → jede Section nimmt Defaults (siehe _apply*-Helpers)
+  _applyState(null, _IMP_PRESETS.alles);
+  _doResetUICleanup();
+  // Tabs die _applyState nicht abdeckt (Konflikt-/Rangliste-/Laufblatt-Vorschauen + Zeitplan-Live):
+  renderE(); renderR(); renderOCRTable(); renderLB(); zgRefresh();
+  localStorage.removeItem('mst_save');
+  showStatus('Zurückgesetzt \u2713');
 }
 // Debounced: speichert 500ms nach dem letzten Aufruf, faltet Tipp-Bursts zu einem Write zusammen
 var autoSave = debounce(function(){
@@ -2249,12 +2304,6 @@ function vFmtApp(v){
   if(v==null||!isFinite(v)) return '\u2014';
   var dp=Math.min(2,(String(+parseFloat(v).toPrecision(10)).replace(/\.?0+$/,'').split('.')[1]||'').length);
   return (+v).toFixed(dp);
-}
-function vDp(vs){  // max natural dp für Print (kein Cap)
-  return vs.reduce(function(m,v){
-    var s=String(+parseFloat(v).toPrecision(10)).replace(/\.?0+$/,'');
-    var i=s.indexOf('.'); return Math.max(m,i<0?0:s.length-i-1);
-  },0);
 }
 function fmtVal(v,dp){  // Print: dp=null → m-dash-only; dp=number → toFixed
   if(v==null||!isFinite(v)) return '\u2014';
@@ -2304,14 +2353,14 @@ function renderBewertung(){
 
 var _regelnId=null;
 function openRegeln(id){
-  var d=state.bewDis.find(function(d){return d.id===id;}); if(!d)return;
+  var d=findDis(id); if(!d)return;
   _regelnId=id; g('regeln-text').value=d.regeln||'';
   openModal('modal-regeln');
   setTimeout(function(){g('regeln-text').focus();},80);
 }
 function saveRegeln(){
   if(_regelnId==null)return;
-  var d=state.bewDis.find(function(d){return d.id===_regelnId;}); if(!d)return;
+  var d=findDis(_regelnId); if(!d)return;
   d.regeln=g('regeln-text').value;
   closeRegeln(); renderBewertung(); schedulePreview(); autoSave();
 }
@@ -2319,21 +2368,25 @@ function closeRegeln(){_regelnId=null;closeModal('modal-regeln');}
 
 function openHinweis(){
   g('hinweis-text').value=state.wichtig||'';
+  g('lbl-hinweis-bt').innerHTML=HINWEIS_LABEL;
   openModal('modal-hinweis');
   setTimeout(function(){g('hinweis-text').focus();},80);
 }
 function saveHinweis(){state.wichtig=g('hinweis-text').value;closeHinweis();schedulePreview();autoSave();}
 function closeHinweis(){closeModal('modal-hinweis');}
+function openLBHinweis(){
+  g('lb-hinweis-text').value=state.lbHinweis||'';
+  g('lbl-hinweis-lb').innerHTML=HINWEIS_LABEL;
+  openModal('modal-lb-hinweis');
+  setTimeout(function(){g('lb-hinweis-text').focus();},80);
+}
+function saveLBHinweis(){state.lbHinweis=g('lb-hinweis-text').value;closeLBHinweis();autoSave();}
+function closeLBHinweis(){closeModal('modal-lb-hinweis');}
 
 function toggleFarbe(){
   state.farbig=!state.farbig;
   var bf=g('btn-farbe'); if(bf)bf.classList.toggle('on',state.farbig);
   renderPreview(); autoSave();
-}
-function updCurve(id,f,v){
-  var d=state.bewDis.find(function(d){return d.id===id;}); if(!d)return;
-  if(!d.curve)d.curve={mode:'linear'};
-  d.curve[f]=v; schedulePreview(); autoSave();
 }
 function fitRegelnBoxes(root){
   var blks=(root||document).querySelectorAll('.rblk');
@@ -2349,25 +2402,23 @@ function renderPreview(){
 }
 
 // ── buildBT ────────────────────────────────────────────────────────────────
-function buildBT(){
-  var name=g('anlassName')?g('anlassName').value:'';
-  var dat=g('anlasDatum')?g('anlasDatum').value:'';
-  var shus=g('anlassSchulhaus')?g('anlassSchulhaus').value:'';
-  var wText=state.wichtig||'';
-  // Ensure skala populated (fallback for legacy loaded data)
+// Aufgeteilt in 4 Helper für Lesbarkeit (alle pure, keine Seiteneffekte ausser Skala-Fallback):
+//   _btEnsureSkala  — Legacy-Saves: leere Skala mit Heuristik füllen
+//   _btTableHtml    — <thead>+<tbody> für die Punkte-Matrix
+//   _btRegelnHtml   — rechte Spalte (Regelnboxen pro Disziplin)
+//   _btDimensions   — A4-Landscape-Höhenrechnung für --tr-h/--body-h
+function _btEnsureSkala(){
   state.bewDis.forEach(function(d){
     if(!d.skala||!d.skala.length){
       var vs=vheuristic(d.zeroVal||0,d.bestVal||0,d.maxPunkte||15);
       d.skala=vs.map(function(v,i){return{p:i+1,v:v};});
     }
   });
-  var visDis=state.bewDis.filter(function(d){return !d.excluded;});
-  var nMax=visDis.reduce(function(m,d){return Math.max(m,d.maxPunkte||0);},0);
-  if(!visDis.length||nMax<1)return '<div class="empty-state">Disziplinen + Werte im Bewertungs-Tab eingeben.</div>';
-  var noFarbe=!state.farbig;
-  var bgCol=function(col){return noFarbe?'#fff':col;};
+}
+function _btTableHtml(visDis,nMax,bgCol){
   var nCols=visDis.length+2;
   var pktW=Math.round(6700/nCols)/100+'%';
+  // Header
   var hdr='<th style="width:'+pktW+'">Punkte</th>';
   visDis.forEach(function(d,idx){
     var col=pastFor(idx);
@@ -2376,12 +2427,10 @@ function buildBT(){
     hdr+='<th style="background:'+bgCol(col.hd)+'">'+esc(d.name)+eh+' <span style="font-size:1.3em;opacity:.4">'+arr+'</span></th>';
   });
   hdr+='<th style="width:'+pktW+'">Punkte</th>';
-  // Per-discipline decimal places for consistent print columns (lokale Map, kein Schreiben auf Datenobjekt)
+  // Per-discipline decimal places (lokale Map, kein Schreiben auf Datenobjekt)
   var dpMap={};
-  visDis.forEach(function(d){
-    var vals=(d.skala||[]).map(function(s){return s.v;}).filter(function(v){return v!=null&&isFinite(v);});
-    dpMap[d.id]=vMainDd(d.id);
-  });
+  visDis.forEach(function(d){ dpMap[d.id]=vMainDd(d.id); });
+  // Rows
   var rows='';
   for(var p=1;p<=nMax;p++){
     var cells='<td class="pkt">'+p+'</td>';
@@ -2394,12 +2443,10 @@ function buildBT(){
     cells+='<td class="pkt">'+p+'</td>';
     rows+='<tr>'+cells+'</tr>';
   }
-  var headerHtml='<div class="bth">'+
-    '<div><div class="btitle">Bewertungstabelle '+esc(name)+'</div>'+
-    (dat?'<div class="bsub">'+esc(dat)+'</div>':'')+
-    '</div>'+logoBlock()+'</div>';
-  var wichtigHtml=wText?'<div class="wblk"><span class="wlbl">Wichtig:</span>'+esc(wText)+'</div>':'';
-  var regelnHtml=visDis.map(function(d,idx){
+  return '<table><thead><tr>'+hdr+'</tr></thead><tbody>'+rows+'</tbody></table>';
+}
+function _btRegelnHtml(visDis,noFarbe,bgCol){
+  return visDis.map(function(d,idx){
     var col=pastFor(idx);
     var versuche=(d.anzahl||1)+' Versuch'+((d.anzahl||1)>1?'e':'');
     var lines=(d.regeln||'').split('\n').map(function(s){return s.trim();}).filter(Boolean);
@@ -2407,53 +2454,40 @@ function buildBT(){
     return '<div class="rblk" style="--rcol:'+(noFarbe?'#888':col.hd)+';background:'+bgCol(col.cl)+'">'+
       '<h4>'+esc(d.name)+' <span class="vers">('+esc(versuche)+')</span></h4>'+body+'</div>';
   }).join('');
-  var footHtml='<div class="bft">'+APP_NAME+' v'+APP_VERSION+'</div>';
-  var availMm=180-18-10-4-(wText?13:0);
+}
+function _btDimensions(nMax,hasWText){
+  // 180mm - 5(body-pad) - 26(bth) - 13(bft) - 3(buffer) - 10(wblk if present)
+  var availMm=133-(hasWText?10:0);
   var nRows=nMax+1;
   var trMm=Math.max(6,Math.floor((availMm/nRows)*10)/10);
   var bodyMm=+(trMm*nRows).toFixed(2);
-  return '<div class="btwrap" style="--tr-h:'+trMm+'mm;--body-h:'+bodyMm+'mm">'+
+  return {trMm:trMm, bodyMm:bodyMm};
+}
+function buildBT(){
+  var name=g('anlassName')?g('anlassName').value:'';
+  var dat=g('anlasDatum')?g('anlasDatum').value:'';
+  var wText=state.wichtig||'';
+  _btEnsureSkala();
+  var visDis=state.bewDis.filter(function(d){return !d.excluded;});
+  var nMax=visDis.reduce(function(m,d){return Math.max(m,d.maxPunkte||0);},0);
+  if(!visDis.length||nMax<1)return '<div class="empty-state">Disziplinen + Werte im Bewertungs-Tab eingeben.</div>';
+  var noFarbe=!state.farbig;
+  var bgCol=function(col){return noFarbe?'#fff':col;};
+  var headerHtml='<div class="bth">'+
+    '<div><div class="btitle">Bewertungstabelle '+esc(name)+'</div>'+
+    (dat?'<div class="bsub">'+esc(dat)+'</div>':'')+
+    '</div>'+logoBlock()+'</div>';
+  var wichtigHtml=wText?'<div class="wblk">'+renderHinweis(wText)+'</div>':'';
+  var tableHtml =_btTableHtml(visDis,nMax,bgCol);
+  var regelnHtml=_btRegelnHtml(visDis,noFarbe,bgCol);
+  var footHtml='<div class="bft">'+APP_NAME+' v'+APP_VERSION+'</div>';
+  var dim=_btDimensions(nMax,!!wText);
+  return '<div class="btwrap" style="--tr-h:'+dim.trMm+'mm;--body-h:'+dim.bodyMm+'mm">'+
     headerHtml+wichtigHtml+
-    '<div class="body"><table><thead><tr>'+hdr+'</tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<div class="body">'+tableHtml+
     '<div class="rstack">'+regelnHtml+'</div></div>'+footHtml+'</div>';
 }
 
-function doPrintBT(title,body){
-  var w=window.open('','_blank');
-  if(!w){alert('Druck blockiert: Bitte Pop-ups erlauben.');return;}
-  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+esc(title)+'</title><style>'+
-    '*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact}'+
-    '@page{size:A4 landscape;margin:1.5cm}'+
-    'body{font-family:\'Century Gothic\',CenturyGothic,AppleGothic,Futura,\'Trebuchet MS\',Arial,sans-serif;font-size:14px;padding:18px 24px 0;margin:0;color:#111}'+
-    '.btwrap{page-break-inside:avoid}'+
-    '.bth{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px;border-bottom:1px solid #888;padding-bottom:14px}'+
-    '.btitle{font-size:20px;font-weight:700;letter-spacing:.2px}'+
-    '.bsub{font-size:12px;color:#555;margin-top:4px}'+
-    '.blogo{height:46px;max-width:140px;border:1px solid #ccc;padding:2px}'+
-    '.blogo-ph{display:flex;align-items:center;justify-content:center;width:120px;height:46px;color:#999;font-size:13px;font-style:italic;background:#f5f5f5;border:1px solid #ccc}'+
-    '.body{display:grid;grid-template-columns:8fr 2fr;gap:24px;align-items:stretch}'+
-    'table{width:100%;border-collapse:collapse;height:100%;table-layout:fixed}'+
-    'th,td{border:1px solid #888;padding:3px 6px;text-align:center;font-size:13px;vertical-align:middle;height:var(--tr-h);overflow:hidden}'+
-    'th{font-weight:700;font-size:12.5px;background:#e9e9e9;padding:3px 6px;color:#000;height:var(--tr-h)}'+
-    'th .uh{font-weight:400;font-size:11px;color:#444;display:inline-block;margin-left:4px}'+
-    'td.pkt{background:#dadada;font-weight:700;font-size:13px}'+
-    'tr{page-break-inside:avoid;height:var(--tr-h)}'+
-    '.rstack{display:flex;flex-direction:column;gap:12px;min-height:0;overflow:hidden;height:var(--body-h)}'+
-    '.rblk{border:1px solid #888;border-left:4px solid #888;padding:.35em 1em .55em;font-size:11px;flex:1;display:flex;flex-direction:column;line-height:1.35;overflow:hidden;min-height:0}'+
-    '.rblk h4{font-size:1.09em;font-weight:700;margin-bottom:.1em;line-height:1.2}'+
-    '.rblk h4 .vers{font-weight:300;color:#555;font-size:.92em;margin-left:2px}'+
-    '.rblk ul{padding-left:1.3em;margin:0}'+
-    '.rblk li{margin:.05em 0}'+
-    '.wblk{margin-bottom:14px;border:1.5px solid #c00;background:#fff5f5;padding:7px 16px;font-size:11.5px;border-radius:3px;page-break-inside:avoid}'+
-    '.wblk .wlbl{color:#c00;font-weight:700;margin-right:6px}'+
-    '.bft{font-size:9px;color:#777;margin-top:36px;text-align:right}'+
-    '</style></head><body>'+body+
-    '<scr'+'ipt>'+
-    'function fitRegelnBoxes(){var blks=document.querySelectorAll(".rblk");blks.forEach(function(el){el.style.fontSize="";var fs=11;while(el.scrollHeight>el.clientHeight+1&&fs>6){fs-=0.25;el.style.fontSize=fs+"px";}});}'+
-    'window.onload=function(){window.focus();fitRegelnBoxes();setTimeout(function(){window.print();},250);}'+
-    '<\/scr'+'ipt></body></html>');
-  w.document.close(); w.focus();
-}
 function printBT(){
   if(!state.bewDis.length){alert('Keine Disziplinen definiert.');return;}
   doPrintBT('Bewertungstabelle '+(g('anlassName')?g('anlassName').value:''),buildBT());
@@ -2472,7 +2506,7 @@ function veq(a,b){return Math.abs(a-b)<1e-9;}
 function vinSteps(r){return VERT_STEPS.some(function(s){return veq(s,r);});}
 function vmaxDec(vs){return vs.reduce(function(m,v){var s=String(v),i=s.indexOf('.');return Math.max(m,i<0?0:s.length-i-1);},0);}
 function vMainDd(id){
-  var d=state.bewDis.find(function(d){return d.id===id;});
+  var d=findDis(id);
   if(!d) return 0;
   var base=d.dp!=null?d.dp:vmaxDec([d.zeroVal,d.bestVal]);
   var vs=(d.skala||[]).map(function(s){return s.v;});
@@ -2527,7 +2561,7 @@ function _vs(id){if(!vPanelState[id])vPanelState[id]={open:false};return vPanelS
 
 // SST: d.skala ist einzige Wahrheitsquelle
 function vGetVals(id){
-  var d2=state.bewDis.find(function(d){return d.id===id;}); if(!d2) return [];
+  var d2=findDis(id); if(!d2) return [];
   if(d2.skala&&d2.skala.length) return d2.skala.map(function(s){return s.v;});
   return vheuristic(d2.zeroVal||0,d2.bestVal||0,d2.maxPunkte||15);
 }
@@ -2540,7 +2574,7 @@ function vReadPanelVals(id){
 
 // Schreibt ins SST und synchronisiert alle Views
 function vApply(id,vs){
-  var d2=state.bewDis.find(function(d){return d.id===id;}); if(!d2||!vs||!vs.length) return;
+  var d2=findDis(id); if(!d2||!vs||!vs.length) return;
   d2.skala=vs.map(function(v,i){return{p:i+1,v:v};});
   d2.zeroVal=vs[0]; d2.bestVal=vs[vs.length-1];
   // Zeile sync
@@ -2566,7 +2600,7 @@ function vRefreshDeltas(id){
 
 function vBuildPanel(id,panel){
   if(!panel) return;
-  var d2=state.bewDis.find(function(d){return d.id===id;}); if(!d2) return;
+  var d2=findDis(id); if(!d2) return;
   var vs=vGetVals(id);
   var dd=vMainDd(id);
   panel.innerHTML=
@@ -2584,7 +2618,7 @@ function vBuildPanel(id,panel){
 }
 
 function vAutoFill(id){
-  var d2=state.bewDis.find(function(d){return d.id===id;}); if(!d2) return;
+  var d2=findDis(id); if(!d2) return;
   var vs=vheuristic(d2.zeroVal||0,d2.bestVal||0,d2.maxPunkte||15);
   var dd=vMainDd(id);
   var iv=g('viv-'+id);
@@ -2600,7 +2634,7 @@ function vOnCellChange(id){
 
 // Zeilen-Feld P1/Pmax geändert: SST-Grenze updaten + Panel-Zelle sync (keine Heuristik)
 function vOnMainInput(id,field,val){
-  var d2=state.bewDis.find(function(d){return d.id===id;}); if(!d2) return;
+  var d2=findDis(id); if(!d2) return;
   var v=parseFloat(val); if(!isFinite(v)) return;
   d2[field]=v;
   // dp aus getipptem String ableiten (Trailing-Zeros werden bewahrt)
@@ -2671,6 +2705,7 @@ var ZG={
     g('anlassSchulhaus').value=DEFAULTS.anlass.schulhaus;
     updateLabel();
     state.wichtig=DEFAULTS.wichtig.text||'';
+    state.lbHinweis=DEFAULTS.lbHinweis.text||'';
     state.farbig=true;
     if(g('btn-farbe'))g('btn-farbe').classList.toggle('on',state.farbig);
     initDefaultDisziplinen();
@@ -2743,8 +2778,11 @@ function extractGruppen(sus){
   return ord.map(function(k){return map[k];});
 }
 function buildRot(gr){
+  var stufenSet={},stufen=[];
+  gr.forEach(function(grp){grp.klassen.forEach(function(k){if(!stufenSet[k.stufe]){stufenSet[k.stufe]=1;stufen.push(k.stufe);}});});
+  stufen.sort();
   var r=[];
-  gr.forEach(function(grp){['4','5','6'].forEach(function(s){var k=grp.klassen.find(function(k){return k.stufe===s;});if(k)r.push(k);});});
+  gr.forEach(function(grp){stufen.forEach(function(s){var k=grp.klassen.find(function(k){return k.stufe===s;});if(k)r.push(k);});});
   return r;
 }
 function getCol(k,gr){var grp=gr.find(function(grp){return grp.key===k.gruppe;});return grp?grp.colors[['4','5','6'].indexOf(k.stufe)]||'#eee':'#eee';}
@@ -2871,37 +2909,23 @@ function zgToggleFarbe(){
   zgRender();autoSave();
 }
 
-function doPrintZG(){
-  var w=window.open('','_blank');if(!w){alert('Pop-ups erlauben.');return;}
-  var css=document.querySelector('style').textContent;
-  var title = 'Zeitplan_' + (g('anlassName') ? g('anlassName').value : '');
-  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+esc(title)+'</title><style>'+css+
-    'body{background:#fff;padding:16px 20px 0;font-family:\'Century Gothic\',CenturyGothic,AppleGothic,\'Trebuchet MS\',Arial,sans-serif}'+
-    '@page{size:A4 landscape;margin:1cm}</style></head><body>'+
-    '<div class="btprev zg-btprev">'+g('zg-preview').innerHTML+'</div>'+
-    '<scr'+'ipt>window.onload=function(){window.print();}<\/scr'+'ipt></body></html>');
-  w.document.close();
-}
 
-function zgRender(){
-  var prevEl=g('zg-preview');if(!prevEl)return;
-  var gr=extractGruppen(state.sus),kl=buildRot(gr),po=zgAllPosten();
-  var nK=kl.length,nP=po.length;
-  var wEl=g('zg-warn');
-  var nR=ZG.slots.filter(function(s){return !s.pause;}).length;
-  if(wEl){
-    if(nP!==nK||nK!==nR){
-      wEl.textContent='\u26a0 Posten: '+nP+' \u00b7 Klassen: '+nK+' \u00b7 Runden: '+nR+' \u2014 funktioniert am besten, wenn alle gleich gross sind.';
-      wEl.className='al aw on';
-    }else wEl.className='al aw';
+// zgRender aufgeteilt:
+//   _zgWarning   — Banner mit Posten/Klassen/Runden-Konsistenz
+//   _zgRotTable  — Hauptmatrix (Zeit × Posten, rotierend)
+//   _zgLegend    — untere Legende mit Lehrpersonen
+function _zgWarning(nP, nK, nR){
+  var wEl=g('zg-warn'); if(!wEl) return;
+  if(nP!==nK||nK!==nR){
+    wEl.textContent='\u26a0 Posten: '+nP+' \u00b7 Klassen: '+nK+' \u00b7 Runden: '+nR+' \u2014 funktioniert am besten, wenn alle gleich gross sind.';
+    wEl.className='al aw on';
+  }else{
+    wEl.textContent=''; wEl.className='al aw';
   }
-  var anlassName=g('anlassName')?g('anlassName').value:'';
-  var anlassDatum=g('anlasDatum')?g('anlasDatum').value:'';
-  var h='<div class="bth"><div><div class="btitle">'+esc(anlassName)+'</div>'+
-    '<div class="bsub">'+esc(anlassDatum)+'</div></div>'+logoBlock()+'</div>';
-  h+='<div class="zt-note">\u2605 Posten fliessen in die Gesamtwertung ein.</div>';
-  h+='<table class="zt"><colgroup><col style="width:48px">';
-  for(var j=0;j<nP;j++)h+='<col>';
+}
+function _zgRotTable(po, kl, gr, nP, nK){
+  var h='<table class="zt"><colgroup><col style="width:48px">';
+  for(var j=0;j<nP;j++) h+='<col>';
   h+='</colgroup><thead><tr><th class="zt-tcol"></th>';
   po.forEach(function(p){
     h+='<th><div class="zt-thname">'+esc(p.name)+(p.scored?' \u2605':'')+'</div>'+
@@ -2920,13 +2944,17 @@ function zgRender(){
       var k=nK?kl[(step-j+nK)%nK]:null;
       var col=ZG.farbig&&k?getCol(k,gr):'#fff';
       h+='<td style="background:'+col+'">';
-      if(k)h+='<span class="zt-stufe">'+k.stufe+'. Klasse</span><span class="zt-lp">'+esc(k.lp)+'</span>';
+      if(k) h+='<span class="zt-stufe">'+k.stufe+'. Klasse</span><span class="zt-lp">'+esc(k.lp)+'</span>';
       h+='</td>';
     }
-    h+='</tr>';step++;
+    h+='</tr>'; step++;
   });
   h+='</tbody></table>';
-  h+='<table class="zl"><colgroup>';  gr.forEach(function(){h+='<col>';});
+  return h;
+}
+function _zgLegend(gr){
+  var h='<table class="zl"><colgroup>';
+  gr.forEach(function(){ h+='<col>'; });
   h+='</colgroup><tbody>';
   ['4','5','6'].forEach(function(stufe){
     h+='<tr>';
@@ -2934,12 +2962,27 @@ function zgRender(){
       var k=grp.klassen.find(function(k){return k.stufe===stufe;});
       var col=ZG.farbig&&k?getCol(k,gr):'#fff';
       h+='<td style="background:'+col+'">';
-      if(k)h+=k.stufe+'. Klasse &nbsp;'+esc(k.lp)+' <span style="margin-left:6px;opacity:.5">'+esc(k.kz)+'</span>';
+      if(k) h+=k.stufe+'. Klasse &nbsp;'+esc(k.lp)+' <span style="margin-left:6px;opacity:.5">'+esc(k.kz)+'</span>';
       h+='</td>';
     });
     h+='</tr>';
   });
   h+='</tbody></table>';
+  return h;
+}
+function zgRender(){
+  var prevEl=g('zg-preview'); if(!prevEl) return;
+  var gr=extractGruppen(state.sus), kl=buildRot(gr), po=zgAllPosten();
+  var nK=kl.length, nP=po.length;
+  var nR=ZG.slots.filter(function(s){return !s.pause;}).length;
+  _zgWarning(nP, nK, nR);
+  var anlassName =g('anlassName') ?g('anlassName').value :'';
+  var anlassDatum=g('anlasDatum') ?g('anlasDatum').value :'';
+  var h='<div class="bth"><div><div class="btitle">'+esc(anlassName)+'</div>'+
+    '<div class="bsub">'+esc(anlassDatum)+'</div></div>'+logoBlock()+'</div>';
+  h+='<div class="zt-note">\u2605 Posten fliessen in die Gesamtwertung ein.</div>';
+  h+=_zgRotTable(po, kl, gr, nP, nK);
+  h+=_zgLegend(gr);
   h+='<div class="bft">'+APP_NAME+' v'+APP_VERSION+'</div>';
   prevEl.innerHTML=h;
 }
