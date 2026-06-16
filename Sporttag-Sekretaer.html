@@ -876,18 +876,18 @@ var DEFAULTS = {
     zeroVal:0, bestVal:0, excluded:false, ort:'',
     curve:{mode:'linear'}, skala:[], regeln:'',
   },
-  bewDis: [
-      { name: 'Weitsprung', anzahl: 3, einheit: 'm', maxPunkte: 15, zeroVal: '1.80', bestVal: '4.60', ort: 'Weitsprunganlage', regeln: 'Messung ab tatsächlichem Absprungort' },
+    bewDis: [
+      { name: 'Hochsprung', anzahl: 3, einheit: 'm', maxPunkte: 15, zeroVal: '0.70', bestVal: '1.40', ort: 'Turnhalle', regeln: 'Absprung ab einem Bein\nKeine Hechtrolle' },
       { name: 'Weitwurf', anzahl: 2, einheit: 'm', maxPunkte: 15, zeroVal: 6, bestVal: 48, ort: 'Grosse Wiese', regeln: 'direkt nacheinander\nBall: 200g' },
       { name: '60m Lauf', anzahl: 1, einheit: 's', maxPunkte: 15, zeroVal: '12.00', bestVal: '8.50', ort: 'Sprintbahn', regeln: 'Freier Startstil\nBei Fehlstart Wiederholung' },
-      { name: 'Hochsprung', anzahl: 3, einheit: 'm', maxPunkte: 15, zeroVal: '0.70', bestVal: '1.40', ort: 'Turnhalle', regeln: 'Absprung ab einem Bein\nKeine Hechtrolle' },
+      { name: 'Weitsprung', anzahl: 3, einheit: 'm', maxPunkte: 15, zeroVal: '1.80', bestVal: '4.60', ort: 'Weitsprunganlage', regeln: 'Messung ab tatsächlichem Absprungort' },
       { name: 'Klettern', anzahl: 2, einheit: 'm', maxPunkte: 8, zeroVal: 1.5, bestVal: 5, ort: 'Turnhalle', regeln: '8 s Zeit\nVertikale Stange' },
   ],
   wichtig: {
     text: 'Alle Messresultate werden auf den nächsten Wert *abgerundet* (Pfeilrichtung).',
   },
   lbHinweis: {
-    text: 'Bitte nur *dunkle Stifte* verwenden und in *Druckschrift in die Felder* schreiben.\nDie *Totale der letzten Klasse* am Posten (11:30) berechnen und im *Zimmer 14* abgeben.',
+    text: 'Bitte nur *dunkle Stifte* verwenden und in *Druckschrift in die Felder* schreiben.\nDie *Totale der letzten Klasse* am Posten berechnen und im *Teamzimmer* abgeben.',
   },
   ocr: {
     confMin: 70,           // Mindest-Konfidenz [%] für Auto-Übernahme
@@ -905,7 +905,7 @@ var DEFAULTS = {
   ],
   // Zeitplan-Generator: Reihenfolge und Standard-Slots
   zg: {
-    order: [4,-4,2,-2,1,-1,3,-3,5],
+    order: [1,-4,2,-2,4,-1,3,-3,5],
     _eid:  -4,
     slots: [
       {time:'08:30'},{time:'08:50'},{time:'09:10'},{time:'09:30'},{time:'09:50'},
