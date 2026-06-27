@@ -93,6 +93,53 @@ tr.abw td{opacity:.45}
 .ei:focus{border-color:var(--accent);outline:none}
 .pc{font-weight:700;color:var(--accent)}
 .fbar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;background:var(--bg);padding:10px 14px;border-radius:var(--r);border:1px solid var(--border)}
+.rl-order{display:flex;flex-wrap:wrap;gap:6px}
+.rl-chip{display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:5px 10px;font-size:12px;cursor:grab;user-select:none}
+.rl-chip.drag{opacity:.4}
+.rl-chip.over{border-color:var(--accent)}
+.rl-chip .gr{color:var(--muted);font-size:13px;line-height:1}
+.rl-chip .pr{color:var(--muted);font-weight:600;min-width:14px;text-align:right}
+.octab{width:100%;border-collapse:collapse;font-size:12px}
+.octab th{background:var(--bg);border-bottom:2px solid var(--border);padding:6px 7px;font-size:11px;color:var(--muted);text-align:center;white-space:nowrap;cursor:default}
+.octab th.nm{text-align:left;padding-left:12px}
+.octab td{border-bottom:1px solid var(--border);border-left:1px solid #efece6;padding:4px 5px;text-align:center;vertical-align:middle;background:var(--surface)}
+.octab td.nm{border-left:none;text-align:left;padding:6px 10px;border-left:3px solid transparent}
+.octab .nmwrap{display:flex;flex-direction:column;gap:2px}
+.octab .nmwrap .n{font-weight:600;font-size:12.5px;line-height:1.2;overflow-wrap:anywhere}
+.octab .cellbox{display:flex;align-items:center;gap:4px;justify-content:center}
+.octab .crop{height:29px;width:auto;max-width:48px;object-fit:contain;display:block;border-radius:3px}
+.octab .crop-tot{max-width:132px}
+.octab td.tot,.octab th.tot{border-left:2px solid var(--border-strong);border-right:2px solid var(--border-strong);padding-left:10px;padding-right:10px}
+.octab input.ei{width:46px;padding:4px 4px;font-size:12px;border:1px solid var(--border);border-radius:6px;text-align:center;background:var(--surface);color:var(--text);outline:none;-moz-appearance:textfield;font-family:inherit}
+.octab input.ei::-webkit-outer-spin-button,.octab input.ei::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.octab input.ei:focus{border-color:var(--accent)}
+.octab input.ei.bad{border-color:var(--danger-border)!important;border-style:dashed;background:var(--danger-bg)}
+.octab .cb-aussl{width:15px;height:15px;cursor:pointer;accent-color:var(--danger)}
+.octab .b{font-size:10.5px;font-weight:600;border-radius:100px;padding:1px 8px;white-space:nowrap;display:inline-block}
+.octab .b.ex{color:var(--muted);background:var(--bg);border:1px solid var(--border)}
+.octab .tick{font-size:16px;line-height:1;color:var(--success)}
+.octab tr.r-ok td{background:var(--success-bg)}
+.octab tr.r-warn td.nm{border-left-color:var(--warn)}
+.octab tr.r-warn .b{background:#fff;color:var(--warn);border:1px solid var(--warn)}
+.octab tr.r-warn input.ei{border-color:var(--warn)}
+.octab tr.r-excl td.nm .n{text-decoration:line-through;color:var(--muted)}
+.octab tr.ocr-hidden{display:none}
+.ocr-toolbar{display:flex;align-items:center;gap:12px;margin:14px 0 8px;flex-wrap:wrap}
+.ocr-toggle{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);cursor:pointer;user-select:none}
+.scnt{display:inline-flex;align-items:center;border-radius:100px;padding:3px 11px;font-size:12px;font-weight:600}
+.scnt.warn{background:var(--warn-bg);border:1px solid var(--warn);color:#8a5208}
+.scnt.ok{background:var(--success-bg);border:1px solid var(--success);color:#14532d}
+.st-section{margin-bottom:12px}
+.st-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border)}
+.st-row:last-child{border-bottom:none}
+.st-lbl{width:120px;flex:none;font-size:13px;font-weight:600;display:flex;gap:6px;align-items:baseline}
+.st-lbl .muted{font-weight:400}
+.st-track{flex:1;background:var(--bg);border-radius:6px;height:20px;min-width:60px;overflow:hidden}
+.st-bar{height:100%;border-radius:6px;background:var(--accent);min-width:2px;transition:width .2s}
+.st-bar.w{background:#d6336c}
+.st-bar.m{background:#1c7ed6}
+.st-val{width:230px;flex:none;font-size:12px;text-align:right;line-height:1.35}
+.st-val .muted{color:var(--muted)}
 .fbar label{margin:0;font-size:12px}
 .fbar select{width:auto;min-width:110px;font-size:12px;padding:5px 8px}
 .rb{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-weight:700;font-size:12px}
@@ -182,8 +229,9 @@ tr.abw td{opacity:.45}
 .lbprev .lbt td.ncol{text-align:left;font-size:11px;font-weight:500}
 .lbprev .lbt td.rcol,.lbprev .lbt td.ptc{background:#fff}
 .lbprev .lbt td.tot{min-width:82px;background:#fff;font-weight:700;border:2px solid #555}
+.lbprev .lbt td.res,.lbprev .lbt th.res{background:#ededed}
 .lbprev .lbt tfoot td{border-left-color:transparent!important;border-right-color:transparent!important;border-bottom-color:transparent!important}
-.lbprev .aussl-hdr{background:#e0e0e0}.lbprev .ptc-hdr{background:#d8d8d8}.lbprev .tot-hdr{background:#d0d0d0}
+.lbprev .lbt th.aussl-hdr{background:#fff}.lbprev .lbt th.ptc-hdr{background:#fff}.lbprev .lbt th.tot-hdr{background:#fff}
 .lbprev .lbt thead th:not(.ncol):not(.qr-spacer):not(.qr1-cell){text-align:center}
 .lbprev .marker-col{background:#cccccc!important;border-color:transparent!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .lbprev .marker-empty{background:transparent!important;border-color:transparent!important}
@@ -386,6 +434,7 @@ footer{text-align:center;font-size:10px;color:var(--muted);padding:16px;margin-t
         <button class="tab" data-tab="bewertung" onclick="showTab('bewertung')">&#128202; Bewertung</button>
         <button class="tab" data-tab="zeitplan" onclick="showTab('zeitplan')">&#128197; Zeitplan</button>
         <button class="tab" data-tab="rangliste" onclick="showTab('rangliste')">&#127942; Rangliste</button>
+        <button class="tab" data-tab="statistik" onclick="showTab('statistik')">&#128200; Statistik</button>
     </div>
 
         <!-- SETUP -->
@@ -640,11 +689,43 @@ footer{text-align:center;font-size:10px;color:var(--muted);padding:16px;margin-t
                         <option value="w" selected>Mädchen</option>
                         <option value="m">Knaben</option>
                     </select>
+                    <label>Modus:</label>
+                    <select id="rlMode" onchange="setRlMode(this.value)">
+                        <option value="standard">Standard (mit Lücke)</option>
+                        <option value="highest">Höchstes Einzelresultat → Disziplinranking</option>
+                        <option value="disorder">Nur Disziplinranking</option>
+                    </select>
                     <button class="btn btn-p" onclick="printRangliste()">&#128424;&#65039; Drucken</button>
                     <button class="btn" onclick="printAlleRanglisten()">&#128424;&#65039; Alle Ranglisten</button>
                 </div>
+                <div id="rlOrderWrap" style="display:none;margin-bottom:4px">
+                    <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Disziplin-Reihenfolge bei Gleichstand (oben/links = höchste Priorität) — zum Sortieren ziehen:</div>
+                    <div id="rlOrder" class="rl-order"></div>
+                </div>
             </div>
             <div id="r-cont"></div>
+        </div>
+
+        <!-- STATISTIK -->
+        <div class="page" id="page-statistik">
+            <div class="card">
+                <div class="ctitle">&#128200; Statistik &mdash; Spannweite je Gruppe</div>
+                <div class="fbar" style="margin-bottom:12px">
+                    <label>Gruppierung:</label>
+                    <select id="stGroup" onchange="renderStat()">
+                        <option value="klasse">Pro Klasse</option>
+                        <option value="stufe">Pro Stufe</option>
+                    </select>
+                    <label>Geschlecht:</label>
+                    <select id="stGe" onchange="renderStat()">
+                        <option value="w" selected>Mädchen</option>
+                        <option value="m">Knaben</option>
+                        <option value="">Alle</option>
+                    </select>
+                </div>
+                <div style="font-size:12px;color:var(--muted)">Balkenlänge = Spannweite (max &minus; min) der erfassten Punkte je Gruppe. Werte permanent angezeigt; Messwerte aus der Disziplin-Skala. Abwesende Klassen und Ausschlüsse sind ausgenommen.</div>
+            </div>
+            <div id="stat-cont"></div>
         </div>
 
         <!-- BEWERTUNG -->
@@ -848,6 +929,12 @@ footer{text-align:center;font-size:10px;color:var(--muted);padding:16px;margin-t
                                 <span class="imp-info">Konfidenz, Grenzwerte</span>
                             </div>
                         </div>
+                        <div class="imp-group grp-on" id="ig-rl">
+                            <div class="imp-row on" id="ir-rl" onclick="togImpOpt('rl')">
+                                <span class="chk">✓</span><span class="imp-lbl">Rangliste-Modus</span>
+                                <span class="imp-info">Modus, Disziplin-Reihenfolge</span>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm" onclick="closeModal('modal-import')">Abbrechen</button>
@@ -863,7 +950,7 @@ footer{text-align:center;font-size:10px;color:var(--muted);padding:16px;margin-t
 
 <script>
 var LOGO='data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNS4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkViZW5lXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KICAgICB3aWR0aD0iMTg2Ljc1cHgiIGhlaWdodD0iMzcuNDhweCIgdmlld0JveD0iMCAwIDE4Ni43NSAzNy40OCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTg2Ljc1IDM3LjQ4IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxwYXRoIGZpbGw9IiMyMzFGMjAiIGQ9Ik00My40NDgsMjMuMTY4bDAuOTE2LTAuNTVjMC42NDUsMS4xODcsMS4zODksMS43NzksMi4yMzQsMS43NzljMC4zNjEsMCwwLjcwMS0wLjA4NCwxLjAxOC0wLjI1Mg0KCWMwLjMxNy0wLjE2OCwwLjU1OS0wLjM5NCwwLjcyNS0wLjY3OGMwLjE2Ni0wLjI4MywwLjI1LTAuNTgzLDAuMjUtMC45MDFjMC0wLjM2MS0wLjEyMy0wLjcxNS0wLjM2OC0xLjA2Mg0KCWMtMC4zMzYtMC40NzktMC45NTEtMS4wNTUtMS44NDUtMS43MjljLTAuODk5LTAuNjc5LTEuNDU3LTEuMTctMS42NzctMS40NzJjLTAuMzgxLTAuNTA4LTAuNTcxLTEuMDU3LTAuNTcxLTEuNjQ4DQoJYzAtMC40NjksMC4xMTItMC44OTYsMC4zMzctMS4yODJjMC4yMjQtMC4zODYsMC41NDEtMC42ODksMC45NDgtMC45MTJjMC40MDgtMC4yMjIsMC44NS0wLjMzMywxLjMzLTAuMzMzDQoJYzAuNTA3LDAsMC45ODIsMC4xMjYsMS40MjQsMC4zNzdjMC40NDIsMC4yNTIsMC45MDksMC43MTQsMS40MDIsMS4zODhsLTAuODc5LDAuNjY3Yy0wLjQwNS0wLjUzOC0wLjc1LTAuODkyLTEuMDM2LTEuMDYyDQoJYy0wLjI4NS0wLjE3MS0wLjU5Ny0wLjI1Ny0wLjkzNC0wLjI1N2MtMC40MzQsMC0wLjc5LDAuMTMyLTEuMDY1LDAuMzk2Yy0wLjI3NiwwLjI2My0wLjQxNCwwLjU4OC0wLjQxNCwwLjk3NA0KCWMwLDAuMjM0LDAuMDQ5LDAuNDYxLDAuMTQ2LDAuNjgxYzAuMDk4LDAuMjIsMC4yNzYsMC40NTksMC41MzYsMC43MThjMC4xNCwwLjEzNiwwLjYwNCwwLjQ5NSwxLjM5LDEuMDc2DQoJYzAuOTMzLDAuNjg5LDEuNTcyLDEuMzAyLDEuOTIsMS44MzljMC4zNDYsMC41MzcsMC41MiwxLjA3NiwwLjUyLDEuNjE4YzAsMC43ODEtMC4yOTcsMS40Ni0wLjg5LDIuMDM2DQoJYy0wLjU5NCwwLjU3Ni0xLjMxNSwwLjg2NC0yLjE2NSwwLjg2NGMtMC42NTQsMC0xLjI0Ny0wLjE3NS0xLjc3OS0wLjUyM0M0NC4zODgsMjQuNTczLDQzLjg5NywyMy45ODgsNDMuNDQ4LDIzLjE2OCIvPg0KICAgIDxwYXRoIGZpbGw9IiMyMzFGMjAiIGQ9Ik01OS43NzgsMTguODYxbC0wLjgxMywwLjUwNWMtMC43MDMtMC45MzItMS42NjEtMS4zOTgtMi44NzUtMS4zOThjLTAuOTcsMC0xLjc3NywwLjMxMi0yLjQxNywwLjkzNg0KCWMtMC42NDIsMC42MjQtMC45NjMsMS4zODMtMC45NjMsMi4yNzVjMCwwLjU4MSwwLjE0OCwxLjEyNywwLjQ0MywxLjYzOWMwLjI5NSwwLjUxMiwwLjY5OSwwLjkxLDEuMjE0LDEuMTkyDQoJYzAuNTE0LDAuMjgzLDEuMDkyLDAuNDI1LDEuNzMsMC40MjVjMS4xNywwLDIuMTI2LTAuNDY3LDIuODY4LTEuMzk5bDAuODEzLDAuNTM1Yy0wLjM4MSwwLjU3My0wLjg5MywxLjAxOS0xLjUzNCwxLjMzNQ0KCWMtMC42NDMsMC4zMTUtMS4zNzQsMC40NzUtMi4xOTUsMC40NzVjLTEuMjU5LDAtMi4zMDQtMC40MDEtMy4xMzQtMS4yMDJjLTAuODMtMC44LTEuMjQ0LTEuNzc0LTEuMjQ0LTIuOTIyDQoJYzAtMC43NzEsMC4xOTMtMS40ODgsMC41ODItMi4xNWMwLjM4Ny0wLjY2MSwwLjkyLTEuMTc4LDEuNTk5LTEuNTQ5YzAuNjc5LTAuMzcxLDEuNDM5LTAuNTU2LDIuMjc5LTAuNTU2DQoJYzAuNTI3LDAsMS4wMzYsMC4wOCwxLjUyNywwLjI0MWMwLjQ5LDAuMTYxLDAuOTA2LDAuMzcyLDEuMjQ5LDAuNjNDNTkuMjQ4LDE4LjEzMSw1OS41MzksMTguNDYxLDU5Ljc3OCwxOC44NjEiLz4NCiAgICA8cGF0aCBmaWxsPSIjMjMxRjIwIiBkPSJNNjEuOTAxLDE0LjEzaDEuMDI1djQuNTA0YzAuNDE1LTAuNTQ2LDAuODcyLTAuOTU1LDEuMzctMS4yMjdjMC40OTgtMC4yNywxLjAzOC0wLjQwNiwxLjYxOS0wLjQwNg0KCWMwLjU5NSwwLDEuMTI0LDAuMTUxLDEuNTg2LDAuNDU0YzAuNDYxLDAuMzAzLDAuODAxLDAuNzEsMS4wMjEsMS4yMmMwLjIyLDAuNTEsMC4zMywxLjMwOSwwLjMzLDIuMzk4djQuMTAzaC0xLjAyNXYtMy44MDINCgljMC0wLjkxOC0wLjAzNy0xLjUzLTAuMTExLTEuODM5Yy0wLjEyNy0wLjUyNy0wLjM1Ny0wLjkyNC0wLjY5Mi0xLjE4OWMtMC4zMzQtMC4yNjYtMC43NzItMC4zOTktMS4zMTQtMC4zOTkNCgljLTAuNjIxLDAtMS4xNzYsMC4yMDUtMS42NjYsMC42MTVjLTAuNDkyLDAuNDEtMC44MTUsMC45MTgtMC45NzEsMS41MjRjLTAuMDk4LDAuMzktMC4xNDcsMS4xMTItMC4xNDcsMi4xNjh2Mi45MjJoLTEuMDI1VjE0LjEzIi8+DQogICAgPHBhdGggZmlsbD0iIzIzMUYyMCIgZD0iTTcxLjI4NCwxNy4yMDZoMS4wMjV2My43MjFjMCwwLjkwOCwwLjA0OSwxLjUzMywwLjE0NywxLjg3NWMwLjE0NiwwLjQ4NywwLjQyNywwLjg3NCwwLjg0LDEuMTU2DQoJYzAuNDEzLDAuMjgzLDAuOTA2LDAuNDI2LDEuNDc4LDAuNDI2YzAuNTczLDAsMS4wNTgtMC4xMzksMS40NTYtMC40MTRjMC4zOTktMC4yNzYsMC42NzMtMC42MzksMC44MjUtMS4wODgNCgljMC4xMDMtMC4zMDgsMC4xNTQtMC45NTksMC4xNTQtMS45NTV2LTMuNzIxaDEuMDQ4djMuOTExYzAsMS4xLTAuMTI4LDEuOTI4LTAuMzg1LDIuNDgzYy0wLjI1NiwwLjU1Ny0wLjY0MiwwLjk5My0xLjE1NywxLjMwNw0KCWMtMC41MTUsMC4zMTYtMS4xNiwwLjQ3NC0xLjkzOCwwLjQ3NGMtMC43NzUsMC0xLjQyNC0wLjE1Ny0xLjk0NC0wLjQ3NGMtMC41Mi0wLjMxMy0wLjkwOC0wLjc1NC0xLjE2NC0xLjMxNw0KCWMtMC4yNTctMC41NjQtMC4zODUtMS40MTItMC4zODUtMi41NDVWMTcuMjA2Ii8+DQogICAgPHJlY3QgeD0iODAuODA1IiB5PSIxNC4xMyIgZmlsbD0iIzIzMUYyMCIgd2lkdGg9IjEuMDI1IiBoZWlnaHQ9IjExLjA0NSIvPg0KICAgIDxwYXRoIGZpbGw9IiMyMzFGMjAiIGQ9Ik05MS4wODMsMjIuNTMxbDAuODY0LDAuNDU0Yy0wLjI4MywwLjU1Ny0wLjYxMSwxLjAwNi0wLjk4MiwxLjM0OGMtMC4zNzEsMC4zNDMtMC43ODksMC42MDMtMS4yNTQsMC43OA0KCWMtMC40NjQsMC4xNzgtMC45ODksMC4yNjgtMS41NzYsMC4yNjhjLTEuMywwLTIuMzE3LTAuNDI3LTMuMDQ5LTEuMjc4Yy0wLjczMy0wLjg1My0xLjEwMS0xLjgxNS0xLjEwMS0yLjg4OQ0KCWMwLTEuMDEyLDAuMzExLTEuOTEzLDAuOTMyLTIuNzA0YzAuNzg2LTEuMDA2LDEuODQtMS41MDksMy4xNTktMS41MDljMS4zNTksMCwyLjQ0NCwwLjUxNSwzLjI1NSwxLjU0Ng0KCWMwLjU3NywwLjcyNywwLjg3LDEuNjM1LDAuODgsMi43MjRIODUuMDRjMC4wMiwwLjkyNiwwLjMxNSwxLjY4NSwwLjg4OCwyLjI3N2MwLjU3MiwwLjU5MSwxLjI3OCwwLjg4NywyLjExOSwwLjg4Nw0KCWMwLjQwNiwwLDAuODAxLTAuMDcsMS4xODQtMC4yMTFjMC4zODQtMC4xNDIsMC43MS0wLjMyOSwwLjk3OS0wLjU2M1M5MC43NywyMy4wNTIsOTEuMDgzLDIyLjUzMSBNOTEuMDgzLDIwLjM4NQ0KCWMtMC4xMzctMC41NDctMC4zMzYtMC45ODQtMC41OTgtMS4zMTFjLTAuMjYxLTAuMzI3LTAuNjA3LTAuNTkxLTEuMDM4LTAuNzkxYy0wLjQyOS0wLjItMC44ODItMC4zLTEuMzU2LTAuMw0KCWMtMC43ODIsMC0xLjQ1NCwwLjI1MS0yLjAxNywwLjc1NGMtMC40MSwwLjM2Ni0wLjcyMSwwLjkxNi0wLjkzLDEuNjQ4SDkxLjA4M3oiLz4NCiAgICA8cGF0aCBmaWxsPSIjMjMxRjIwIiBkPSJNOTguOTU2LDE0LjQwMWgyLjE3NmMxLjE3NywwLDIuMDI1LDAuMTA4LDIuNTQ1LDAuMzI1YzAuNTIxLDAuMjE4LDAuOTMxLDAuNTcsMS4yMywxLjA1NQ0KCWMwLjMwMSwwLjQ4NiwwLjQ1MSwxLjA2OCwwLjQ1MSwxLjc0N2MwLDAuNzUyLTAuMTk3LDEuMzc3LTAuNTksMS44NzVjLTAuMzk0LDAuNDk4LTAuOTI3LDAuODQ1LTEuNjAxLDEuMDQNCgljLTAuMzk2LDAuMTEyLTEuMTE2LDAuMTY4LTIuMTYxLDAuMTY4djQuNTYzaC0yLjA1MVYxNC40MDEgTTEwMS4wMDcsMTguNjEyaDAuNjUyYzAuNTEzLDAsMC44NjktMC4wMzcsMS4wNjktMC4xMQ0KCWMwLjItMC4wNzQsMC4zNTctMC4xOTUsMC40NzMtMC4zNjRjMC4xMTQtMC4xNjksMC4xNzItMC4zNzQsMC4xNzItMC42MTNjMC0wLjQxNy0wLjE2MS0wLjcyMS0wLjQ4My0wLjkxMg0KCWMtMC4yMzQtMC4xNDItMC42NjktMC4yMTMtMS4zMDQtMC4yMTNoLTAuNTc5VjE4LjYxMnoiLz4NCiAgICA8cGF0aCBmaWxsPSIjMjMxRjIwIiBkPSJNMTA2LjcyOSwxNy4yMDZoMC43MTJjMC4wMDQtMS4wNDUsMC4wMjEtMS42NjIsMC4wNTEtMS44NTNjMC4wNTQtMC40MzksMC4yMzctMC43ODgsMC41NTMtMS4wNDMNCgljMC4zMTUtMC4yNTcsMC43NjEtMC4zODUsMS4zMzctMC4zODVjMC40MTUsMCwwLjg4NCwwLjA5NSwxLjQwNiwwLjI4NXYxLjUyNGMtMC4yODgtMC4wODMtMC41MjUtMC4xMjUtMC43MS0wLjEyNQ0KCWMtMC4yMzQsMC0wLjQwNiwwLjA0OS0wLjUxNCwwLjE0N2MtMC4wNzgsMC4wNzMtMC4xMTcsMC4yMjUtMC4xMTcsMC40NTRsLTAuMDA3LDAuOTk2aDEuMjY3djEuNjkyaC0xLjI2N3Y2LjI3N2gtMS45OTl2LTYuMjc3DQoJaC0wLjcxMlYxNy4yMDYiLz4NCiAgICA8cGF0aCBmaWxsPSIjMjMxRjIwIiBkPSJNMTE4LjA2MSwxNy4yMDZoMS45OTl2Ny45NjloLTEuOTk5di0wLjg0M2MtMC4zOTEsMC4zNzEtMC43ODIsMC42MzktMS4xNzUsMC44MDMNCgljLTAuMzkzLDAuMTYzLTAuODE4LDAuMjQ1LTEuMjc2LDAuMjQ1Yy0xLjAyOSwwLTEuOTE5LTAuMzk5LTIuNjctMS4xOTdjLTAuNzUxLTAuNzk5LTEuMTI2LTEuNzkxLTEuMTI2LTIuOTc5DQoJYzAtMS4yMjksMC4zNjItMi4yMzksMS4wODktMy4wMjRjMC43MjctMC43ODYsMS42MDktMS4xNzksMi42NDgtMS4xNzljMC40NzgsMCwwLjkyNywwLjA5LDEuMzQ2LDAuMjcxDQoJYzAuNDIsMC4xODEsMC44MDgsMC40NTIsMS4xNjQsMC44MTNWMTcuMjA2IE0xMTQuNDcxLDEzLjY1NGMwLjI5MywwLDAuNTQzLDAuMTAyLDAuNzQ4LDAuMzA4YzAuMjA1LDAuMjA1LDAuMzA3LDAuNDUxLDAuMzA3LDAuNzM5DQoJYzAsMC4yOTMtMC4xMDIsMC41NDItMC4zMDcsMC43NDdjLTAuMjA1LDAuMjA2LTAuNDU1LDAuMzA4LTAuNzQ4LDAuMzA4Yy0wLjI4OCwwLTAuNTM0LTAuMTAyLTAuNzM5LTAuMzA4DQoJYy0wLjIwNS0wLjIwNS0wLjMwOC0wLjQ1NC0wLjMwOC0wLjc0N2MwLTAuMjg4LDAuMTAzLTAuNTM0LDAuMzA4LTAuNzM5QzExMy45MzcsMTMuNzU2LDExNC4xODMsMTMuNjU0LDExNC40NzEsMTMuNjU0eg0KCSBNMTE1Ljk1OCwxOC44NDdjLTAuNjE4LDAtMS4xMzIsMC4yMTktMS41NCwwLjY1NWMtMC40MDksMC40MzgtMC42MTMsMC45OTctMC42MTMsMS42ODFjMCwwLjY4OCwwLjIwOCwxLjI1NSwwLjYyNCwxLjY5OQ0KCXMwLjkyOSwwLjY2NywxLjUzNiwwLjY2N2MwLjYyOCwwLDEuMTQ5LTAuMjE5LDEuNTYzLTAuNjU1YzAuNDE0LTAuNDM4LDAuNjIxLTEuMDEsMC42MjEtMS43MThjMC0wLjY5My0wLjIwNy0xLjI1NS0wLjYyMS0xLjY4Ng0KCUMxMTcuMTE0LDE5LjA2MiwxMTYuNTkxLDE4Ljg0NywxMTUuOTU4LDE4Ljg0N3ogTTExNy43MTYsMTMuNjU0YzAuMjkzLDAsMC41NDIsMC4xMDIsMC43NDcsMC4zMDgNCgljMC4yMDUsMC4yMDUsMC4zMDksMC40NTEsMC4zMDksMC43MzljMCwwLjI5My0wLjEwNCwwLjU0Mi0wLjMwOSwwLjc0N2MtMC4yMDUsMC4yMDYtMC40NTQsMC4zMDgtMC43NDcsMC4zMDgNCgljLTAuMjg4LDAtMC41MzQtMC4xMDItMC43MzktMC4zMDhjLTAuMjA1LTAuMjA1LTAuMzA5LTAuNDU0LTAuMzA5LTAuNzQ3YzAtMC4yODgsMC4xMDQtMC41MzQsMC4zMDktMC43MzkNCglDMTE3LjE4MiwxMy43NTYsMTE3LjQyOCwxMy42NTQsMTE3LjcxNiwxMy42NTR6Ii8+DQogICAgPHBhdGggZmlsbD0iIzIzMUYyMCIgZD0iTTEyMS43NTksMTcuMjA2aDAuNzExYzAuMDA0LTEuMDQ1LDAuMDIxLTEuNjYyLDAuMDUyLTEuODUzYzAuMDUzLTAuNDM5LDAuMjM3LTAuNzg4LDAuNTUyLTEuMDQzDQoJYzAuMzE1LTAuMjU3LDAuNzYxLTAuMzg1LDEuMzM3LTAuMzg1YzAuNDE1LDAsMC44ODQsMC4wOTUsMS40MDYsMC4yODV2MS41MjRjLTAuMjg4LTAuMDgzLTAuNTI1LTAuMTI1LTAuNzEtMC4xMjUNCgljLTAuMjM0LDAtMC40MDYsMC4wNDktMC41MTQsMC4xNDdjLTAuMDc4LDAuMDczLTAuMTE3LDAuMjI1LTAuMTE3LDAuNDU0bC0wLjAwNywwLjk5NmgxLjI2N3YxLjY5MmgtMS4yNjd2Ni4yNzdoLTEuOTk5di02LjI3Nw0KCWgtMC43MTFWMTcuMjA2Ii8+DQogICAgPHBhdGggZmlsbD0iIzIzMUYyMCIgZD0iTTEyNy4wNjUsMTcuMjA2aDAuNzExYzAuMDA0LTEuMDQ1LDAuMDIxLTEuNjYyLDAuMDUxLTEuODUzYzAuMDU0LTAuNDM5LDAuMjM4LTAuNzg4LDAuNTUzLTEuMDQzDQoJYzAuMzE1LTAuMjU3LDAuNzYxLTAuMzg1LDEuMzM3LTAuMzg1YzAuNDE1LDAsMC44ODQsMC4wOTUsMS40MDYsMC4yODV2MS41MjRjLTAuMjg4LTAuMDgzLTAuNTI1LTAuMTI1LTAuNzEtMC4xMjUNCgljLTAuMjM0LDAtMC40MDYsMC4wNDktMC41MTQsMC4xNDdjLTAuMDc4LDAuMDczLTAuMTE3LDAuMjI1LTAuMTE3LDAuNDU0bC0wLjAwNywwLjk5NmgxLjI2N3YxLjY5MmgtMS4yNjd2Ni4yNzdoLTEuOTk5di02LjI3Nw0KCWgtMC43MTFWMTcuMjA2Ii8+DQogICAgPHBhdGggZmlsbD0iIzIzMUYyMCIgZD0iTTEzMy45MSwxMy45MjVjMC4zNTEsMCwwLjY1MSwwLjEyNywwLjkwMSwwLjM4MWMwLjI1MiwwLjI1NCwwLjM3NywwLjU2MSwwLjM3NywwLjkyMw0KCWMwLDAuMzU2LTAuMTI1LDAuNjYtMC4zNzMsMC45MTJjLTAuMjQ4LDAuMjUxLTAuNTQ0LDAuMzc3LTAuODkxLDAuMzc3Yy0wLjM1NSwwLTAuNjU5LTAuMTI4LTAuOTA5LTAuMzg1DQoJYy0wLjI1MS0wLjI1Ni0wLjM3Ny0wLjU2OC0wLjM3Ny0wLjkzNGMwLTAuMzUxLDAuMTI1LTAuNjUyLDAuMzczLTAuOTAxUzEzMy41NiwxMy45MjUsMTMzLjkxLDEzLjkyNSBNMTMyLjkxLDE3LjIwNmgydjcuOTY4aC0yDQoJVjE3LjIwNnoiLz4NCiAgICA8cG9seWxpbmUgZmlsbD0iIzIzMUYyMCIgcG9pbnRzPSIxMzcuMjE0LDE0LjEzIDEzOS4yMTQsMTQuMTMgMTM5LjIxNCwyMC40OTEgMTQyLjE1NywxNy4yMDYgMTQ0LjY2OSwxNy4yMDYgMTQxLjIzNiwyMS4wMjYNCgkxNDUuMDc5LDI1LjE3NSAxNDIuNTk3LDI1LjE3NSAxMzkuMjE0LDIxLjUwMiAxMzkuMjE0LDI1LjE3NSAxMzcuMjE0LDI1LjE3NSAxMzcuMjE0LDE0LjEzICIvPg0KICAgIDxwYXRoIGZpbGw9IiMyMzFGMjAiIGQ9Ik0xNDkuNDY0LDE3LjAwMWMwLjc1MSwwLDEuNDU4LDAuMTg4LDIuMTIsMC41NjRjMC42NjEsMC4zNzYsMS4xNzgsMC44ODYsMS41NDksMS41Mw0KCWMwLjM3MSwwLjY0NSwwLjU1NywxLjM0MSwwLjU1NywyLjA4OGMwLDAuNzUyLTAuMTg3LDEuNDU1LTAuNTYxLDIuMTA4Yy0wLjM3MywwLjY1NC0wLjg4MiwxLjE2Ni0xLjUyNiwxLjUzNQ0KCWMtMC42NDUsMC4zNjgtMS4zNTUsMC41NTQtMi4xMzIsMC41NTRjLTEuMTQzLDAtMi4xMTgtMC40MDctMi45MjYtMS4yMjFjLTAuODA5LTAuODEzLTEuMjEyLTEuOC0xLjIxMi0yLjk2Mw0KCWMwLTEuMjQ1LDAuNDU2LTIuMjgyLDEuMzY5LTMuMTEyQzE0Ny41MDMsMTcuMzYyLDE0OC40MjMsMTcuMDAxLDE0OS40NjQsMTcuMDAxIE0xNDkuNDk2LDE4Ljg4M2MtMC42MjEsMC0xLjEzOSwwLjIxNi0xLjU1MiwwLjY0OA0KCWMtMC40MTMsMC40MzQtMC42MTksMC45ODUtMC42MTksMS42NTljMCwwLjY5MywwLjIwNCwxLjI1NSwwLjYxMiwxLjY4NXMwLjkyNiwwLjY0NSwxLjU1MiwwLjY0NXMxLjE0Ni0wLjIxNywxLjU2My0wLjY1Mg0KCWMwLjQxNi0wLjQzNCwwLjYyMy0wLjk5MywwLjYyMy0xLjY3N3MtMC4yMDQtMS4yMzktMC42MTItMS42NjZTMTUwLjEzMiwxOC44ODMsMTQ5LjQ5NiwxOC44ODN6Ii8+DQogICAgPHBhdGggZmlsbD0iIzIzMUYyMCIgZD0iTTE1NS41NzgsMTcuMjA2aDEuOTk5djAuODE2YzAuNDU0LTAuMzgxLDAuODY0LTAuNjQ3LDEuMjMyLTAuNzk3YzAuMzY4LTAuMTQ5LDAuNzQ1LTAuMjI0LDEuMTMtMC4yMjQNCgljMC43ODksMCwxLjQ2MSwwLjI3NiwyLjAxMiwwLjgyOGMwLjQ2MywwLjQ2OCwwLjY5NSwxLjE2MiwwLjY5NSwyLjA4djUuMjY3aC0xLjk3OHYtMy40OWMwLTAuOTUxLTAuMDQzLTEuNTgyLTAuMTI5LTEuODk1DQoJYy0wLjA4NS0wLjMxMi0wLjIzMy0wLjU0OS0wLjQ0NS0wLjcxM2MtMC4yMTItMC4xNjMtMC40NzQtMC4yNDUtMC43ODUtMC4yNDVjLTAuNDA0LDAtMC43NTIsMC4xMzUtMS4wNDEsMC40MDYNCgljLTAuMjksMC4yNzEtMC40OTEsMC42NDYtMC42MDQsMS4xMjNjLTAuMDU5LDAuMjQ5LTAuMDg4LDAuNzg4LTAuMDg4LDEuNjE3djMuMTk3aC0xLjk5OVYxNy4yMDYiLz4NCiAgICA8cG9seWxpbmUgZmlsbD0iIzIzMUYyMCIgcG9pbnRzPSIxNjkuMDI0LDE0LjQwMSAxNzUuNTQzLDE0LjQwMSAxNzEuNzA3LDIzLjIwNSAxNzUuMjk0LDIzLjIwNSAxNzUuMjk0LDI1LjE3NSAxNjguNzA5LDI1LjE3NQ0KCTE3Mi41MjgsMTYuNDMgMTY5LjAyNCwxNi40MyAxNjkuMDI0LDE0LjQwMSAiLz4NCiAgICA8cG9seWxpbmUgZmlsbD0iIzIzMUYyMCIgcG9pbnRzPSIxNzcuNDY1LDE0LjQwMSAxNzkuNTQ1LDE0LjQwMSAxNzkuNTQ1LDE4LjQ2NiAxODMuMTQyLDE4LjQ2NiAxODMuMTQyLDE0LjQwMSAxODUuMjE1LDE0LjQwMQ0KCTE4NS4yMTUsMjUuMTc1IDE4My4xNDIsMjUuMTc1IDE4My4xNDIsMjAuNDUxIDE3OS41NDUsMjAuNDUxIDE3OS41NDUsMjUuMTc1IDE3Ny40NjUsMjUuMTc1IDE3Ny40NjUsMTQuNDAxICIvPg0KICAgIDxnPg0KCTxkZWZzPg0KCQk8cmVjdCBpZD0iU1ZHSURfMV8iIHg9IjAuMDYiIHdpZHRoPSIxODUuMTU1IiBoZWlnaHQ9IjM3LjQyIi8+DQoJPC9kZWZzPg0KICAgICAgICA8Y2xpcFBhdGggaWQ9IlNWR0lEXzJfIj4NCgkJPHVzZSB4bGluazpocmVmPSIjU1ZHSURfMV8iICBvdmVyZmxvdz0idmlzaWJsZSIvPg0KCTwvY2xpcFBhdGg+DQogICAgICAgIDxwYXRoIGNsaXAtcGF0aD0idXJsKCNTVkdJRF8yXykiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBmaWxsPSIjRTMwNjEzIiBkPSJNMTAuMTIzLDQuNDIxDQoJCWMwLDAuMDU4LDAsMC4wNTgsMCwwLjExNkMxMC4wMDYsNC43MTIsOS45NDksNC45NDUsOS44OSw1LjExOWMwLDAuOTMxLDAsMS41MTMsMC4wNTksMi4yMTFjMCwwLjY0LDAuNDY1LDEuMzk2LDEuMjc5LDEuNjg3DQoJCWMtMS41NywwLjQwNy0yLjQ0MywxLjIyMi0zLjAyNCwyLjczNGMtMC41MjQtMC4xNzQtMC41ODItMS4zOTYtMC41ODItMS44NjFjMC0xLjgwNCwwLjExNi0zLjMxNiwwLjExNi00LjU5Ng0KCQlDNi4zNDEsMy41NDksOC4wMjksMi45MDksOC40MzYsMS44MDNjMC4xMTYtMC40MDctMC4yOTEtMS4wNDctMC43NTctMC45ODljMC44NzMtMC40NjUsMS4xNjQtMC4wNTgsMS4zOTYsMC4xNzUNCgkJYzAuMjMyLTAuMTc1LDAuMjkxLTAuNjQsMC0wLjk4OUM5Ljc3NCwwLjM0OSw5Ljk0OSwwLjc1Niw5Ljg5LDEuMTA1YzAuMzQ5LDAuMDU4LDAuNjk4LTAuNDY1LDAuNDY2LTAuOTMNCgkJYzEuMTYzLDAuODcyLDAuMTc0LDEuNTEyLDAuMjMyLDEuNjg3YzAsMCwwLjA1OSwwLDAuMDU5LDAuMDU4YzAuMjksMCwwLjY5Ny0wLjM0OSwwLjc1Ni0wLjgxNWMwLjUyMywxLjE2NC0wLjQwNywxLjU3MS0wLjY0LDEuNzQ1DQoJCUMxMC43MDUsMy40MzIsMTAuNDcyLDQuMDE0LDEwLjEyMyw0LjQyMSBNMC45ODksMTAuOTM3Yy0wLjM0OSwwLTAuNzU2LDAuMDU4LTAuOTg5LDAuODcyYzAuMjkxLTAuMjkxLDEuMDQ3LTAuMTc0LDEuMzM4LDANCgkJYzAuOTMxLDAuOTMxLDAuODc0LDIuNzM1LDIuOTY3LDIuMzg2YzEuMDQ4LDAuNTgyLDEuODYxLDEuODYxLDIuNTYsMi41MDFsMi41NiwyLjczNWMxLjYzLDEuMzM3LDMuNjY1LDAuMTE2LDMuNzgzLTEuNjg3DQoJCWMwLjI5MS0yLjMyOC0yLjMyOC0zLjI1OC0zLjcyNC0zLjU0OWMtMS4zOTYtMC4yOTEtMS40NTQtMC4xMTctMy4yNTgtMS4yOGMtMC4yMzItMC4xMTYtMC41MjMtMC4yOTEtMC43NTYtMC40NjUNCgkJYy0wLjExNi0xLjM5Ny0xLjUxMy0xLjM5Ny0xLjkyLTIuMjExYy0wLjExNi0wLjIzMy0wLjExNi0xLjI4LTEuNTcxLTEuMDQ3YzAuNDY2LDAuMTE2LDAuNjQxLDAuNTIzLDAuNTgyLDAuODE0SDIuNTAxDQoJCWMtMC4yMzIsMC0wLjUyMy0xLjI4LTEuOTE5LTAuNDY1YzAuNTI0LTAuMDU4LDAuOTMxLDAuNDA3LDAuODczLDAuNjk4Yy0wLjI5Mi0wLjE3NS0wLjc1Ni0wLjIzMy0xLjM5NywwLjIzMw0KCQlDMC41MjQsMTAuMzU1LDAuOTMxLDEwLjY0NiwwLjk4OSwxMC45Mzd6IE0xNC41NDQsNS41ODVjLTAuMTE2LDEuMTA1LDAuODcyLDEuODAzLDEuOTIsMi41NTljMC4yMzMtMC45ODgsMC4yOS0xLjM5NiwxLjI4LTEuNTEyDQoJCWMwLjE3NCwwLjA1OCwwLjQwNy0wLjUyNCwwLjY5OC0wLjM0OWMwLjgxNCwwLjUyNCwxLjkyLDEuMjgsMi43OTIsMS44NjFjMC40NjYsMC4zNSwwLjkzMSwwLjU4MiwwLjc1NywxLjEwNg0KCQljMC40MDcsMC4zNDksMC41ODIsMC41MjMsMC44NzMsMC43NTZjMC4yOSwwLjI5MSwwLjI5LDAuMjMzLDAsMC42OThjLTAuNTI1LDAuOTMxLTEuODA0LDEuMzM4LTIuNDQ1LDAuNjQNCgkJYy0wLjE3My0wLjE3NC0wLjE3My0wLjE3NC0wLjM0OC0wLjI5MWMtMC40MDcsMC40NjUtMS42MjksMS4zMzgtMS45NzgsMC44NzNjLTAuMzQ5LTAuMjkxLTAuNzU3LTAuNjk4LTEuMjgtMS4yOA0KCQljLTEuMTYzLDAuMjkxLTEuNjg4LTEuMzM4LTAuNTgyLTEuODAzQzE0LjY2MSw4LjAyOCwxMy40OTgsNi44MDcsMTQuNTQ0LDUuNTg1eiBNMTcuNjg2LDEwLjAwNg0KCQljLTAuNzU3LDAuNDA3LTEuNjg4LTAuMzQ5LTEuMzk2LTEuMTYzQzE2LjkyOSw5LjE5MiwxNy40NTQsOS40ODMsMTcuNjg2LDEwLjAwNnogTTE2LjQ2NCwxMS40NjENCgkJYzAuNDA4LDAuNDY1LDAuNzU2LDAuODcyLDEuMTA1LDEuMTYzYzAuNjk5LDAuNzU2LDEuNjMsMC4xNzUsMi4zMjctMC41MjRjMC40MDcsMC4zNSwwLjU4MiwwLjQwOCwxLjEwNSwwLjQ2Ng0KCQljMC40NjYsMS4zOTYsMC4yMzMsMi4xNTItMC40MDcsMy4wMjVjLTEuODAzLDIuNTAyLTQuMjQ2LDMuMDgzLTYuODY0LDMuMjU3YzAuOTMxLTIuMTUyLTAuMjkxLTMuNjA2LTEuNDU1LTQuNDIxDQoJCWMtMC45ODgtMC41ODEtMi42MTctMC45MzEtMy42MDYtMS4xMDVjLTAuMDU5LTIuNzkyLDIuNzM0LTQuMjQ3LDUuMjM1LTMuMzc0YzAuMzQ5LDAuMTc0LDAuNjk4LDAuNDA3LDEuMTA1LDAuNzU2DQoJCUMxNS4zNTksMTEuMDUzLDE1LjY1LDExLjYzNSwxNi40NjQsMTEuNDYxeiBNMjQuMjU5LDI1LjY1NWMtMC40NjUtMC42OTgtMS41Ny0xLjkyLTMuNjY1LTEuODYNCgkJYzAuNDA3LTAuNjQxLDEuMzM5LTAuOTg5LDIuMDM2LTAuODE1QzIzLjQ0NSwyMy4xNTQsMjQuMzE4LDI0Ljc4MywyNC4yNTksMjUuNjU1eiBNMTcuODAyLDkuOTQ4DQoJCWMtMC4xNzUtMC43NTYtMC41MjMtMS4zMzgtMS4yOC0xLjc0NUMxNy41NjksNy43MzcsMTguODQ5LDkuMDE3LDE3LjgwMiw5Ljk0OHogTTE4LjczMyw3LjI3MmMwLjQwNywwLjI5MSwwLjg3MiwwLjUyNCwxLjI4LDAuODcyDQoJCWMtMC4yMzMsMC0wLjY0LDAuMTE3LTAuNzU3LDAuMzVDMTkuMTQsOC4xNDQsMTguOTA4LDcuNjc5LDE4LjczMyw3LjI3MnogTTEyLjEwMSwyMi4yMjNjLTAuMjkxLDAtMC42OTgsMC4xMTYtMC45MzEsMC44MTMNCgkJYzAuMjMzLTAuMjMxLDAuOTg5LTAuMTc0LDEuMjgsMGMxLjA0OCwwLjgxNSwwLjQ2NSwyLjczNSwyLjczNCwyLjU2MWMwLjIzMiwwLjM0OSwwLjQ2NiwxLjMzOCwxLjIyMiwyLjE1Mg0KCQljMS4wNDgsMS4xNjQsMi42MTgsMS41Nyw0LjY1NCwxLjUxM2MwLjc1NiwwLjA1OCwxLjMzOCwwLjExNiwxLjMzOC0wLjgxNHYtMS4xNjRjMC0wLjI5MSwwLjExNi0wLjQ2NSwwLjQ2Ni0wLjUyMmwxLjM5NSwwLjA1OA0KCQljLTAuMTc1LDQuMzA1LDEuMDQ4LDUuNTg1LDQuNjU1LDUuNTg1YzAuMDU4LDEuMjIxLDAuMDU4LDIuNDQzLTAuOTksMi42MTdjLTAuNjM5LTEuMjc5LTEuNDU0LTAuODcyLTEuNjg2LTEuNTEyDQoJCWMtMC4xMTYtMC4yOTEtMC4xNzUtMS4xNjMtMS41MTMtMC45ODljMC40MDcsMC4xMTYsMC41ODIsMC40NjUsMC41ODIsMC43NTZjLTAuMDU5LDAtMC4xMTcsMC0wLjExNywwDQoJCWMtMC4yMzMsMC0wLjUyNC0xLjI3OS0xLjkxOS0wLjQ2NWMwLjUyMy0wLjA1OCwwLjkzMSwwLjQwNywwLjg3MiwwLjY5OGMtMC4yOTEtMC4xNzYtMC42OTgtMC4xNzYtMS4yNzksMC4xNzQNCgkJYzAuNDY1LTAuMDU5LDAuODE0LDAuMjkyLDAuODE0LDAuNTgyYy0wLjI5MSwwLTAuNjk4LDAuMDU5LTAuOTMxLDAuODE0YzAuMjMzLTAuMjkxLDAuOTg5LTAuMTc1LDEuMjgsMC4wNTkNCgkJYzEuMzM4LDAuODEzLDEuMTYzLDMuMjU4LDMuODk3LDEuOTc4YzEuMTY0LTAuNDY2LDEuODYzLTEuMDQ3LDMuMDI2LTEuODYxYzEuMjc5LTAuOTg5LDAuOTg5LTIuMzg2LDAuOTg5LTQuNjU0DQoJCWMtMC4xMTYtMC4xNzUtMC4zNS0wLjI5MS0wLjQ2Ni0wLjI5MWMtMS42MjksMC4wNTktMi4yMS0wLjE3NS0yLjIxLTAuODE0di0yLjYxN2wxLjk3OCwyLjA5NGMxLjgwMywxLjk3OCw1LjM1Mi0xLjA0NywzLjA4My0zLjM3NA0KCQlsLTguMjAyLTguNTUyYzAuMTE2LTAuOTg5LTAuMTc1LTEuMzM4LTEuMjgxLTIuMDk0Yy0xLjE2My0wLjg3MywwLjIzMy0yLjUwMSwwLjUyNC0yLjc5MmMtMS4yODEsMC4yMzItMy40OTEsMS43NDUtMi45MDgsMy44MzkNCgkJYzAuMjksMC44NzMsMS4wNDYsMS44MDQsMi41NTksMi4xNTNsOC4zNzcsOC43MjdjMC41ODIsMC42NC0wLjUyMywxLjQ1NC0wLjk4OSwwLjkzMUwyMS4xMTksMTYuMTE1DQoJCWMtMi4yNywzLjU0OS01Ljg3NiwzLjE5OS03LjYyMSwzLjQ5YzAuNDA2LDAuMjkxLDAuODcyLDAuNTI0LDEuMzM3LDAuNzU2YzAuMDU4LDAsMC4wNTgsMCwwLjExNywwLjA2DQoJCWMyLjM4NCwwLjkzLDUuMjk0LDAuNDA2LDcuMjcxLDIuMTUxYy0xLjQ1NC0wLjQwNy0yLjY3NiwwLjY0MS0yLjczNCwxLjYyOWMwLDAuNTgyLTAuMDU4LDEuMTYzLTAuMDU4LDEuNjg4DQoJCWMtMC4yOTEsMC4yOTEtMS4xNjMsMC0xLjU3MS0wLjE3NWMtMC40NjUtMC4yMzItMS4wNDctMC44MTQtMS4zOTYtMS4zMzljMC4xNzQtMS45MTktMS42ODctMi4wMzUtMS44NjItMi45MDcNCgkJYy0wLjA1OC0wLjM1LTAuMjMyLTEuMTA2LTEuNDU0LTAuOTg5YzAuMzUsMC4xNzQsMC41MjMsMC40NjUsMC41MjMsMC42OThjMCwwLTAuMDU3LDAtMC4xMTYsMGMtMC4xNzUsMC0wLjQ2Ni0xLjIyMy0xLjg2MS0wLjQ2Ng0KCQljMC41MjMsMCwwLjkzLDAuNDY2LDAuODE0LDAuNzU3Yy0wLjIzMy0wLjE3Ni0wLjYzOS0wLjE3Ni0xLjIyMSwwLjExNWMwLjQ2NCwwLDAuNzU1LDAuMjkxLDAuODE0LDAuNTgyDQoJCUMxMi4xMDEsMjIuMjIzLDEyLjEwMSwyMi4yMjMsMTIuMTAxLDIyLjIyM3oiLz4NCjwvZz4NCiAgICA8cG9seWxpbmUgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGw9IiNFMzA2MTMiIHBvaW50cz0iMzUuNTg2LDE3LjY0NCAyMC43NywyLjgyNyAzNS41ODYsMi44MjcgMzUuNTg2LDE3LjY0NA0KCSIvPg0KICAgIDxwb2x5bGluZSBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iI0UzMDYxMyIgcG9pbnRzPSIzLjE5NCwyMC40MDIgMTguMDExLDM1LjIxOSAzLjE5NCwzNS4yMTkgMy4xOTQsMjAuNDAyDQoJIi8+DQo8L3N2Zz4=';
-var APP_VERSION = "1.41.006";
+var APP_VERSION = "1.42.003";
 var APP_NAME = "Sporttag-Sekretär";
 
 var DEFAULTS = {
@@ -913,6 +1000,8 @@ var DEFAULTS = {
       {time:'10:30'},{time:'10:50'},{time:'11:10'},{time:'11:30'},
     ],
   },
+  // Rangliste-Modus: 'standard' (mit Lücke) | 'highest' (höchstes Einzelresultat→Disziplinranking) | 'disorder' (nur Disziplinranking)
+  rl: { mode:'standard', disOrder:[] },
 };
 
 
@@ -923,6 +1012,8 @@ var state={bewDis:[],unbewDis:[],sus:[],erg:{},logo:'',wichtig:'',lbHinweis:'',f
 var nextSid=1,nextDid=1;
 var sortCol='klasse',sortDir=1;
 var scanPending=[];
+var ocrOnlyOpen=true;
+var _ocrGroups=[];
 var scanHadContent=false;
 var scanResults=[];        // {kl, ge, autoCount} — erfolgreiche Importe akkumuliert (bis Reset)
 var scanCurrentErrors=[];  // pro Upload-Vorgang, transient
@@ -966,7 +1057,7 @@ function emptyMsg(text, btnLabel, btnAction){
 }
 
 function showTab(t){
-  ['setup', 'sus', 'laufblatt', 'bewertung', 'ergebnisse', 'rangliste', 'zeitplan'].forEach(function(p){
+  ['setup', 'sus', 'laufblatt', 'bewertung', 'ergebnisse', 'rangliste', 'zeitplan', 'statistik'].forEach(function(p){
     g('page-'+p).classList.toggle('active',p===t);
   });
   document.querySelectorAll('.tab[data-tab]').forEach(function(btn){
@@ -979,6 +1070,7 @@ function showTab(t){
   if(t==='sus') renderS();
   if(t==='bewertung') { renderBewertung(); renderPreview(); }
   if(t==='zeitplan') { zgInitOrder(); zgRenderSlots(); zgRenderDis(); zgRender(); }
+  if(t==='statistik') renderStat();
 }
 function updateLabel(){g('anlass-label').textContent=g('anlassName').value;}
 
@@ -1362,40 +1454,190 @@ function getRLData(fs,fge){
     stufen.forEach(function(stufe){
         var list = state.sus.filter(function (s) { return s.geschlecht === grp.key && s.jahrgangsstufe === stufe && !s.ausschluss && !isAbwesend(s.klasse);});
       if(!list.length)return;
-      var scored=list.map(function(s){return Object.assign({},s,{score:getTotal(s.id)});}).filter(function(s){return s.score>0;}).sort(function(a,b){return b.score-a.score;});
+      var scored=list.map(function(s){
+        var disMap={}, maxSingle=0;
+        state.bewDis.forEach(function(d){
+          var v=state.erg[s.id]?state.erg[s.id][d.id]:null; v=(v!=null?parseFloat(v)||0:0);
+          disMap[d.id]=v; if(v>maxSingle)maxSingle=v;
+        });
+        return Object.assign({},s,{score:getTotal(s.id), disMap:disMap, maxSingle:maxSingle});
+      }).filter(function(s){return s.score>0;});
+      rankSort(scored);
       result.push({grp:grp,stufe:stufe,list:scored});
     });
   });
   return result;
 }
+// Disziplin-Prioritätsreihenfolge: gewählte RL.disOrder (auf existierende IDs gefiltert) ⊕ restliche bewDis-Reihenfolge
+function rlOrderIds(){
+  var ids=state.bewDis.map(function(d){return d.id;});
+  var ordered=(RL.disOrder||[]).filter(function(id){return ids.indexOf(id)>=0;});
+  ids.forEach(function(id){ if(ordered.indexOf(id)<0) ordered.push(id); });
+  return ordered;
+}
+// Hält RL.disOrder mit den aktuellen Disziplinen synchron (entfernt gelöschte, ergänzt neue)
+function rlSyncOrder(){ RL.disOrder = rlOrderIds(); }
+// Sortiert list + setzt s.rang. Geteilter Rang mit Lücke bei echter Gleichheit (Standard: Score-Gleichheit).
+function rankSort(list){
+  var mode=RL.mode, order=rlOrderIds();
+  function disCmp(a,b){ for(var k=0;k<order.length;k++){var id=order[k],av=a.disMap[id]||0,bv=b.disMap[id]||0; if(bv!==av)return bv-av;} return 0; }
+  function alpha(a,b){ return (a.name||'').localeCompare(b.name||'','de') || (a.vorname||'').localeCompare(b.vorname||'','de'); }
+  list.sort(function(a,b){
+    if(b.score!==a.score) return b.score-a.score;
+    if(mode==='highest'){ if(b.maxSingle!==a.maxSingle) return b.maxSingle-a.maxSingle; var d1=disCmp(a,b); if(d1)return d1; }
+    else if(mode==='disorder'){ var d2=disCmp(a,b); if(d2)return d2; }
+    return alpha(a,b);
+  });
+  function shared(a,b){
+    if(a.score!==b.score) return false;
+    if(mode==='standard') return true;                 // nur Score zählt → Score-Gleichheit = geteilter Rang
+    return order.every(function(id){ return (a.disMap[id]||0)===(b.disMap[id]||0); }); // Modi 2&3: nur echte Gleichheit
+  }
+  var rang=0, prev=null;
+  list.forEach(function(s,i){
+    if(prev===null || !shared(s,prev)){ rang=i+1; }
+    s.rang=rang; prev=s;
+  });
+}
 function rankClass(rang){return rang===1?'r1':rang===2?'r2':rang===3?'r3':'rx';}
 function buildRLT(list){
   if(!list.length)return emptyMsg('Keine Einträge.');
   var h='<div class="twrap"><table class="rlt"><thead><tr><th class="nosort">Rang</th><th class="nosort">Vorname</th><th class="nosort">Name</th><th class="nosort">Klasse</th><th class="nosort">Total Punkte</th></tr></thead><tbody>';
-  var rang=0,prev=null;
-  list.forEach(function(s,i){
-    if(s.score!==prev){rang=i+1;}prev=s.score;
-    var bc=rankClass(rang);
-    h+='<tr><td><span class="rb '+bc+'">'+rang+'</span></td><td>'+esc(s.vorname)+'</td><td>'+esc(s.name)+'</td><td>'+esc(s.klasse)+'</td><td class="pc">'+s.score+'</td></tr>';
+  list.forEach(function(s){
+    var bc=rankClass(s.rang);
+    h+='<tr><td><span class="rb '+bc+'">'+s.rang+'</span></td><td>'+esc(s.vorname)+'</td><td>'+esc(s.name)+'</td><td>'+esc(s.klasse)+'</td><td class="pc">'+s.score+'</td></tr>';
   });
   return h+'</tbody></table></div>';
 }
 function renderR(){
+  rlRenderControls();
   var fs=g('fSR').value,fge=g('fGR').value;
   var data=getRLData(fs,fge);
   var html=data.map(function(d){return '<div class="card"><div class="ctitle">'+d.grp.label+' \u2014 '+esc(d.stufe||'\u2013')+'</div>'+buildRLT(d.list)+'</div>';}).join('');
   g('r-cont').innerHTML=html||'<div class="card">'+emptyMsg('Keine SuS.','SuS hinzufügen','gotoSus()')+'</div>';
+}
+// ── Rangliste-Modus-UI (Modus-Select + Drag&Drop-Reihenfolge) ──
+function rlRenderControls(){
+  var sel=g('rlMode'); if(sel) sel.value=RL.mode;
+  var wrap=g('rlOrderWrap'), cont=g('rlOrder');
+  if(!wrap||!cont) return;
+  var show=(RL.mode==='highest'||RL.mode==='disorder');
+  wrap.style.display = show ? '' : 'none';
+  if(!show){ cont.innerHTML=''; return; }
+  rlSyncOrder();
+  var byId={}; state.bewDis.forEach(function(d){byId[d.id]=d;});
+  cont.innerHTML = RL.disOrder.map(function(id,i){
+    var d=byId[id]; if(!d) return '';
+    return '<div class="rl-chip" draggable="true" data-id="'+id+'" '+
+      'ondragstart="rlDragStart(event,'+id+')" ondragover="rlDragOver(event,'+id+')" '+
+      'ondragleave="rlDragLeave(event)" ondrop="rlDrop(event,'+id+')" ondragend="rlDragEnd(event)">'+
+      '<span class="pr">'+(i+1)+'.</span><span class="gr">\u283F</span><span>'+esc(d.name)+'</span></div>';
+  }).join('');
+}
+function setRlMode(m){ RL.mode=m; renderR(); autoSave(); }
+var _rlDragId=null;
+function rlDragStart(ev,id){ _rlDragId=id; try{ev.dataTransfer.effectAllowed='move';ev.dataTransfer.setData('text/plain',String(id));}catch(e){} ev.currentTarget.classList.add('drag'); }
+function rlDragOver(ev,overId){ ev.preventDefault(); try{ev.dataTransfer.dropEffect='move';}catch(e){} if(ev.currentTarget)ev.currentTarget.classList.add('over'); }
+function rlDragLeave(ev){ if(ev.currentTarget)ev.currentTarget.classList.remove('over'); }
+function rlDrop(ev,overId){
+  ev.preventDefault();
+  if(_rlDragId===null || _rlDragId===overId){ rlDragEnd(ev); return; }
+  var arr=RL.disOrder.slice();
+  var from=arr.indexOf(_rlDragId), to=arr.indexOf(overId);
+  if(from<0||to<0){ rlDragEnd(ev); return; }
+  arr.splice(from,1); arr.splice(to,0,_rlDragId);
+  RL.disOrder=arr; renderR(); autoSave();
+}
+function rlDragEnd(ev){
+  _rlDragId=null;
+  var d=g('rlOrder'); if(d){ [].forEach.call(d.querySelectorAll('.rl-chip'),function(c){c.classList.remove('drag');c.classList.remove('over');}); }
+}
+
+// ── STATISTIK: Spannweite (max−min) je Gruppe, pro Disziplin + Total ──────────
+// Messwert zu einem Punktwert aus der Disziplin-Skala (exakte Umkehrung p→v)
+function statMess(d, p){
+  if(p==null) return null;
+  if(p<=0) return (d.zeroVal!=null && d.zeroVal!=='') ? d.zeroVal : null;
+  var e = d.skala && d.skala.find(function(s){return s.p===p;});
+  return e ? e.v : null;
+}
+function statSpread(values){
+  if(!values.length) return null;
+  var mn=Math.min.apply(null,values), mx=Math.max.apply(null,values);
+  return {min:mn, max:mx, span:mx-mn, n:values.length};
+}
+// Gruppenmodell: Schlüssel (Klasse oder Stufe) + gefilterte SuS-Menge
+function statGroups(mode, ge){
+  var sus=state.sus.filter(function(s){
+    if(isAbwesend(s.klasse) || s.ausschluss) return false;
+    if(ge && s.geschlecht!==ge) return false;
+    return true;
+  });
+  var keyOf=function(s){ return mode==='stufe' ? (s.jahrgangsstufe||'\u2013') : (s.klasse||'\u2013'); };
+  var keys=[];
+  sus.forEach(function(s){ var k=keyOf(s); if(keys.indexOf(k)<0) keys.push(k); });
+  keys.sort(function(a,b){ return String(a).localeCompare(String(b),'de',{numeric:true}); });
+  return {sus:sus, keys:keys, keyOf:keyOf};
+}
+// Ein Balken-Abschnitt (eine Disziplin oder Total). geCls steuert die Balkenfarbe.
+function statSection(title, unit, groups, geCls){
+  var maxSpan=0; groups.forEach(function(gr){ if(gr.stat && gr.stat.span>maxSpan) maxSpan=gr.stat.span; });
+  var rows=groups.map(function(gr){
+    if(!gr.stat){
+      return '<div class="st-row"><div class="st-lbl">'+esc(gr.key)+'</div>'+
+        '<div class="st-track"></div><div class="st-val muted">keine Daten</div></div>';
+    }
+    var w = maxSpan>0 ? Math.round(gr.stat.span/maxSpan*100) : (gr.stat.span>0?100:0);
+    return '<div class="st-row">'+
+      '<div class="st-lbl">'+esc(gr.key)+' <span class="muted">n='+gr.stat.n+'</span></div>'+
+      '<div class="st-track"><div class="st-bar'+(geCls?' '+geCls:'')+'" style="width:'+w+'%"></div></div>'+
+      '<div class="st-val"><b>'+gr.stat.span+' Pkt</b> <span class="muted">('+gr.stat.min+'\u2013'+gr.stat.max+' Pkt)</span>'+(gr.extra||'')+'</div>'+
+      '</div>';
+  }).join('');
+  return '<div class="card st-section"><div class="ctitle">'+esc(title)+
+    (unit?' <span class="muted" style="font-weight:400;font-size:13px">['+esc(unit)+']</span>':'')+'</div>'+rows+'</div>';
+}
+function renderStat(){
+  var cont=g('stat-cont'); if(!cont) return;
+  var mode=g('stGroup')?g('stGroup').value:'klasse';
+  var ge=g('stGe')?g('stGe').value:'';
+  var geCls = ge==='w'?'w':ge==='m'?'m':'';
+  if(!state.bewDis.length){ cont.innerHTML='<div class="card">'+emptyMsg('Keine bewerteten Disziplinen.')+'</div>'; return; }
+  var G=statGroups(mode, ge);
+  if(!G.keys.length){ cont.innerHTML='<div class="card">'+emptyMsg('Keine passenden SuS (Filter/Abwesenheiten prüfen).')+'</div>'; return; }
+  var html='';
+  // Total (Gesamtpunktzahl)
+  var totGroups=G.keys.map(function(k){
+    var vals=G.sus.filter(function(s){return G.keyOf(s)===k;})
+      .map(function(s){return getTotal(s.id);}).filter(function(v){return v>0;});
+    return {key:k, stat:statSpread(vals)};
+  });
+  html+=statSection('Total (Gesamtpunktzahl)','Pkt', totGroups, geCls);
+  // pro Disziplin (Punkte-Spannweite + Messwert-Endpunkte)
+  state.bewDis.forEach(function(d){
+    var groups=G.keys.map(function(k){
+      var ps=G.sus.filter(function(s){return G.keyOf(s)===k;})
+        .map(function(s){ var v=state.erg[s.id]?state.erg[s.id][d.id]:null; return v!=null?(parseFloat(v)||0):null; })
+        .filter(function(v){return v!=null;});
+      var st=statSpread(ps), extra='';
+      if(st){
+        var mMin=statMess(d,st.min), mMax=statMess(d,st.max);
+        if(mMin!=null && mMax!=null) extra=' <span class="muted">&middot; '+mMin+'\u2013'+mMax+(d.einheit?' '+esc(d.einheit):'')+'</span>';
+      }
+      return {key:k, stat:st, extra:extra};
+    });
+    html+=statSection(d.name||'Disziplin','Pkt', groups, geCls);
+  });
+  cont.innerHTML=html;
 }
 
 // ── RANGLISTE PRINT: one A4 per Stufe+Geschlecht with full header ──
 function buildRLPage(d){
   var name=g('anlassName').value,dat=g('anlasDatum').value;
   var rows='';
-  var rang=0,prev=null;
-  d.list.forEach(function(s,i){
-    if(s.score!==prev){rang=i+1;}prev=s.score;
-    var bc=rankClass(rang);
-    rows+='<tr><td style="width:46px"><span class="rb '+bc+'">'+rang+'</span></td><td>'+esc(s.vorname)+'</td><td>'+esc(s.name)+'</td><td>'+esc(s.klasse)+'</td><td style="font-weight:700;color:#000">'+s.score+'</td></tr>';
+  d.list.forEach(function(s){
+    var bc=rankClass(s.rang);
+    rows+='<tr><td style="width:46px"><span class="rb '+bc+'">'+s.rang+'</span></td><td>'+esc(s.vorname)+'</td><td>'+esc(s.name)+'</td><td>'+esc(s.klasse)+'</td><td style="font-weight:700;color:#000">'+s.score+'</td></tr>';
   });
   return '<div style="page-break-inside:avoid">'+
     '<div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #222;padding-bottom:10px;margin-bottom:14px">'+
@@ -1570,12 +1812,16 @@ async function scan_processFile(file) {
   // 6.5 Disziplinen-Anzahl-Validierung
   if (scan_layout.ptcs.length !== state.bewDis.length) { scanCurrentErrors.push({file:file.name, error:'Anzahl Disziplinen stimmt nicht'}); return; }
 
-  // 7. OCR
-  scan_poiData = scan_buildPOIs(scan_layout, settings.poiInset);
-  var results  = await scan_runOCR(tmp, scan_poiData, scan_payload.n);
-  var mapped = scan_mapResults(scan_payload, results);
-  var autoCount = mapped.length ? applyOCRResults(mapped) : 0;
-  scanResults.push({kl:scan_payload.kl, ge:scan_payload.ge, autoCount:autoCount});
+  // 7. OCR (try/catch: 0-px-Box o.ä. darf nicht den ganzen Lauf einfrieren)
+  try {
+    scan_poiData = scan_buildPOIs(scan_layout, settings.poiInset);
+    var results  = await scan_runOCR(tmp, scan_poiData, scan_payload.n);
+    var mapped = scan_mapResults(scan_payload, results);
+    var autoCount = mapped.length ? applyOCRResults(mapped) : 0;
+    scanResults.push({kl:scan_payload.kl, ge:scan_payload.ge, autoCount:autoCount});
+  } catch (e) {
+    scanCurrentErrors.push({file:file.name, error:'OCR-Erkennung fehlgeschlagen'}); return;
+  }
 }
 
 // ── Canvas-Helfer ─────────────────────────────────────────────────────────────
@@ -1591,8 +1837,27 @@ function scan_rotateCanvas(src, deg) {
 }
 
 // ── QR-Helfer ─────────────────────────────────────────────────────────────────
+// Globaler Otsu-Schwellwert (Graustufen → S/W) – rettet blasse/dichte QR-Module. Aus OCR DebugTool v2.11 (v1.42.001)
+function scan_otsu(imgData) {
+  var d = imgData.data, n = d.length >> 2, hist = new Array(256).fill(0), g = new Uint8Array(n);
+  for (var i = 0; i < n; i++) { var v = (d[i*4]*0.299 + d[i*4+1]*0.587 + d[i*4+2]*0.114) | 0; g[i] = v; hist[v]++; }
+  var sum = 0; for (var t = 0; t < 256; t++) sum += t * hist[t];
+  var sumB = 0, wB = 0, max = 0, thr = 127;
+  for (var t2 = 0; t2 < 256; t2++) { wB += hist[t2]; if (!wB) continue; var wF = n - wB; if (!wF) break;
+    sumB += t2 * hist[t2]; var mB = sumB / wB, mF = (sum - sumB) / wF, between = wB * wF * (mB - mF) * (mB - mF);
+    if (between > max) { max = between; thr = t2; } }
+  for (var k = 0; k < n; k++) { var bw = g[k] > thr ? 255 : 0; d[k*4] = d[k*4+1] = d[k*4+2] = bw; }
+  return imgData;
+}
 function scan_tryQR(c) {
-  try { var d = c.getContext('2d').getImageData(0, 0, c.width, c.height); return jsQR(d.data, c.width, c.height); }
+  try {
+    var ctx = c.getContext('2d');
+    var d = ctx.getImageData(0, 0, c.width, c.height);
+    var r = jsQR(d.data, c.width, c.height); if (r) return r;   // 1) roh – wie bisher
+    var d2 = ctx.getImageData(0, 0, c.width, c.height);
+    scan_otsu(d2);                                              // 2) Otsu-Fallback (v1.42.001)
+    return jsQR(d2.data, c.width, c.height);
+  }
   catch (e) { return null; }
 }
 function scan_shiftQR(qr, dx, dy) {
@@ -1873,14 +2138,14 @@ function _segment(inv,W,H,thresh,cellMax){
      for(var x=0;x<gw;x++)for(var y=g.y0;y<g.y1;y++) if(inv[y*W+(g.x0+x)]>thresh) colSum[x]++;
      var lo=Math.floor(gw*0.25),hi=Math.ceil(gw*0.75),valley=-1,vmin=1e9;
      for(var xx=lo;xx<hi;xx++) if(colSum[xx]<vmin){vmin=colSum[xx];valley=xx;}
-     if(valley>=0 && vmin<=1){ // leere Spalte ⇒ Lücke zwischen Ziffern (durchgehender Strich hat keine)
+     if(valley>0 && valley<gw-1 && vmin<=1){ // leere Spalte ⇒ Lücke zwischen Ziffern (durchgehender Strich hat keine); valley am Rand ⇒ keine 0-px-Hälfte
        var mid=g.x0+valley;
        return [{x0:g.x0,x1:mid,y0:g.y0,y1:g.y1},{x0:mid,x1:g.x1,y0:g.y0,y1:g.y1}];}}}
  return groups.slice(0,2);
 }
 // Eine Zelle klassifizieren → {val, conf, prev}
 function classifyCell(mctx,rect,cellMax){
- const gi=_getInv(mctx,rect); const segs=_segment(gi.inv,gi.W,gi.H,60,cellMax);
+ const gi=_getInv(mctx,rect); const segs=_segment(gi.inv,gi.W,gi.H,60,cellMax).filter(function(s){return s.x1>s.x0 && s.y1>s.y0;});
  if(segs.length===0) return {val:null,conf:0,prevs:[]};
  let digits='',confs=[],prevs=[];
  for(const s of segs){ const r=_toMNIST(gi.inv,gi.W,gi.H,s.x0,s.y0,s.x1,s.y1);
@@ -2028,6 +2293,18 @@ function clipRectToCanvas(r, W, H) {
 }
 // ══ Ende CNN-OCR-Engine ══════════════════════════════════════════════════════
 
+// Kleiner JPEG-Ausschnitt einer Zelle (für Konflikt-Anzeige). Auf max. 40px Höhe skaliert, session-only.
+function _cropDataURL(mctx, rect){
+  try{
+    var sw=Math.max(1,rect.w|0), sh=Math.max(1,rect.h|0);
+    var scale = sh>40 ? 40/sh : 1;
+    var dw=Math.max(1,Math.round(sw*scale)), dh=Math.max(1,Math.round(sh*scale));
+    var cc=document.createElement('canvas'); cc.width=dw; cc.height=dh;
+    var cx=cc.getContext('2d'); cx.fillStyle='#fff'; cx.fillRect(0,0,dw,dh);
+    cx.drawImage(mctx.canvas, rect.x, rect.y, sw, sh, 0, 0, dw, dh);
+    return cc.toDataURL('image/jpeg', 0.6);
+  }catch(e){ return ''; }
+}
 async function scan_runOCR(canvas, pois, nRows) {
   // CNN-Multi-Pass (portiert aus OCR DebugTool v2.06). Rückgabeformat identisch
   // zur Tesseract-Version: [{row, aussl, cols:[{name,val,conf}], total:{val,conf}}]
@@ -2095,11 +2372,15 @@ async function scan_runOCR(canvas, pois, nRows) {
     var rowCells  = cells.filter(function(c) { return c.row === ri; });
     var rowResult = {row:ri, aussl:false, cols:[], total:null};
     rowCells.forEach(function(c) {
-      if (c.kind === 'aussl') { rowResult.aussl = c.marked; return; }
+      var ins = settings.poiInset || 0;
+      // Bild aus voller Zelle (Inset herausrechnen) — Zellränder können bei der Korrektur wichtig sein
+      var full = { x: c.poi.x - ins, y: c.poi.y - ins, w: c.poi.w + 2*ins, h: c.poi.h + 2*ins };
+      var img = _cropDataURL(mctx, clipRectToCanvas(full, canvas.width, canvas.height));
+      if (c.kind === 'aussl') { rowResult.aussl = c.marked; rowResult.ausslImg = img; return; }
       var val = null, conf = 0;
       if (c.kind === 'ocr') { val = c.agg.val; conf = c.agg.conf; }
-      if (c.poi.col === 'total') rowResult.total = {val:val, conf:conf};
-      else rowResult.cols.push({name:c.poi.name, val:val, conf:conf});
+      if (c.poi.col === 'total') rowResult.total = {val:val, conf:conf, img:img};
+      else rowResult.cols.push({name:c.poi.name, val:val, conf:conf, img:img});
     });
     if (rowResult.total === null) rowResult.total = {val:null, conf:0};
     results.push(rowResult);
@@ -2119,10 +2400,12 @@ function scan_mapResults(payload, results) {
       name: s.name ? (s.name+' '+s.vorname) : ('Zeile '+(r.row+1)),
       kl: kl, ge: ge,
       ausschluss: r.aussl,
+      ausslImg: r.ausslImg||'',
       dis: r.cols.map(function(c,ci){
-          return { nextDid: state.bewDis[ci] ? state.bewDis[ci].id : ci, name: state.bewDis[ci] ? state.bewDis[ci].name : 'D' + (ci + 1), val: c.val, conf: c.conf };
+          var d = state.bewDis[ci];
+          return { did: d ? d.id : ci, nextDid: d ? d.id : ci, name: d ? d.name : 'D' + (ci + 1), val: c.val, conf: c.conf, img: c.img||'' };
       }),
-      total: r.total||{val:null,conf:0}
+      total: r.total||{val:null,conf:0,img:''}
     };
   });
 }
@@ -2211,27 +2494,16 @@ function renderScanResults(){
 }
 
 function applyOCRResults(results) {
-  var autoCount = 0;
+  // Kein automatisches Übernehmen mehr: ALLE erkannten Zeilen kommen in die Review-Tabelle.
+  // Übernahme erfolgt ausschliesslich manuell via „Alle übernehmen" (nur ✓-Zeilen).
   results.forEach(function(row) {
-    if (row.ausschluss !== undefined) {
-      var s = findSus(row.sid);
-      if (s) s.ausschluss = row.ausschluss;
-    }
-    var hasExisting = state.erg[row.sid] && state.erg[row.sid]['total'] != null;
-    if (isValidOCRRow(row) && !hasExisting) {
-      if (!state.erg[row.sid]) state.erg[row.sid] = {};
-      row.dis.forEach(function(d){ state.erg[row.sid][d.did] = d.val; });
-      state.erg[row.sid]['total'] = row.total.val;
-      state.erg[row.sid]['_src'] = 'ocr';
-      autoCount++;
-    } else {
-      var idx = scanPending.findIndex(function(p){ return p.sid===row.sid; });
-      if (idx >= 0) scanPending[idx] = row;
-      else scanPending.push(row);
-    }
+    // Bereits in der Ergebnisliste erfasst (Total gesetzt) → nicht als Konflikt anzeigen
+    if (state.erg[row.sid] && state.erg[row.sid]['total'] != null) return;
+    var idx = scanPending.findIndex(function(p){ return p.sid===row.sid; });
+    if (idx >= 0) scanPending[idx] = row; else scanPending.push(row);
   });
-  autoSave(); renderE(); renderOCRTable();
-  return autoCount;
+  renderOCRTable();
+  return 0;
 }
 
 // ── OCR-Commit: Single Source of Truth ───────────────────────────────────────
@@ -2272,58 +2544,116 @@ function _ocrGroupPending(){
   });
   return groups;
 }
-function _ocrGroupHeader(grp){
+function _ocrGroupHeader(grp, gi){
   return '<div style="margin:20px 0 8px;padding-bottom:4px;border-bottom:2px solid var(--border);display:flex;gap:8px;align-items:center">'+
     (grp.kl ? '<span class="chip">'+esc(grp.kl)+'</span>' : '')+
     (grp.ge ? geBadge(grp.ge) : '')+
     '<span style="font-size:11px;color:var(--muted)">('+grp.rows.length+')</span>'+
+    '<div style="flex:1"></div>'+
+    '<button class="btn btn-sm btn-p" tabindex="-1" onclick="commitGroupOCR('+gi+')">&#10003; Gültige übernehmen</button>'+
     '</div>';
 }
+function _cropImg(src, wide){ return src ? '<img class="crop'+(wide?' crop-tot':'')+'" src="'+src+'" alt="Scan">' : ''; }
 function _ocrTableShell(){
-  // colgroup + thead — gemeinsam für alle Gruppen, kein Gruppen-spezifischer Inhalt
-  return '<div class="twrap" style="margin-bottom:24px"><table style="width:100%">'+
-    '<colgroup>'+
-      '<col>'+                                       // Name (auto)
-      '<col>'+                                       // Vorname (auto, eng an Name via padding-Trick)
-      '<col>'+                                       // Spacer 1 (Whitespace nach Vorname)
-      '<col style="width:120px">'+                   // Ausschluss
-      '<col>'+                                       // Spacer 2 (Whitespace nach Ausschluss)
-      '<col style="width:160px">'+                   // Total
-      '<col style="width:240px">'+                   // Status (Icon + Text)
-      '<col style="width:1%;white-space:nowrap">'+   // Buttons
-    '</colgroup>'+
-    '<thead><tr>'+
-      '<th class="nosort" style="padding-right:4px">Name</th>'+
-      '<th class="nosort" style="padding-left:4px">Vorname</th>'+
-      '<th></th>'+
-      '<th class="nosort" style="text-align:center">Ausschluss</th>'+
-      '<th></th>'+
-      '<th class="nosort" style="text-align:center">Total</th>'+
-      '<th class="nosort" style="padding-left:16px"></th>'+
-      '<th></th>'+
+  // thead — Spalten: Name · Ausschluss · je bewertete Disziplin · Total · Status
+  var th='';
+  state.bewDis.forEach(function(d){ th += '<th>'+esc(d.name)+'</th>'; });
+  return '<div class="twrap" style="margin-bottom:20px"><table class="octab"><thead><tr>'+
+    '<th class="nm">Name</th><th>Aussl.</th>'+th+'<th class="tot">Total</th><th>Status</th>'+
     '</tr></thead><tbody>';
 }
-function _ocrRowHtml(item, maxTot){
+function _ocrRowHtml(item){
   var row = item.row, ri = item.ri;
-  var s=findSus(row.sid); var lastName=s?s.name:'', firstName=s?s.vorname:'';
-  var totVal = (row.total && row.total.val !== null) ? row.total.val : '';
-  var canCommit = canCommitOCRRow(row), reason = getConflictReason(row);
-  var statusHtml = ocrStatusHtml(reason, row.total && row.total.manual);
-  return '<tr>'+
-    '<td style="padding-right:4px">'+esc(lastName)+'</td>'+
-    '<td style="padding-left:4px">'+esc(firstName)+'</td>'+
-    '<td></td>'+
-    '<td style="text-align:center"><input type="checkbox" tabindex="-1" class="cb-aussl" '+(row.ausschluss?'checked':'')+' onchange="scanPending['+ri+'].ausschluss=this.checked"></td>'+
-    '<td></td>'+
-    '<td><input class="ei" type="number" id="ocr-t-'+ri+'" step="1" min="0" max="'+maxTot+'" value="'+totVal+'" style="width:160px" oninput="ocrTot(event,'+ri+')" onchange="ocrTot(event,'+ri+',this)"></td>'+
-    '<td id="ocr-i-'+ri+'" style="padding-left:16px">'+statusHtml+'</td>'+
-    '<td style="white-space:nowrap">'+
-      '<button class="btn btn-sm btn-p" id="ocr-btn-'+ri+'" tabindex="-1" '+(canCommit?'':'disabled ')+'style="'+(canCommit?'':'opacity:0.4;cursor:not-allowed;')+'" onclick="commitOCRRow('+ri+')">&#10003; Übernehmen</button> '+
-      '<button class="btn btn-sm btn-d" tabindex="-1" onclick="discardOCRRow('+ri+')">&#10005; Verwerfen</button>'+
-    '</td>'+
+  var s = findSus(row.sid); var nm = s ? (s.name+' '+s.vorname) : (row.name||'');
+  var disCells='';
+  state.bewDis.forEach(function(d, di){
+    var dd = row.dis[di] || {val:null, img:''};
+    var v = (dd.val != null) ? dd.val : '';
+    disCells += '<td><div class="cellbox">'+ _cropImg(dd.img) +
+      '<input class="ei" type="number" inputmode="numeric" min="0" id="ocr-d-'+ri+'-'+di+'" value="'+v+'" oninput="ocrDis(event,'+ri+','+di+')"></div></td>';
+  });
+  var tv = (row.total && row.total.val != null) ? row.total.val : '';
+  return '<tr id="ocr-row-'+ri+'">'+
+    '<td class="nm"><div class="nmwrap"><span class="n">'+esc(nm)+'</span></div></td>'+
+    '<td><div class="cellbox">'+ _cropImg(row.ausslImg) +
+      '<input type="checkbox" class="cb-aussl" '+(row.ausschluss?'checked':'')+' onchange="ocrAussl('+ri+',this.checked)"></div></td>'+
+    disCells+
+    '<td class="tot"><div class="cellbox">'+ _cropImg(row.total && row.total.img, true) +
+      '<input class="ei" type="number" inputmode="numeric" min="0" id="ocr-t-'+ri+'" value="'+tv+'" oninput="ocrTot2(event,'+ri+')"></div></td>'+
+    '<td id="ocr-st-'+ri+'"></td>'+
     '</tr>';
 }
+// Validierung einer Zeile: Summenprüfung Σ(Einzelwerte)=Total, Status + Zeilenfarbe in-place.
+function ocrValidateRow(ri, skipCounter){
+  var row = scanPending[ri]; if (!row) return;
+  var tr = document.getElementById('ocr-row-'+ri);
+  var st = document.getElementById('ocr-st-'+ri);
+  if (!tr || !st) return;
+  tr.classList.remove('r-ok','r-warn');
+  tr.classList.toggle('r-excl', !!row.ausschluss);   // nur visuell: Name durchgestrichen
+  state.bewDis.forEach(function(d, di){ var inp=document.getElementById('ocr-d-'+ri+'-'+di); if(inp) inp.classList.remove('bad'); });
+  var tinp = document.getElementById('ocr-t-'+ri); if(tinp) tinp.classList.remove('bad');
+  var sum = 0, miss = false, anyPos = false;
+  row.dis.forEach(function(dd){ if (dd.val == null) miss = true; else { sum += dd.val; if (dd.val > 0) anyPos = true; } });
+  var tot = (row.total && row.total.val != null) ? row.total.val : null;
+  var cls, html;
+  if (tot === 0 && !anyPos){
+    cls='r-ok'; html='<span class="tick">&#10003;</span>';   // 0 ist ein gültiger Total
+  } else if (miss){
+    cls='r-warn';
+    row.dis.forEach(function(dd, di){ if (dd.val == null){ var inp=document.getElementById('ocr-d-'+ri+'-'+di); if(inp) inp.classList.add('bad'); } });
+    html='<span class="b">Wert fehlt</span>';
+  } else if (tot == null){
+    cls='r-warn'; if(tinp) tinp.classList.add('bad'); html='<span class="b">Total fehlt</span>';
+  } else if (sum === tot){
+    cls='r-ok'; html='<span class="tick">&#10003;</span>';
+  } else {
+    cls='r-warn'; html='<span class="b">&#931; '+sum+' &#8800; '+tot+'</span>';
+  }
+  tr.classList.add(cls);
+  st.innerHTML = html;
+  row._open = (cls === 'r-warn');
+  // Sichtbarkeit NICHT bei jeder Eingabe ändern — korrigierte Zeilen bleiben sichtbar (zeigen ✓),
+  // werden nicht automatisch übernommen. Ausblenden geschieht nur beim Render / Toggle.
+  if (!skipCounter) ocrUpdateCounter();
+}
+function ocrUpdateCounter(){
+  var open = scanPending.filter(function(r){ return r._open; }).length;
+  var el = document.getElementById('ocr-counter');
+  if (!el) return;
+  el.textContent = open ? (open + (open===1 ? ' Wert prüfen' : ' Werte prüfen')) : 'Alle Werte bestätigt \u2713';
+  el.className = 'scnt ' + (open ? 'warn' : 'ok');
+}
+function ocrDis(e, ri, di){
+  var row = scanPending[ri]; if (!row || !row.dis[di]) return;
+  var maxD = getMaxDis(di);
+  var n = clampInt(e.target.value, 0, maxD > 0 ? maxD : Infinity);
+  row.dis[di].val = n; row.dis[di].conf = 100; row.dis[di].manual = true;
+  ocrValidateRow(ri);
+}
+function ocrTot2(e, ri){
+  var row = scanPending[ri]; if (!row) return;
+  var max = getMaxTot();
+  var n = clampInt(e.target.value, 0, max > 0 ? max : Infinity);
+  if (!row.total) row.total = {};
+  row.total.val = n; row.total.conf = 100; row.total.manual = true;
+  ocrValidateRow(ri);
+}
+function ocrAussl(ri, checked){
+  var row = scanPending[ri]; if (!row) return;
+  row.ausschluss = checked;
+  ocrValidateRow(ri);
+}
+function toggleOcrOnlyOpen(v){
+  ocrOnlyOpen = v;
+  scanPending.forEach(function(r, ri){
+    var tr = document.getElementById('ocr-row-'+ri);
+    if (tr) tr.classList.toggle('ocr-hidden', ocrOnlyOpen && !r._open);
+  });
+}
 function renderOCRTable() {
+  // Zeilen entfernen, deren SuS inzwischen in der Ergebnisliste erfasst sind (Total gesetzt)
+  scanPending = scanPending.filter(function(p){ return !(state.erg[p.sid] && state.erg[p.sid]['total'] != null); });
   var card = g('ocr-konflikte-card'), countEl = g('ocr-konflikte-count');
   if (!scanPending.length) {
     if (card) card.style.display = 'none';
@@ -2336,15 +2666,24 @@ function renderOCRTable() {
   if (countEl) countEl.textContent = '(' + scanPending.length + ')';
 
   var groups = _ocrGroupPending();
-  var maxTot = getMaxTot(), h = '';
-  groups.forEach(function(grp) {
-    h += _ocrGroupHeader(grp);
+  _ocrGroups = groups;
+  var h = '<div class="ocr-toolbar">'+
+    '<label class="ocr-toggle"><input type="checkbox" '+(ocrOnlyOpen?'checked':'')+' onchange="toggleOcrOnlyOpen(this.checked)"> Nur zu prüfende</label>'+
+    '<span class="scnt" id="ocr-counter">\u2013</span>'+
+    '<div style="flex:1"></div>'+
+    '<button class="btn btn-p" tabindex="-1" onclick="commitAllOCR()">&#10003; Alle übernehmen</button> '+
+    '<button class="btn btn-d" tabindex="-1" onclick="discardAllOCR()">&#10005; Alle verwerfen</button>'+
+    '</div>';
+  groups.forEach(function(grp, gi) {
+    h += _ocrGroupHeader(grp, gi);
     h += _ocrTableShell();
-    grp.rows.forEach(function(item){ h += _ocrRowHtml(item, maxTot); });
+    grp.rows.forEach(function(item){ h += _ocrRowHtml(item); });
     h += '</tbody></table></div>';
   });
-  h += '<div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-start"><button class="btn btn-p" tabindex="-1" onclick="commitAllOCR()">&#10003; Alle übernehmen</button> <button class="btn btn-d" tabindex="-1" onclick="discardAllOCR()">&#10005; Alle verwerfen</button></div>';
   g('ocr-result').innerHTML = h;
+  scanPending.forEach(function(_, ri){ ocrValidateRow(ri, true); });
+  scanPending.forEach(function(r, ri){ var tr=document.getElementById('ocr-row-'+ri); if(tr) tr.classList.toggle('ocr-hidden', ocrOnlyOpen && !r._open); });
+  ocrUpdateCounter();
 }
 
 function discardOCRRow(ri) {
@@ -2353,14 +2692,40 @@ function discardOCRRow(ri) {
 }
 
 function discardAllOCR(){ scanPending = []; autoSave(); renderOCRTable(); }
-function commitAllOCR(){
-  // Alle committbaren Zeilen in einem Durchgang schreiben, danach einmal rendern
-  for (var i = scanPending.length - 1; i >= 0; i--) {
-    var row = scanPending[i];
-    if (!canCommitOCRRow(row)) continue;
-    _writeOCRRow(row);
-    scanPending.splice(i, 1);
+// Zeile ist „✓": alle Disziplinwerte vorhanden, Total vorhanden, Summe = Total.
+function ocrRowOk(row){
+  if (!row || !row.total || row.total.val == null) return false;
+  var sum = 0, anyPos = false, miss = false;
+  for (var k = 0; k < row.dis.length; k++){
+    if (row.dis[k].val == null) miss = true;
+    else { sum += row.dis[k].val; if (row.dis[k].val > 0) anyPos = true; }
   }
+  if (row.total.val === 0 && !anyPos) return true;   // 0-Total ist gültig
+  return !miss && sum === row.total.val;
+}
+function commitGroupOCR(gi){
+  var grp = _ocrGroups[gi]; if (!grp) return;
+  // Nur ✓-Zeilen dieser Klasse/Gruppe (Match über kl+ge, indexunabhängig).
+  var n = 0;
+  for (var i = scanPending.length - 1; i >= 0; i--) {
+    var r = scanPending[i];
+    if ((r.kl||'') !== (grp.kl||'') || (r.ge||'') !== (grp.ge||'')) continue;
+    if (!ocrRowOk(r)) continue;
+    _writeOCRRow(r); scanPending.splice(i, 1); n++;
+  }
+  if (!n) { showStatus('Keine gültige Zeile (\u2713) in dieser Klasse.'); return; }
+  autoSave(); renderE(); renderOCRTable();
+}
+function commitAllOCR(){
+  // Nur ✓-Zeilen (gültige Summe) übernehmen — der Rest bleibt zur Korrektur stehen.
+  var n = 0;
+  for (var i = scanPending.length - 1; i >= 0; i--) {
+    if (!ocrRowOk(scanPending[i])) continue;
+    _writeOCRRow(scanPending[i]);
+    scanPending.splice(i, 1);
+    n++;
+  }
+  if (!n) { showStatus('Keine Zeile mit gültiger Summe (\u2713) zum Übernehmen.'); return; }
   autoSave(); renderE(); renderOCRTable();
 }
 
@@ -2386,7 +2751,8 @@ function exportData(){
     abwesendeKlassen:state.abwesendeKlassen||[],
     wichtig:{text:state.wichtig||''},lbHinweis:{text:state.lbHinweis||''},farbig:!!state.farbig,
     settings:settings,nextSid:nextSid,nextDid:nextDid,
-    zg:{order:ZG.order,slots:ZG.slots,farbig:ZG.farbig,_eid:ZG._eid}};
+    zg:{order:ZG.order,slots:ZG.slots,farbig:ZG.farbig,_eid:ZG._eid},
+    rl:{mode:RL.mode,disOrder:RL.disOrder}};
 }
 // ── State-Pipeline: Section-Helpers (E4 — gemeinsame Basis für importData, importDataSelective, doReset) ──
 // Jeder Helper applyt eine logische Section. data=null wird wie 'leere Daten' behandelt (Defaults greifen).
@@ -2395,6 +2761,7 @@ function _resetState(){
   nextSid = 1; nextDid = 1;
   ZG.order = []; ZG.farbig = true; ZG._eid = -1;
   ZG.slots = DEFAULTS.zg.slots.map(function(s){return Object.assign({},s);});
+  RL.mode = 'standard'; RL.disOrder = [];
 }
 function _applyAnlass(data, include){
   var al = (include && data && data.anlass) ? data.anlass : DEFAULTS.anlass;
@@ -2457,11 +2824,19 @@ function _applyZg(data, include){
     zgApplyDefaults();
   }
 }
+function _applyRl(data, include){
+  // Abwärtskompatibel: alte Saves ohne data.rl → Default (mode 'standard', leere Reihenfolge)
+  var rl = (include && data && data.rl) ? data.rl : null;
+  RL.mode = (rl && (rl.mode==='highest'||rl.mode==='disorder'||rl.mode==='standard')) ? rl.mode : 'standard';
+  RL.disOrder = (rl && Array.isArray(rl.disOrder)) ? rl.disOrder.slice() : [];
+  rlSyncOrder();
+}
 function _syncUIAfterApply(){
   if(g('btn-farbe')) g('btn-farbe').classList.toggle('on',state.farbig);
   var zgf=g('zg-farbe'); if(zgf) zgf.classList.toggle('on',ZG.farbig);
   zgInitOrder();
   renderDis(); syncFilters(); renderS(); renderSettings(); showLogoPreview();
+  rlRenderControls();
 }
 // Zentrale State-Apply Pipeline: nutzt Section-Helpers.
 function _applyState(data, opts){
@@ -2474,6 +2849,7 @@ function _applyState(data, opts){
   _applyFarbig(data);
   _applyOcrSettings(data, opts.ocr);
   _applyZg(data, opts.zg);
+  _applyRl(data, opts.rl);
   _syncUIAfterApply();
 }
 
@@ -2504,17 +2880,17 @@ function doSave(){
 function doLoad(inp){var f=inp.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){try{openImportModal(JSON.parse(e.target.result));}catch(err){alert('Fehler beim Lesen: '+err.message);}};r.readAsText(f,'UTF-8');inp.value='';}
 // ── Import-Modal ─────────────────────────────────────────────────────────────
 var _IMP_PRESETS={
-  alles:    {anlass:1,logo:1,sus:1,erg:1,disBew:1,disUnbew:1,zg:1,ocr:1},
-  aufAnlass:{anlass:1,logo:1,sus:0,erg:0,disBew:1,disUnbew:1,zg:1,ocr:1},
-  nurSus:   {anlass:0,logo:0,sus:1,erg:1,disBew:0,disUnbew:0,zg:0,ocr:0},
+  alles:    {anlass:1,logo:1,sus:1,erg:1,disBew:1,disUnbew:1,zg:1,ocr:1,rl:1},
+  aufAnlass:{anlass:1,logo:1,sus:0,erg:0,disBew:1,disUnbew:1,zg:1,ocr:1,rl:1},
+  nurSus:   {anlass:0,logo:0,sus:1,erg:1,disBew:0,disUnbew:0,zg:0,ocr:0,rl:0},
 };
 var _IMP_GRP={anlass:'ig-anlass',logo:'ig-logo',sus:'ig-sus',erg:'ig-sus',
-              disBew:'ig-dis',disUnbew:'ig-dis',zg:'ig-zg',ocr:'ig-ocr'};
-var _IMP_KEYS=['anlass','logo','sus','erg','disBew','disUnbew','zg','ocr'];
+              disBew:'ig-dis',disUnbew:'ig-dis',zg:'ig-zg',ocr:'ig-ocr',rl:'ig-rl'};
+var _IMP_KEYS=['anlass','logo','sus','erg','disBew','disUnbew','zg','ocr','rl'];
 var _IMP_LABELS={anlass:'Anlass',logo:'Logo',sus:'SuS',erg:'Rangliste',
   disBew:'Bewertete Disziplinen',disUnbew:'Nicht bewertete Disziplinen',
-  zg:'Zeitplan',ocr:'OCR-Einstellungen'};
-var _impOpts={anlass:1,logo:1,sus:1,erg:1,disBew:1,disUnbew:1,zg:1,ocr:1};
+  zg:'Zeitplan',ocr:'OCR-Einstellungen',rl:'Rangliste-Modus'};
+var _impOpts={anlass:1,logo:1,sus:1,erg:1,disBew:1,disUnbew:1,zg:1,ocr:1,rl:1};
 var _impData=null;
 
 function _impRender(){
@@ -3020,6 +3396,7 @@ var ZG={
   slots:DEFAULTS.zg.slots.map(function(s){return Object.assign({},s);}),
   farbig:true,_eid:-1,
 };
+var RL={ mode:'standard', disOrder:[] };
 
 (function(){
   updateConfHint();
@@ -3323,6 +3700,243 @@ function zgRender(){
 // Dank an  Andi
 const b = document.getElementById('bot'); const f = document.querySelector('footer');
 f.onmouseenter = () => { b.style.opacity = 1; setTimeout(() => b.style.opacity = 0, 1500);};
+</script>
+
+<!-- ════ Statistik-Modul v0.14.0 (rückwärtskompatibel: Total aus erg.total) ════ -->
+<style id="stat2-style">
+/* ══ Statistik-Modul v0.11.0 (additiv, eigener Namespace s2-/stat2-) ══ */
+#stat2-root .s2-controls{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+#stat2-root .s2-lbl{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+#stat2-root .s2-datainfo{font-size:12px;color:var(--muted)}
+#stat2-root .s2-btn,#stat2-root .s2-sel{border:1px solid var(--border-strong);background:var(--surface);color:var(--text);padding:8px 14px;border-radius:var(--r,8px);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
+#stat2-root .s2-btn:hover{background:var(--bg)}#stat2-root .s2-sel{padding:8px 12px}
+#stat2-root .s2-spacer{flex:1}
+#stat2-root .s2-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;min-height:4px}
+#stat2-root .s2-chip{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:5px 6px 5px 13px;font-size:13px;font-weight:600}
+#stat2-root .s2-chip button{border:none;color:#fff;width:18px;height:18px;border-radius:50%;cursor:pointer;font-size:11px;line-height:1;display:grid;place-items:center}
+#stat2-root .s2-legend{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+#stat2-root .s2-lg{display:flex;align-items:center;gap:7px;font-size:14px}#stat2-root .s2-lg .s2-sw{width:14px;height:14px;border-radius:3px}#stat2-root .s2-lg .s2-cnt{color:var(--muted);font-size:13px}
+#stat2-root .s2-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl,12px);padding:10px 14px 8px}
+#stat2-root .s2-ph{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}#stat2-root .s2-ph h3{font-size:16px;font-weight:600}#stat2-root .s2-ph .s2-pmax{font-size:13px;color:var(--muted)}
+#stat2-root .s2-panel svg{width:100%;height:auto;display:block;overflow:visible}
+.s2-lane-lbl{font-size:15px;font-weight:700}.s2-lane-n{font-size:12px;font-weight:600}.s2-cat-lbl{font-size:11px;font-weight:700;letter-spacing:1px}
+.s2-axis-line{stroke:var(--border-strong);stroke-width:1}.s2-tick-p{font-size:11.5px;fill:var(--text)}.s2-tick-m{font-size:10px;fill:var(--muted)}
+.s2-gridline{stroke:var(--border);stroke-width:1;stroke-dasharray:2 3}.s2-gridfine{stroke:#ece9e3;stroke-width:1}
+.s2-baseline{stroke:var(--border-strong);stroke-width:1;stroke-dasharray:4 3}
+.s2-area{stroke-width:1;fill-opacity:.20}.s2-iqr{stroke:none}.s2-medline{stroke-width:2.4}.s2-mmtick{stroke-width:1.4;opacity:.55}
+.s2-med-lbl{font-size:10.5px;font-weight:700}.s2-hit{fill:transparent;cursor:pointer}
+#stat2-modalBg{position:fixed;inset:0;background:rgba(0,0,0,.42);display:none;align-items:center;justify-content:center;z-index:9000}
+#stat2-modalBg.s2-open{display:flex}
+#stat2-modalBg .s2-modal{background:var(--surface);border-radius:14px;width:min(460px,92vw);max-height:86vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+#stat2-modalBg .s2-mh{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);font-size:16px;font-weight:600}
+#stat2-modalBg .s2-mh button{border:none;background:none;font-size:18px;cursor:pointer;color:var(--muted)}
+#stat2-modalBg .s2-mtools{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px;border-bottom:1px solid var(--border)}
+#stat2-modalBg .s2-mtools button{font-size:13px;padding:6px 11px;border:1px solid var(--border-strong);border-radius:7px;background:var(--surface);cursor:pointer;font-family:inherit}
+#stat2-modalBg .s2-mtools button:hover{background:var(--bg)}
+#stat2-modalBg .s2-mbody{padding:8px 18px;overflow:auto}
+#stat2-modalBg .s2-trow{display:flex;align-items:center;gap:9px;padding:7px 6px;border-radius:6px;font-size:14px;cursor:pointer}
+#stat2-modalBg .s2-trow:hover{background:var(--bg)}#stat2-modalBg .s2-trow input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer}
+#stat2-modalBg .s2-s0,#stat2-modalBg .s2-s1{font-weight:600}#stat2-modalBg .s2-s1{margin-top:4px}#stat2-modalBg .s2-s2{padding-left:28px;font-weight:400}
+#stat2-modalBg .s2-mf{padding:12px 18px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+#stat2-modalBg .s2-mf .s2-cnt{font-size:13px;color:var(--muted)}#stat2-modalBg .s2-mf button{background:var(--accent);color:#fff;border:none;padding:9px 18px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+#stat2-tt{position:fixed;pointer-events:none;background:#1a1a18;color:#fff;font-size:13px;padding:8px 11px;border-radius:6px;opacity:0;transition:opacity .1s;z-index:9500;max-width:340px;white-space:normal;line-height:1.45}
+#stat2-tt b{font-weight:600}#stat2-tt .s2-tv{color:#93c5fd}#stat2-tt .s2-nm{color:#d1d5db;font-size:12px}
+#stat2-root .s2-notice{background:var(--warn-bg);border:1px solid #fcd9a3;border-radius:var(--rl,12px);padding:16px 18px;font-size:14px;color:var(--text);line-height:1.5}
+
+</style>
+<script id="stat2-script">
+/* ══ Statistik-Modul v0.14.0 — additiv. Ändert nichts Bestehendes:
+   prepend in #page-statistik, wrappt window.renderStat (Original läuft weiter).
+   Echte Daten aus state; KEINE Demodaten – bei fehlenden Daten klarer Hinweis.
+   Median: pro Geschlecht mit Wert, ohne Präfix. ══ */
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  function E(t,a,x){var e=document.createElementNS(NS,t);if(a)for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;return e;}
+  function H(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;}
+  function gid(id){return document.getElementById(id);}
+  var FB={'--bw-fg':'#831843','--bm-fg':'#1e40af','--success':'#16a34a','--success-bg':'#f0fdf4','--warn':'#d97706','--warn-bg':'#fffbeb','--bx-fg':'#581c87','--bx-bg':'#f3e8ff','--accent':'#2563eb','--text':'#1a1a18'};
+  function C(n){try{var x=getComputedStyle(document.documentElement).getPropertyValue(n).trim();return x||FB[n]||'#666';}catch(e){return FB[n]||'#666';}}
+  var CATS={all:{label:'ALLE',fg:'--success',bg:'--success-bg',order:0},stufe:{label:'STUFEN',fg:'--warn',bg:'--warn-bg',order:1},klasse:{label:'KLASSEN',fg:'--bx-fg',bg:'--bx-bg',order:2}};
+
+  var DIS=[],TOTAL_MAX=0,TOTAL=null,STUFEN=[],CLASSDEF=[],SUS=[],hasData=false;
+  function disByKey(k){return k==='total'?TOTAL:DIS.find(function(d){return d.key===k;});}
+  function mess(p,d){if(d.key==='total'||p<1)return null;var t=d.max===1?1:(p-1)/(d.max-1);return d.zero+t*(d.best-d.zero);}
+  function fmtM(v,d,dp){return v.toFixed(dp!=null?dp:(d.einheit==='s'?2:(Math.abs(d.best)>=10?1:2)))+'\u00A0'+(d.einheit||'');}
+  function recompute(){TOTAL_MAX=DIS.reduce(function(s,d){return s+d.max;},0);TOTAL={key:'total',name:'Gesamtwertung',max:TOTAL_MAX};}
+  function stLabel(st){return /^\d+$/.test(st)?(st+'. Klassen'):(''+st);}
+
+  /* ── Bindung aus App-state (KEINE Demodaten) ── */
+  function bindFromApp(){
+    hasData=false;DIS=[];SUS=[];STUFEN=[];CLASSDEF=[];
+    var st=(typeof state!=='undefined')?state:(typeof window!=='undefined'&&window.state)?window.state:null;
+    var usable=st&&st.bewDis&&st.bewDis.length&&st.sus&&st.sus.filter(function(s){return !s.ausschluss;}).length;
+    if(usable){
+      DIS=st.bewDis.map(function(d){return {key:'d'+d.id,disId:d.id,name:d.name||('Disziplin '+d.id),max:+d.maxPunkte||0,einheit:d.einheit||'',zero:+d.zeroVal||0,best:+d.bestVal||0};}).filter(function(d){return d.max>0;});
+      recompute();
+      SUS=st.sus.filter(function(s){return !s.ausschluss;}).map(function(s){
+        var e=(st.erg&&st.erg[s.id])?st.erg[s.id]:{};
+        var p={};DIS.forEach(function(d){var v=e[d.disId];p[d.key]=(v!=null&&v!=='')?(parseFloat(v)||0):null;});
+        p.total=(e['total']!=null&&e['total']!=='')?(parseFloat(e['total'])||0):DIS.reduce(function(a,d){return a+(p[d.key]!=null?p[d.key]:0);},0);
+        return {n:((s.name||'')+' '+(s.vorname||'')).trim(),kl:(s.klasse||'?'),st:String(s.jahrgangsstufe||'?'),ge:(s.geschlecht==='m'?'M':'W'),p:p};
+      });
+      if(DIS.length&&SUS.length)hasData=true;
+    }
+    if(hasData){
+      var stset=Array.from(new Set(SUS.map(function(s){return s.st;}))).sort();
+      STUFEN=stset.map(function(v){return {val:v,label:stLabel(v)};});
+      var seen={};SUS.forEach(function(s){if(!seen[s.kl]){seen[s.kl]=1;CLASSDEF.push({kl:s.kl,st:s.st});}});
+      CLASSDEF.sort(function(a,b){return (a.st+a.kl).localeCompare(b.st+b.kl);});
+    }
+    var di=gid('stat2-datainfo');if(di)di.textContent=hasData?(SUS.length+' SuS · '+STUFEN.length+' Stufen · '+CLASSDEF.length+' Klassen (reale Daten)'):'Keine erfassten Daten gefunden';
+  }
+
+  var G={sel:[],dis:'total'};
+  function susFor(node){return node.type==='all'?SUS:node.type==='stufe'?SUS.filter(function(s){return s.st===node.val;}):SUS.filter(function(s){return s.kl===node.val;});}
+  function quantile(s,q){if(!s.length)return null;var p=(s.length-1)*q,b=Math.floor(p),r=p-b;return s[b+1]!==undefined?s[b]+r*(s[b+1]-s[b]):s[b];}
+  function stats(v){var s=v.slice().sort(function(a,b){return a-b;});return{min:s[0],max:s[s.length-1],q1:quantile(s,.25),med:quantile(s,.5),q3:quantile(s,.75),n:s.length};}
+  function binStep(d){return Math.max(1,Math.round(d.max/16));}
+  function makeBins(sus,d){var step=binStep(d),arr=[];for(var b=0;b<=d.max;b+=step)arr.push({lo:b,c:0,names:[]});sus.forEach(function(s){var x=s.p[d.key];var i=Math.min(arr.length-1,Math.floor(x/step));arr[i].c++;arr[i].names.push(s.n);});return {step:step,arr:arr};}
+  function medTxtFor(med,d){if(d.key==='total'){var mp=Number.isInteger(med)?med:Math.round(med*10)/10;return mp+'\u00A0P.';}var mm=mess(med,d);return (mm!=null?fmtM(mm,d):(Math.round(med*10)/10)+'\u00A0P.');}
+
+  var tt;
+  function moveTT(e){var x=e.clientX+14,y=e.clientY+14;if(x>innerWidth-350)x=e.clientX-350;tt.style.left=x+'px';tt.style.top=y+'px';}
+
+  function buildDisSel(){var s=gid('stat2-disSel');s.innerHTML='<option value="total">Gesamtwertung</option>'+DIS.map(function(d){return '<option value="'+d.key+'">'+d.name+'</option>';}).join('');if(!disByKey(G.dis))G.dis='total';s.value=G.dis;}
+  function boxFor(type,val){return Array.prototype.slice.call(document.querySelectorAll('#stat2-modalTree input')).find(function(i){return i.dataset.type===type&&i.dataset.val===val;});}
+  function buildModal(){
+    var t=gid('stat2-modalTree');var h='<label class="s2-trow s2-s0"><input type="checkbox" data-type="all" data-val="*"> Alle SuS</label>';
+    STUFEN.forEach(function(s){h+='<label class="s2-trow s2-s1"><input type="checkbox" data-type="stufe" data-val="'+s.val+'"> '+s.label+'</label>';
+      CLASSDEF.filter(function(c){return c.st===s.val;}).forEach(function(c){h+='<label class="s2-trow s2-s2"><input type="checkbox" data-type="klasse" data-val="'+c.kl+'"> '+c.kl+'</label>';});});
+    t.innerHTML=h;
+    Array.prototype.forEach.call(t.querySelectorAll('input'),function(b){b.addEventListener('change',function(e){onTree(e.target);});});
+  }
+  function onTree(box){var chk=box.checked;
+    if(box.dataset.type==='all'){Array.prototype.forEach.call(document.querySelectorAll('#stat2-modalTree input'),function(i){if(i!==box)i.checked=chk;});}
+    else if(box.dataset.type==='stufe'){CLASSDEF.filter(function(c){return c.st===box.dataset.val;}).forEach(function(c){var i=boxFor('klasse',c.kl);if(i)i.checked=chk;});}
+    syncSel();
+  }
+  function labelOf(b){return b.parentNode.childNodes[1].textContent.trim();}
+  function syncSel(){
+    G.sel=Array.prototype.slice.call(document.querySelectorAll('#stat2-modalTree input:checked')).map(function(b){return {type:b.dataset.type,val:b.dataset.val,label:labelOf(b)};})
+      .sort(function(a,b){return CATS[a.type].order-CATS[b.type].order||(''+a.val).localeCompare(''+b.val);});
+    gid('stat2-openModal').textContent=(G.sel.length?'Gruppen ('+G.sel.length+')':'Gruppen wählen…');
+    gid('stat2-modalCnt').textContent=G.sel.length+' Gruppe(n) gewählt';
+    renderChips();renderPanel();
+  }
+  function renderChips(){var c=gid('stat2-chips');c.innerHTML='';
+    G.sel.forEach(function(node){var cat=CATS[node.type],chip=H('span','s2-chip');chip.style.background=C(cat.bg);chip.style.color=C(cat.fg);chip.style.border='1px solid '+C(cat.fg);chip.appendChild(document.createTextNode(node.label+' '));
+      var x=H('button',null,'✕');x.style.background=C(cat.fg);x.onclick=function(){var b=boxFor(node.type,node.val);if(b){b.checked=false;syncSel();}};chip.appendChild(x);c.appendChild(chip);});}
+  function renderLegend(){var lg=gid('stat2-legend');lg.innerHTML='';
+    function it(col,txt){var w=H('span','s2-lg');var sw=H('span','s2-sw');sw.style.background=col;sw.style.opacity=.55;w.appendChild(sw);w.appendChild(document.createTextNode(txt));return w;}
+    lg.appendChild(it(C('--bw-fg'),'Mädchen (oben)'));lg.appendChild(it(C('--bm-fg'),'Knaben (unten)'));}
+
+  function renderNotice(){
+    gid('stat2-chips').innerHTML='';gid('stat2-legend').innerHTML='';
+    gid('stat2-panelHost').innerHTML='<div class="s2-notice"><b>Noch keine Daten erfasst.</b><br>Bitte zuerst unter <i>Schüler/innen</i> Klassen anlegen und unter <i>Bewertung</i> Resultate eintragen – dann erscheint hier die Verteilung der ganzen Schule, Stufen und Klassen.</div>';
+  }
+
+  function renderPanel(){
+    if(!hasData){renderNotice();return;}
+    renderLegend();var host=gid('stat2-panelHost');host.innerHTML='';
+    if(!G.sel.length){host.appendChild(H('div','s2-cnt','Keine Gruppe gewählt – „Gruppen wählen…" öffnen.'));return;}
+    var d=disByKey(G.dis);if(!d){host.appendChild(H('div','s2-cnt','Keine Disziplin.'));return;}
+    var W=1000,padL=178,padR=30,padT=10,axisH=48,x0=padL,x1=W-padR;
+    function sx(v){return x0+(v/d.max)*(x1-x0);}
+    var bandH=34,half=52,laneH=2*half,Hh=padT+G.sel.length*laneH+axisH,binPix=sx(binStep(d))-sx(0),maed=C('--bw-fg'),knab=C('--bm-fg');
+    var card=H('div','s2-panel'),ph=H('div','s2-ph');ph.appendChild(H('h3',null,d.name));ph.appendChild(H('span','s2-pmax',d.key==='total'?'Summe aller Disziplinen':'Messwert in '+d.einheit));card.appendChild(ph);
+    var svg=E('svg',{viewBox:'0 0 '+W+' '+Hh,width:W,height:Hh,role:'img'});
+    var i=0;while(i<G.sel.length){var cat=CATS[G.sel[i].type],j=i;while(j<G.sel.length&&G.sel[j].type===G.sel[i].type)j++;var top=padT+i*laneH,h=(j-i)*laneH,mid=top+h/2;
+      svg.appendChild(E('rect',{x:0,y:top,width:W,height:h,fill:C(cat.bg),opacity:.6}));
+      svg.appendChild(E('rect',{x:6,y:top+4,width:4,height:h-8,rx:2,fill:C(cat.fg)}));
+      svg.appendChild(E('text',{'class':'s2-cat-lbl',x:20,y:mid,fill:C(cat.fg),'text-anchor':'middle',transform:'rotate(-90 20 '+mid.toFixed(1)+')'},cat.label));i=j;}
+    var fineStep=d.max>20?2:1;for(var p=0;p<=d.max;p+=fineStep){var fx=sx(p);svg.appendChild(E('line',{'class':'s2-gridfine',x1:fx,y1:padT,x2:fx,y2:Hh-axisH+6}));}
+    var labelStep=d.max>20?10:1;for(var pp=0;pp<=d.max;pp+=labelStep){var lx=sx(pp);
+      svg.appendChild(E('line',{'class':'s2-gridline',x1:lx,y1:padT,x2:lx,y2:Hh-axisH+6}));
+      svg.appendChild(E('text',{'class':'s2-tick-p',x:lx,y:Hh-axisH+22,'text-anchor':'middle'},pp));
+      var mvv=mess(pp,d);if(mvv!=null)svg.appendChild(E('text',{'class':'s2-tick-m',x:lx,y:Hh-axisH+37,'text-anchor':'middle'},fmtM(mvv,d,1)));}
+    if(d.max>20&&d.max%labelStep!==0)svg.appendChild(E('text',{'class':'s2-tick-p',x:sx(d.max),y:Hh-axisH+22,'text-anchor':'middle'},d.max));
+    svg.appendChild(E('line',{'class':'s2-axis-line',x1:x0,y1:Hh-axisH+6,x2:x1,y2:Hh-axisH+6}));
+    G.sel.forEach(function(node,k){var cat=CATS[node.type],cy=padT+k*laneH+laneH/2;
+      var sus=susFor(node).filter(function(s){return d.key==='total'||s.p[d.key]!=null;});
+      var nW=sus.filter(function(s){return s.ge==='W';}).length,nM=sus.filter(function(s){return s.ge==='M';}).length;
+      svg.appendChild(E('line',{'class':'s2-baseline',x1:x0,y1:cy,x2:x1,y2:cy}));
+      svg.appendChild(E('text',{'class':'s2-lane-lbl',x:30,y:cy-13,fill:C(cat.fg)},node.label));
+      svg.appendChild(E('text',{'class':'s2-lane-n',x:30,y:cy+5,fill:maed},'Mädchen '+nW));
+      svg.appendChild(E('text',{'class':'s2-lane-n',x:30,y:cy+22,fill:knab},'Knaben '+nM));
+      side(svg,sx,sus.filter(function(s){return s.ge==='W';}),d,cy,-1,maed,bandH,binPix,'Mädchen',node.label,'s2cpW'+k);
+      side(svg,sx,sus.filter(function(s){return s.ge==='M';}),d,cy,1,knab,bandH,binPix,'Knaben',node.label,'s2cpM'+k);
+    });
+    card.appendChild(svg);host.appendChild(card);
+  }
+  function side(svg,sx,sus,d,cy,dir,col,bandH,binPix,geLabel,laneLabel,uid){
+    if(!sus.length)return;var bb=makeBins(sus,d),step=bb.step,arr=bb.arr,maxC=Math.max.apply(null,[1].concat(arr.map(function(b){return b.c;})));
+    function cx(b){return sx(b.lo+(step===1?0:step/2));}
+    var pts=arr.map(function(b){return [cx(b),cy+dir*(b.c/maxC*bandH)];});
+    var area='M '+pts[0][0].toFixed(1)+' '+cy+' '+pts.map(function(p){return 'L '+p[0].toFixed(1)+' '+p[1].toFixed(1);}).join(' ')+' L '+pts[pts.length-1][0].toFixed(1)+' '+cy+' Z';
+    svg.appendChild(E('path',{'class':'s2-area',d:area,fill:col,stroke:col}));
+    var st=stats(sus.map(function(s){return s.p[d.key];}));
+    var cp=E('clipPath',{id:uid});cp.appendChild(E('path',{d:area}));svg.appendChild(cp);
+    svg.appendChild(E('rect',{'class':'s2-iqr',x:sx(st.q1),y:dir<0?cy-bandH:cy,width:Math.max(0,sx(st.q3)-sx(st.q1)),height:bandH,fill:col,'fill-opacity':.34,'clip-path':'url(#'+uid+')'}));
+    [st.min,st.max].forEach(function(v){svg.appendChild(E('line',{'class':'s2-mmtick',stroke:col,x1:sx(v),y1:cy,x2:sx(v),y2:cy+dir*5}));});
+    // Median pro Geschlecht, mit Wert (ohne Präfix)
+    svg.appendChild(E('line',{'class':'s2-medline',stroke:col,x1:sx(st.med),y1:cy,x2:sx(st.med),y2:cy+dir*bandH}));
+    svg.appendChild(E('text',{'class':'s2-med-lbl',x:sx(st.med),y:dir<0?cy-bandH-5:cy+bandH+13,'text-anchor':'middle',fill:col},medTxtFor(st.med,d)));
+    arr.forEach(function(b){if(!b.c)return;var x=cx(b),m=mess(b.lo,d);
+      var hit=E('rect',{'class':'s2-hit',x:x-binPix/2,y:dir<0?cy-bandH:cy,width:binPix,height:bandH});
+      var valTxt=step===1?(b.lo+(d.key==='total'?' Pkt':' / '+d.max+' Pkt'+(m!=null?' · '+fmtM(m,d):''))):(b.lo+'–'+(b.lo+step-1)+' Pkt');
+      hit.__tip='<b>'+laneLabel+' · '+geLabel+'</b><br>'+d.name+': <span class="s2-tv">'+valTxt+'</span> · '+b.c+' SuS<br><span class="s2-nm">'+b.names.map(function(n){return n.replace(/&/g,'&amp;').replace(/</g,'&lt;');}).join(', ')+'</span>';
+      svg.appendChild(hit);});
+  }
+
+  var ROOT='<div class="card"><div class="ctitle">&#128202; Verteilung je Gruppe (M&auml;dchen / Knaben)</div>'+
+    '<div class="s2-controls"><span class="s2-lbl">Disziplin</span><select class="s2-sel" id="stat2-disSel"></select>'+
+    '<span class="s2-lbl" style="margin-left:8px">Vergleich</span><button class="s2-btn" id="stat2-openModal">Gruppen w&auml;hlen&hellip;</button>'+
+    '<span class="s2-datainfo" id="stat2-datainfo"></span><span class="s2-spacer"></span>'+
+    '<button class="s2-btn" id="stat2-refresh">&#8635; Aktualisieren</button></div>'+
+    '<div class="s2-chips" id="stat2-chips"></div><div class="s2-legend" id="stat2-legend"></div><div id="stat2-panelHost"></div></div>';
+  var MODAL='<div id="stat2-modalBg"><div class="s2-modal"><div class="s2-mh"><span>Vergleichsgruppen w&auml;hlen</span><button id="stat2-modalX">&times;</button></div>'+
+    '<div class="s2-mtools"><button data-act="allon">Alle an</button><button data-act="alloff">Alle ab</button><button data-act="stufen">Stufen</button><button data-act="klassen">Klassen einzeln</button></div>'+
+    '<div class="s2-mbody" id="stat2-modalTree"></div><div class="s2-mf"><span class="s2-cnt" id="stat2-modalCnt"></span><button id="stat2-modalDone">Fertig</button></div></div></div>';
+
+  function refresh(keepSel){
+    var prev=keepSel?G.sel.slice():null;
+    bindFromApp();
+    if(!hasData){renderNotice();return;}
+    buildDisSel();buildModal();
+    var any=false;if(prev&&prev.length){prev.forEach(function(n){var b=boxFor(n.type,n.val);if(b){b.checked=true;any=true;}});}
+    if(!any)STUFEN.forEach(function(s){var b=boxFor('stufe',s.val);if(b)b.checked=true;});
+    syncSel();
+  }
+  function init(){
+    var page=gid('page-statistik');if(!page||gid('stat2-root'))return;
+    // bestehende Statistik ERSETZEN: alte Inhalte ausblenden (Quelltext bleibt unangetastet)
+    Array.prototype.forEach.call(page.children,function(ch){ch.style.display='none';});
+    var root=document.createElement('div');root.id='stat2-root';root.innerHTML=ROOT;page.appendChild(root);
+    document.body.insertAdjacentHTML('beforeend',MODAL+'<div id="stat2-tt"></div>');
+    tt=gid('stat2-tt');var mb=gid('stat2-modalBg');
+    gid('stat2-openModal').addEventListener('click',function(){mb.classList.add('s2-open');});
+    gid('stat2-modalX').addEventListener('click',function(){mb.classList.remove('s2-open');});
+    gid('stat2-modalDone').addEventListener('click',function(){mb.classList.remove('s2-open');});
+    mb.addEventListener('click',function(e){if(e.target===mb)mb.classList.remove('s2-open');});
+    gid('stat2-refresh').addEventListener('click',function(){refresh(true);});
+    Array.prototype.forEach.call(document.querySelectorAll('#stat2-modalBg .s2-mtools button'),function(b){b.addEventListener('click',function(){
+      var act=b.dataset.act,all=Array.prototype.slice.call(document.querySelectorAll('#stat2-modalTree input'));
+      if(act==='alloff')all.forEach(function(i){i.checked=false;});
+      if(act==='allon')all.forEach(function(i){i.checked=true;});
+      if(act==='stufen'){all.forEach(function(i){i.checked=false;});STUFEN.forEach(function(s){var x=boxFor('stufe',s.val);if(x)x.checked=true;});}
+      if(act==='klassen'){all.forEach(function(i){i.checked=false;});CLASSDEF.forEach(function(c){var x=boxFor('klasse',c.kl);if(x)x.checked=true;});}
+      syncSel();});});
+    gid('stat2-disSel').addEventListener('change',function(){G.dis=this.value;renderPanel();});
+    var pe=gid('stat2-panelHost');
+    pe.addEventListener('mouseover',function(e){var c=e.target;if(c.classList&&c.classList.contains('s2-hit')){tt.innerHTML=c.__tip;tt.style.opacity=1;moveTT(e);}});
+    pe.addEventListener('mousemove',function(e){if(tt.style.opacity==='1')moveTT(e);});
+    pe.addEventListener('mouseout',function(e){var c=e.target;if(c.classList&&c.classList.contains('s2-hit'))tt.style.opacity=0;});
+    refresh(false);
+    if(typeof window.renderStat==='function'){var o=window.renderStat;window.renderStat=function(){var r;try{r=o.apply(this,arguments);}catch(e){}try{refresh(true);}catch(e){}return r;};}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+})();
+
 </script>
 </body>
 </html>
